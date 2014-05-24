@@ -126,4 +126,4 @@ DESCR:&nbsp;&nbsp;render data
 USING:&nbsp;&nbsp;update(Object data)<br />
 DESCR:&nbsp;&nbsp;update data for the template. Infact this method forces the render method's second param to be false to replace old data
 
-###Please understand that SodaRender currently just works well for IE9+, Chrome and all mobile browesers.
+###Please understand that SodaRender currently just works well for IE9+, Chrome and all mobile browsers.
