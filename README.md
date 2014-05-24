@@ -103,4 +103,4 @@ infact, you can also using a script tag to identify the js template. Like the fo
 </html>
 ```
 ##Why we use <? ?> for the start and end tag instead of <% %>?
-Cause the content between the <? ?> tag will be parsed as comment in Chrome and IE, our template will not display directly in the browser. on the contrary, the content between the <% %> will display in the browser. It's not what we want.
+Cause the content between the <? ?> tag will be parsed as comment in Chrome and IE, our template will not display directly in the browser. On the contrary, the content between the <% %> will display in the browser. It's not what we want.
