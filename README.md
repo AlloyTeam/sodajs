@@ -9,9 +9,9 @@ SodaRender is a light template render engine for JavaScript;
 SodaRender will make your front end web page like a server side template page. Especially
  when you use ajax in your front end web page, it's very easy to render the data to html views.
  
-That is to say, when you have maked a static web page accroding to the web design composition, it just takes a little time to make the static page to a front end page using templates rendering.
+That is to say, when you have made a static web page accroding to the web design composition, it just takes a little time to make the static page to a front end page using templates rendering.
 
-What's more, it's using '<?' and '?>' for the start and end markup tag. So the phper will feel it similar.
+What's more, it's using '<?' and '?>' for the start and end markup tag. So the phper will feel it familiar.
 
 ##How to use SodaRender?
 The static web page like the following.
