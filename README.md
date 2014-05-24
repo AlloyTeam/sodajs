@@ -104,3 +104,24 @@ infact, you can also using a script tag to identify the js template. Like the fo
 ```
 ##Why we use <? ?> for the start and end tag instead of <% %>?
 Cause the content between the <? ?> tag will be parsed as comment in Chrome and IE, our template will not display directly in the browser. On the contrary, the content between the <% %> will display in the browser. It's not what we want.
+
+##API Of SodaRender
+>### SodaRender
+USING: &nbsp;&nbsp;SodaRender(String id, Object data, Boolean isAppend)<br />OR<br />
+USING: &nbsp;&nbsp;new SodaRender(String id, Object data, Boolean isAppend)<br /><br />
+DESCR: &nbsp;&nbsp;Init SodaRender, the method will render data to the node with a soda-model attribute named id, or a script typed by soda, which has an id attribute equals to param id. The third param isAppend identifies using append or replace method to render to the parent node. Meanwhile it returns a SodaRender Object.
+
+>### sodarender
+equals to SodaRender
+
+>### $SR
+equals to SodaRender
+
+##API Of SodaRenderObject
+>###render
+USING:&nbsp;&nbsp;render(Object data, Boolean isAppend)<br />
+DESCR:&nbsp;&nbsp;render data
+
+>###update
+USING:&nbsp;&nbsp;update(Object data)<br />
+DESCR:&nbsp;&nbsp;update data for the template. Infact this method forces the render method's second to be false to replace old data
