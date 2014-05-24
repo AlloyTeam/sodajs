@@ -1,6 +1,8 @@
 /**
  * SodarRender
  * light tmpl engine
+ * @author dorsywang@Tencent AlloyTeam
+ * @email honghu91@hotmail.com
  */
 ;(function(){
     var encodeHtmlSimple = function(sStr){
@@ -49,12 +51,15 @@
         }
 
         tmplStr = tmplStr.replace(/\s+/g, " ");
+        tmplStr = tmplStr.replace(/'/g, "\\'");
+        tmplStr = tmplStr.replace(/<!--\?/g, "<?");
+        tmplStr = tmplStr.replace(/\?-->/g, "?>");
         tmplStr = varHtml + "var __result = ''; ?>" + tmplStr + "<?";
         tmplStr += " return __result;";
-        tmplStr = tmplStr.replace(/<\?=([^\?]+)\?>/g, "' + $1 + '").replace(/<\?\+([^\?]+)\?>/g, "' + encodeHtmlSimple($1) + '").replace(/<\?-([^\?]+)\?>/g, "' + encodeAttr($1) + '").replace(/<\?/gi, "';").replace(/\?>/g,"__result += '");
+        tmplStr = tmplStr.replace(/<\?=([^\?]+)\?>/g, "' + $1 + '").replace(/<\?\+([^\?]+)\?>/g, "' + _SodaTool.encodeHtmlSimple($1) + '").replace(/<\?-([^\?]+)\?>/g, "' + _SodaTool.encodeAttr($1) + '").replace(/<\?/gi, "';").replace(/\?>/g,"__result += '");
 
-        var str = new Function("data", "_Utils", tmplStr);
-        result = str(data, Utils);
+        var str = new Function("data", "_SodaTool", tmplStr);
+        result = str(data, {encodeHtmlSimple: encodeHtmlSimple, encodeAttr: encodeAttr});
 
         return result;
     };
@@ -64,6 +69,14 @@
 
     var renderTmpl = function(id, data, isAppend){
         var tmplNode = document.getElementById(id);
+
+        if(! tmplNode){
+            tmplNode = document.querySelector(".soda_" + id);
+            console.log(tmplNode);
+        }
+
+        if(! tmplNode) return;
+
         var tmplString = tmplNode.innerHTML;
         var result = getTmpl(tmplString, data);
 
@@ -93,10 +106,68 @@
         }
     };
 
-    window.sodarender = window.SodaRender = window.$SR = {
-        renderTmpl: function(id, data, isAppend){
-            renderTmpl(id, data, isAppend);
+    var sodarModel = function(id, data, isAppend){
+        if(this instanceof sodarModel){
+            this.id = id;
+            this.data = data;
+            this.isAppend = isAppend;
+
+            this.render();
+        }else{
+            return new sodarModel(id, data, isAppend).render();
         }
     };
+
+    sodarModel.prototype = {
+        update: function(data){
+            var d = data || this.data;
+            if(d){
+                renderTmpl(this.id, d);
+            }
+
+            return this;
+        },
+
+        render: function(data, append){
+            var d = data || this.data;
+            var a = append || this.isAppend;
+
+            if(d){
+                renderTmpl(this.id, d, a);
+            }
+
+            return this;
+        }
+    };
+
+    sodarModel.render = function(id, data, isAppend){
+        return new sodarModel(id, data, isAppend);
+    };
+
+    window.sodarender = window.SodaRender = window.$SR = sodarModel;
+
+    window.addEventListener('DOMContentLoaded', function(){
+        var documents = document.getElementsByTagName("*");
+        Array.prototype.map.call(documents, function(item, index){
+            var name;
+            if(name = item.getAttribute("soda-model")){
+                //var frage = document.createDocumentFragment();
+                //for(var i = 0; i < item.childNodes.length; i ++){
+                //    frage.appendChild(item.childNodes[i]);
+                //}
+
+                //console.log(frage);
+                var tmlHtml = item.innerHTML;
+
+                var script = document.createElement('script');
+                script.type = "text/soda";
+                script.innerHTML = tmlHtml;
+                script.id = name;
+
+                item.innerHTML = "";
+                item.appendChild(script);
+            }
+        });
+    });
 
 })();

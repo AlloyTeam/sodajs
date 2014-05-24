@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<body>
+
+<div soda-model="list">
+  <? for(var i = 0; i < list.length; i ++){
+    var name = list[i].name;
+    var title = list[i].title;
+  ?>
+  <li title="<?-title?>"><?+name?></li>
+  <? } ?>
+</div>
+
+<script type="text/javascript" src="../src/sodarender.js"></script>
+<script type="text/javascript">
+var data = {
+    list: [
+      {name: "Soda Render", title: "Soda"},
+      {name: "Soda Render2", title: "Soda"}
+    ]
+}
+
+setTimeout(function(){
+  SodaRender("list", data);
+}, 100);
+</script>
+</body>
+</html>

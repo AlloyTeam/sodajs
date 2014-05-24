@@ -1,0 +1,21 @@
+// https://github.com/modulejs/modjs
+module.exports = {
+    tasks:{
+        cat:{
+            source:['src/copyright.js', 'combined/sodarender.min.js']
+            ,dest: 'combined/sodarender.js'
+        },
+        
+        rm: {
+                dest: ['combined/sodarender.min.js']
+       },
+
+        min: {
+                src: 'src/sodarender.js',
+                dest: 'combined/'
+     }
+    },
+    targets:{
+        dist: "min cat rm"
+    }
+};
