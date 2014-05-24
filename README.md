@@ -79,3 +79,28 @@ $.ajax({
 })
 </script>
 ```
+
+infact, you can also using a script tag to identify the js template. Like the following;
+```html
+<html>
+    <head>
+        <title>
+            SodaRender Examaple
+        </title>
+    </head>
+    
+    <div>
+    <ul>
+        <script type="text/soda" id="dataList">
+                <? for(var i = 0; i < list.length; i ++){
+                ?>
+                <li><?=list[i]?></li>
+                <? }
+                ?>
+        </script>
+    </ul>
+</div>
+</html>
+```
+##Why we use <? ?> for the start and end tag instead of <% %>?
+Cause the content between the <? ?> tag will be parsed as comment in Chrome and IE, our template will not display directly in the browser. on the contrary, the content between the <% %> will display in the browser. It's not what we want.
