@@ -97,6 +97,18 @@
         };
     });
 
+    sodaDirective('if', function(){
+        return {
+            link: function(scope, el, attrs){
+                var opt = el.getAttribute('soda-if');
+
+                if(getValue(scope, opt)){
+                }else{
+                }
+            }
+        };
+    });
+
     var sodaRender = function(str, data){
         // 解析模板DOM
         var div = document.createElement("div");
