@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<body>
+<script type="text/javascript" src="../src/sodaRender2.js"></script>	
+<script type="text/javascript">
+var data = {
+   list: [
+         {list: [{'title': 'aa'}, {'title': 'bb'}], name: 'a'},
+         {list: [{'title': 'aa'}, {'title': 'bb'}], name: 'b'},
+         {list: [{'title': 'aa'}, {'title': 'bb'}], name: 'c'}
+   ]
+};
+sodaRender("<div soda-repeat='item in list'>{{item.name}}<span soda-repeat='subitem in item.list'>{{subitem.title}}</span></div>", data);
+</script>
+</body>
+</html>
