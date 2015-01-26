@@ -1,6 +1,6 @@
 SodaRender
 ==========
-###Why do we spend a lot of time to just make a static web page dynamic using ajax and templates, rathar than a simple foreach code for server side coding? So it's Soda and SodaRender!
+###Why do we spend a lot of time  just making a static web page dynamic using ajax and templates, rathar than a simple foreach code for server side coding? So it's Soda and SodaRender!
 
 ##What is SodaRender?
 SodaRender is a light template render engine for JavaScript;
