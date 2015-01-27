@@ -1,21 +1,18 @@
 SodaRender
-==========
-###Why do we spend a lot of time  just making a static web page dynamic using ajax and templates, rathar than a simple foreach code for server side coding? So it's Soda and SodaRender!
+====
+###A lite angular-like template engine for JavaScript
 
-##What is SodaRender?
-SodaRender is a light template render engine for JavaScript;
 
-##Why to use SodaRender?
-SodaRender will make your front end web page like a server side template page. Especially
- when you use ajax in your front end web page, it's very easy to render the data to html views.
- 
-That is to say, when you have made a static web page accroding to the web design composition, it just takes a little time to make the static page to a front end page using templates rendering.
+##why using SodaRender?
+>###SodaRender is just 3KB in size.
+>###SodaRender has AngularJs Template like Apis. It will make your template file tidy, clearly to read.
+>###SodaRender reduces the error while cgi responses the data in unexpected way, such as losting some keys, error value types.
+>###SodaRender prevents XSS holes in your template file.
+>###SodaRender uses DOM parsor to render your template rather than string replacement, so it's more effective.
 
-What's more, it's using '<?' and '?>' for the start and end markup tag. So the phper will feel it familiar.
+##how to use SodaRender
 
-##How to use SodaRender?
-The static web page like the following.
-
+###Examples
 ```html
 <html>
     <head>
@@ -25,105 +22,57 @@ The static web page like the following.
     </head>
     
     <div>
-    <ul>
-        <li>list1</li>
-        <li>list2</li>
-        <li>list3</li>
-        <li>list3</li>
-    </ul>
-    </div>
-</html>
-```
-
-Using SodaRender, it's like the following.
-
-```html
-<html>
-    <head>
-        <title>
-            SodaRender Examaple
-        </title>
-    </head>
-    
-    <div>
-    <ul soda-model="dataList">
-        <? for(var i = 0; i < list.length; i ++){
-        ?>
-        <li><?=list[i]?></li>
-        <? }
-        ?>
-    </ul>
-</div>
-</html>
-```
-You will find it's just like using php to render the page in the server side.
-
-But to make it's rendering, we will still write our javscript code like the following.
-```html
-<script src="sodarender.js" type="text/javascript"></script>
-<script type="text/javscript">
-//assume that you are using jQuery-like library in your page
-$.ajax({
-    url: "/cgi-bin/get_list",
-    method: "GET",
-    data: {},
-    success: function(res){
-        //the res like
-        //{list: ['list1', 'list2', 'list3']}
-        SodaRender("dataList", res);
-    },
-    
-    error: function(res){
-        
-    }
-})
-</script>
-```
-
-infact, you can also using a script tag to identify the js template. Like the following;
-```html
-<html>
-    <head>
-        <title>
-            SodaRender Examaple
-        </title>
-    </head>
-    
-    <div>
-    <ul>
+    <ul id="targetUl">
         <script type="text/soda" id="dataList">
-                <? for(var i = 0; i < list.length; i ++){
-                ?>
-                <li><?=list[i]?></li>
-                <? }
-                ?>
+            <li soda-repeat="item in list" soda-if="item.show">
+            {{item.name}}
+            </li>
         </script>
     </ul>
 </div>
 </html>
 ```
-##Why we use <? ?> for the start and end tag instead of <% %>?
-Cause the content between the <? ?> tag will be parsed as comment in Chrome and IE, our template will not display directly in the browser. On the contrary, the content between the <% %> will display in the browser. It's not what we want.
+```JavaScript
+var templateStr = document.getElementById("dataList");
+var target = document.getElementById("targetUl");
 
-##API Of SodaRender
->### SodaRender
-USING: &nbsp;&nbsp;SodaRender(String id, Object data, Boolean isAppend)<br />OR<br />
-USING: &nbsp;&nbsp;new SodaRender(String id, Object data, Boolean isAppend)<br /><br />
-DESCR: &nbsp;&nbsp;Init SodaRender, the method will render data to the node with a soda-model attribute named id, or a script typed by soda, which has an id attribute equals to param id. The third param isAppend identifies using append or replace method to render to the parent node. Meanwhile it returns a SodaRender Object.
+var data = {
+    list: [
+        {name: "A"},
+        {name: "B"}
+    ]
+};
 
->### sodarender
-equals to SodaRender
+var result = sodaRender(templateStr, data);
+target.appendChild(result);
+```
 
->### $SR
-equals to SodaRender
+##APIs Of SodaRender
+>### sodaRender
+USING&nbsp;: &nbsp;&nbsp;SodaRender(String templateStr, Object data)<br />
+DESCR&nbsp;: &nbsp;&nbsp;Using templateStr with data to render template<br />
+RETURN: DOM Fragment<br />
+the DOM Frament Object has a method innerHTML which will return the rendered HTML code.<br />
+Meanwhile, you can use it like a common DOM Node, such as appending it to your target node.
+>### sodaFilter
+USING&nbsp;: &nbsp;&nbsp;SodaFilter(String filterName, Function func(input, args...))<br />
+DESCR&nbsp;: &nbsp;&nbsp;Defining Filters, so you can use filters in template<br />
 
-##API Of SodaRenderObject
->###render
-USING:&nbsp;&nbsp;render(Object data, Boolean isAppend)<br />
-DESCR:&nbsp;&nbsp;render data
+##Template Language (AngularJs Template Like)
+###Now, we just offer three directives as below. More will be added soon later. But the three directives are able to meet our daily needs.
+####{{}}
+>out put expressions
 
->###update
-USING:&nbsp;&nbsp;update(Object data)<br />
-DESCR:&nbsp;&nbsp;update data for the template. Infact this method forces the render method's second param to be false to replace old data
+>{{item.name + 1}}
+####soda-repeat
+>soda-repeat="item in array"
+USING&nbsp;: &nbsp;&nbsp;SodaRender(String templateStr, Object data)<br />
+DESCR&nbsp;: &nbsp;&nbsp;Using templateStr with data to render template<br />
 
-###Please understand that SodaRender currently just works well for IE9+, Chrome and all mobile browsers.
+####soda-if
+>soda-if="item.show"
+
+####filters
+>{{input|filte1:args1:args2...|filter2:args...}}
+
+

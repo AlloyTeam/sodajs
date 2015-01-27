@@ -14,6 +14,9 @@
 <script type="text/javascript" src="../src/sodaRender2.js"></script>	
 <script type="text/javascript">
 window.show = 1;
+sodaFilter("date", function(input, length){
+    return "2d" + length;
+});
 var data = {
   a: 1,
    list: [
