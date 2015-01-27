@@ -1,11 +1,11 @@
 ;(function(){
-    var valueoutReg = /\{\{([^\}]*)\}\}/;
+    var valueoutReg = /\{\{([^\}]*)\}\}/g;
 
     var getValue = function(data, attrStr){
         var dotIndex = attrStr.indexOf(".");
 
         if(dotIndex > -1){
-            var attr = attrStr.substr(0, dotIndex)
+            var attr = attrStr.substr(0, dotIndex);
             attrStr = attrStr.substr(dotIndex + 1);
 
             if(data[attr]){
@@ -22,24 +22,74 @@
     var commentNode = function(node){
     };
 
+    // 标识符
+    var IDENTOR_REG = /[a-zA-Z_\$]+[\w\$]*/g;
+    var STRING_REG = /"[^"]*"/g
+    var NUMBER_REG = /\d+|\d*\.\d+/g;
+
+    var OBJECT_REG = /[a-zA-Z_\$]+[\w\$]*(?:[a-zA-Z_\$]+[\w\$]*|\.|\s)*/g;
+
+    var parseSodaExpression = function(str){
+        // 对filter进行处理
+        var str = str.split("|");
+        var expr = str[0] || "";
+        var filters = str.slice(1);
+
+        expr = expr.replace(OBJECT_REG, function(value){
+            return "getValue(scope,'" + value.trim() + "')";
+        });
+
+        var parseFilter = function(){
+            var filterExpr = filters.shift();
+
+            if(! filterExpr){
+                return;
+            }
+
+            var args = filterExpr.split(":").slice(1) || [];
+            var name = filterExpr[0] || "";
+
+            if(sodaFilterMap[name]){
+                args = args.unshift(expr);
+
+                args = args.join(",");
+
+                expr = "sodaFilterMap['" + name + "'](" + args + ")";
+            }
+        };
+
+        parseFilter();
+
+        console.log(expr);
+
+        var evalFunc = new Function("getValue", "return function sodaExp(scope){ return " + expr + "}")(getValue);
+
+        return evalFunc;
+    };
+
     var parseChild = function(parent, scope){
-        [].map.call(parent.childNodes, function(child){
+        [].map.call([].slice.call(parent.childNodes, []), function(child){
             if(child.nodeType === 3){
                 child.nodeValue = child.nodeValue.replace(valueoutReg, function(item, $1){
-                    return getValue(scope, $1); 
+                    return parseSodaExpression($1)(scope); 
                 });
             }
 
             if(child.attributes){
-                [].map.call(child.attributes, function(attr){
-                    if(/^soda-/.test(attr.name)){
-                        if(sodaDirectiveMap[attr.name]){
-                            var dire = sodaDirectiveMap[attr.name]
+                // 优先处理 soda-repeat
+                if(/in/.test(child.getAttribute("soda-repeat") || "")){
+                    sodaDirectiveMap['soda-repeat'].link(scope, child, child.attributes);
+                }else{
+                    [].map.call(child.attributes, function(attr){
+                        if(/^soda-/.test(attr.name)){
+                            if(sodaDirectiveMap[attr.name]){
+                                var dire = sodaDirectiveMap[attr.name]
 
-                            dire.link(scope, child, child.attributes);
+                                dire.link(scope, child, child.attributes);
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
         });
     };
@@ -47,9 +97,20 @@
     var sodaDirectiveMap = {
     };
 
+    var sodaFilterMap = {
+    };
+
     var sodaDirective = function(name, func){
         sodaDirectiveMap['soda-' + name] = func();
     };
+
+    var sodaFilter = function(name, func){
+        sodaFilterMap[name] = func;
+    };
+
+    sodaFilter("date", function(input, lenth){
+        return lenth;
+    });
 
     sodaDirective('repeat', function(){
         return {
@@ -84,11 +145,29 @@
 
                     itemNode.innerHTML = el.innerHTML;
 
-                    parseChild(itemNode, itemScope);
+                    // 依次分析该节点上的其他属性
+                    [].map.call(itemNode.attributes, function(attr){
+                        if(itemNode.getAttribute("removed") === "removed"){
+                            return;
+                        }
 
-                    el.parentNode.insertBefore(itemNode, lastNode.nextSibling);
+                        if(/^soda-/.test(attr.name) && attr.name.trim() !== "soda-repeat"){
+                            if(sodaDirectiveMap[attr.name]){
+                                var dire = sodaDirectiveMap[attr.name]
 
-                    lastNode = itemNode;
+                                dire.link(itemScope, itemNode, itemNode.attributes);
+
+                            }
+                        }
+                    });
+
+                    if(itemNode.getAttribute("removed") !== "removed"){
+                        parseChild(itemNode, itemScope);
+
+                        el.parentNode.insertBefore(itemNode, lastNode.nextSibling);
+
+                        lastNode = itemNode;
+                    }
                 }
 
                 el.parentNode.removeChild(el);
@@ -102,8 +181,13 @@
             link: function(scope, el, attrs){
                 var opt = el.getAttribute('soda-if');
 
-                if(getValue(scope, opt)){
+                var expressFunc = parseSodaExpression(opt);
+
+                console.log(expressFunc);
+
+                if(expressFunc(scope)){
                 }else{
+                    el.setAttribute("removed", "removed");
                 }
             }
         };
@@ -120,6 +204,18 @@
 
         console.log(div);
         console.log(div.innerHTML);
+
+        document.body.appendChild(div);
+
+        var frament = document.createDocumentFragment();
+
+        [].map.call(div.childNodes, function(child){
+            frament.appendChild(child);
+        });
+
+        frament.innerHTML = div.innerHTML;
+
+        return frament;
     };
 
     window.sodaRender = sodaRender;
