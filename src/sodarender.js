@@ -140,6 +140,23 @@
         }
     };
 
+    sodarModel.renderAjax = function(filename, data, callback){
+        var name = window.location.pathname;
+        var result = /\/?([^\.]+)\.html/.exec(name);
+        if(result && result[1]){
+            var path = result[1];
+
+            $.ajax({
+                type: "GET",
+                url: "template/" + path + "/" + filename + ".html",
+                success: function(res){
+                    var result = getTmpl(tmplString, data);
+                    callback && callback(result);
+                }
+            });
+        }
+    };
+
     sodarModel.render = function(id, data, isAppend){
         return new sodarModel(id, data, isAppend);
     };
