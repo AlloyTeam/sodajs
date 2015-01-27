@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<body>
+<script type="text/ppp" id="p">
+<div soda-repeat="item in list" soda-if="item.show">
+  {{item.show}}
+</div>
+
+</script>
+<script type="text/javascript" src="../src/sodaRender2.js"></script>	
+<script type="text/javascript">
+window.show = 1;
+var data = {
+  a: 1,
+   list: [
+         {list: [{'title': '<>aa</h1>'}, {'title': 'bb'}], name: 'a', show: 1},
+         {list: [{'title': 'aa'}, {'title': 'bb'}], name: 'b'},
+         {list: [{'title': 'aa'}, {'title': 'bb'}], name: 'b'},
+         {list: [{'title': 'aa'}, {'title': 'bb'}], name: 'b'},
+         {list: [{'title': 'aa'}, {'title': 'bb'}], name: 'b'},
+         {list: [{'title': 'aa'}, {'title': 'bb'}], name: 'b'},
+         {list: [{'title': 'aa'}, {'title': 'bb'}], name: 'c'}
+   ]
+};
+sodaRender(document.getElementById("p").innerHTML, data);
+</script>
+</body>
+</html>
