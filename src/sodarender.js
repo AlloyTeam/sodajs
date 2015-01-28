@@ -1,6 +1,10 @@
 ;(function(){
     var valueoutReg = /\{\{([^\}]*)\}\}/g;
 
+    Object.prototype.__getValue = function(name){
+        return this[name] || "";
+    };
+
     var getValue = function(data, attrStr){
         var dotIndex = attrStr.indexOf(".");
 
@@ -27,13 +31,27 @@
     var STRING_REG = /"[^"]*"/g
     var NUMBER_REG = /\d+|\d*\.\d+/g;
 
-    var OBJECT_REG = /[a-zA-Z_\$]+[\w\$]*(?:[a-zA-Z_\$]+[\w\$]*|\.|\s)*/g;
+    var OBJECT_REG = /[a-zA-Z_\$]+[\w\$]*(?:\s*\.\s*(?:[a-zA-Z_\$]+[\w\$]*|\d+))*/g;
+    var ATTR_REG = /\[([^\[\]]*)\]/g;
+    var ATTR_REG_DOT = /\.([a-zA-Z_\$]+[\w\$]*)/g;
 
-    var parseSodaExpression = function(str){
+    var NOT_ATTR_REG = /[^\.|]([a-zA-Z_\$]+[\w\$]*)/g;
+
+    var parseSodaExpression = function(str, scope){
         // 对filter进行处理
         var str = str.split("|");
         var expr = str[0] || "";
         var filters = str.slice(1);
+
+        while(ATTR_REG.test(expr)){
+            ATTR_REG.lastIndex = 0;
+
+            //对expr预处理
+            expr = expr.replace(ATTR_REG, function(r, $1){
+                return "." + parseSodaExpression($1, scope);
+            });
+        }
+
 
         expr = expr.replace(OBJECT_REG, function(value){
             return "getValue(scope,'" + value.trim() + "')";
@@ -63,18 +81,16 @@
 
         parseFilter();
 
-        console.log(expr);
-
         var evalFunc = new Function("getValue", "sodaFilterMap", "return function sodaExp(scope){ return " + expr + "}")(getValue, sodaFilterMap);
 
-        return evalFunc;
+        return evalFunc(scope);
     };
 
     var parseChild = function(parent, scope){
         [].map.call([].slice.call(parent.childNodes, []), function(child){
             if(child.nodeType === 3){
                 child.nodeValue = child.nodeValue.replace(valueoutReg, function(item, $1){
-                    return parseSodaExpression($1)(scope); 
+                    return parseSodaExpression($1, scope); 
                 });
             }
 
@@ -94,7 +110,7 @@
                         // 对其他属性里含expr 处理
                         }else{
                             attr.value = attr.value.replace(valueoutReg, function(item, $1){
-                                return parseSodaExpression($1)(scope); 
+                                return parseSodaExpression($1, scope); 
                             });
                         }
                     });
@@ -172,7 +188,7 @@
                                 }
                             }else{
                                 attr.value = attr.value.replace(valueoutReg, function(item, $1){
-                                    return parseSodaExpression($1)(itemScope); 
+                                    return parseSodaExpression($1, itemScope); 
                                 });
                             }
                         }
@@ -198,11 +214,9 @@
             link: function(scope, el, attrs){
                 var opt = el.getAttribute('soda-if');
 
-                var expressFunc = parseSodaExpression(opt);
+                var expressFunc = parseSodaExpression(opt, scope);
 
-                console.log(expressFunc);
-
-                if(expressFunc(scope)){
+                if(expressFunc){
                 }else{
                     el.setAttribute("removed", "removed");
                     el.parentNode && el.parentNode.removeChild(el);
@@ -220,9 +234,6 @@
 
         parseChild(div, data);
 
-        console.log(div);
-        console.log(div.innerHTML);
-
         var frament = document.createDocumentFragment();
         frament.innerHTML = div.innerHTML;
 
@@ -233,6 +244,10 @@
         
 
         return frament;
+    };
+
+    // 预先编译
+    var compile = function(str, data){
     };
 
     window.sodaRender = sodaRender;

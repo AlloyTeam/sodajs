@@ -11,7 +11,7 @@
 </div>
 
 <div class="{{a+1}}" soda-if="a">{{a}}</div>
-{{a}}
+{{list[list[0].show].name}}
 </script>
 
 <div id="pp"></div>
@@ -37,8 +37,6 @@ var data = {
 var t = + new Date();
 var target = document.getElementById("pp");
 var result = sodaRender(document.getElementById("p").innerHTML, data);
-console.log(result);
-console.log(result.innerHTML);
 
 target.appendChild(result);
 
