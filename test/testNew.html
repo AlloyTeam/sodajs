@@ -6,12 +6,15 @@
 </head>
 <body>
 <script type="text/ppp" id="p">
-<div soda-repeat="item in list" soda-if="item.show">
-  {{item.show}}
+<div soda-repeat="item in list">
+  {{item.show|date:2}}
 </div>
 
 </script>
-<script type="text/javascript" src="../src/sodaRender2.js"></script>	
+
+<div id="pp"></div>
+
+<script type="text/javascript" src="../src/sodaRender.js"></script>	
 <script type="text/javascript">
 window.show = 1;
 sodaFilter("date", function(input, length){
@@ -29,7 +32,12 @@ var data = {
          {list: [{'title': 'aa'}, {'title': 'bb'}], name: 'c'}
    ]
 };
-sodaRender(document.getElementById("p").innerHTML, data);
+var target = document.getElementById("pp");
+var result = sodaRender(document.getElementById("p").innerHTML, data);
+console.log(result);
+console.log(result.innerHTML);
+
+target.appendChild(result);
 </script>
 </body>
 </html>

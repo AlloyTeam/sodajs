@@ -90,6 +90,8 @@
 
                                 dire.link(scope, child, child.attributes);
                             }
+                        }else{
+                            console.log(attr);
                         }
                     });
                 }
@@ -208,15 +210,14 @@
         console.log(div);
         console.log(div.innerHTML);
 
-        document.body.appendChild(div);
-
         var frament = document.createDocumentFragment();
-
-        [].map.call(div.childNodes, function(child){
-            frament.appendChild(child);
-        });
-
         frament.innerHTML = div.innerHTML;
+
+        var child;
+        while(child = div.childNodes[0]){
+            frament.appendChild(child);
+        }
+        
 
         return frament;
     };
