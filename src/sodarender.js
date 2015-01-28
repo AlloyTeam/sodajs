@@ -90,10 +90,16 @@
 
                                 dire.link(scope, child, child.attributes);
                             }
+
+                        // 对其他属性里含expr 处理
                         }else{
-                            console.log(attr);
+                            attr.value = attr.value.replace(valueoutReg, function(item, $1){
+                                return parseSodaExpression($1)(scope); 
+                            });
                         }
                     });
+
+                    parseChild(child, scope);
                 }
             }
         });
@@ -156,12 +162,18 @@
                             return;
                         }
 
-                        if(/^soda-/.test(attr.name) && attr.name.trim() !== "soda-repeat"){
-                            if(sodaDirectiveMap[attr.name]){
-                                var dire = sodaDirectiveMap[attr.name]
+                        if(attr.name.trim() !== "soda-repeat"){
+                            if(/^soda-/.test(attr.name)){
+                                if(sodaDirectiveMap[attr.name]){
+                                    var dire = sodaDirectiveMap[attr.name]
 
-                                dire.link(itemScope, itemNode, itemNode.attributes);
+                                    dire.link(itemScope, itemNode, itemNode.attributes);
 
+                                }
+                            }else{
+                                attr.value = attr.value.replace(valueoutReg, function(item, $1){
+                                    return parseSodaExpression($1)(itemScope); 
+                                });
                             }
                         }
                     });
@@ -193,6 +205,7 @@
                 if(expressFunc(scope)){
                 }else{
                     el.setAttribute("removed", "removed");
+                    el.parentNode && el.parentNode.removeChild(el);
                 }
             }
         };
