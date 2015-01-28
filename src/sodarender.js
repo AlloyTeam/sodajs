@@ -1,10 +1,6 @@
 ;(function(){
     var valueoutReg = /\{\{([^\}]*)\}\}/g;
 
-    Object.prototype.__getValue = function(name){
-        return this[name] || "";
-    };
-
     var getValue = function(data, attrStr){
         var dotIndex = attrStr.indexOf(".");
 
@@ -28,7 +24,7 @@
 
     // 标识符
     var IDENTOR_REG = /[a-zA-Z_\$]+[\w\$]*/g;
-    var STRING_REG = /"[^"]*"/g
+    var STRING_REG = /"([^"]*)"|'([^']*)'/g
     var NUMBER_REG = /\d+|\d*\.\d+/g;
 
     var OBJECT_REG = /[a-zA-Z_\$]+[\w\$]*(?:\s*\.\s*(?:[a-zA-Z_\$]+[\w\$]*|\d+))*/g;
@@ -37,11 +33,21 @@
 
     var NOT_ATTR_REG = /[^\.|]([a-zA-Z_\$]+[\w\$]*)/g;
 
+    var getRandom = function(){
+        return "$$" + ~~ (Math.random() * 1E6);
+    };
+
     var parseSodaExpression = function(str, scope){
         // 对filter进行处理
         var str = str.split("|");
         var expr = str[0] || "";
         var filters = str.slice(1);
+
+        expr = expr.replace(STRING_REG, function(r, $1, $2){
+            var key = getRandom();
+            scope[key] = $1 || $2;
+            return key;
+        });
 
         while(ATTR_REG.test(expr)){
             ATTR_REG.lastIndex = 0;

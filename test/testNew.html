@@ -6,12 +6,13 @@
 </head>
 <body>
 <script type="text/ppp" id="p">
+{{'aa' + 1}}
 <div soda-repeat="item in list" data-id="{{item.name}}">
   {{item.show|date:2}}
 </div>
 
 <div class="{{a+1}}" soda-if="a">{{a}}</div>
-{{list[list[0].show].name}}
+{{list[0]['name']}}
 </script>
 
 <div id="pp"></div>
