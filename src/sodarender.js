@@ -1,6 +1,27 @@
 ;(function(){
     var valueoutReg = /\{\{([^\}]*)\}\}/g;
 
+    var classNameRegExp = function(className) {
+        return new RegExp('(^|\\s+)' + className + '(\\s+|$)', 'g');
+    };
+
+    var addClass = function(el, className){
+        if(! el.className){
+            el.className = className;
+
+            return;
+        }
+
+        if(el.className.match(classNameRegExp(className))){
+        }else{
+          el.className += " " + className;
+        }
+    };
+
+    var removeClass = function(el, className){
+        el.className = el.className.replace(classNameRegExp(className), "");
+    };
+
     var getValue = function(data, attrStr){
         var dotIndex = attrStr.indexOf(".");
 
@@ -226,6 +247,21 @@
                 }else{
                     el.setAttribute("removed", "removed");
                     el.parentNode && el.parentNode.removeChild(el);
+                }
+            }
+        };
+    });
+
+    sodaDirective('class', function(){
+        return {
+            link: function(scope, el, attrs){
+                var opt = el.getAttribute("soda-class");
+
+                var expressFunc = parseSodaExpression(opt, scope);
+
+                if(expressFunc){
+                    addClass(el, expressFunc);
+                }else{
                 }
             }
         };
