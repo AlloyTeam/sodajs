@@ -6,6 +6,7 @@
 </head>
 <body>
 <script type="text/ppp" id="p">
+{{0}}
 {{'aa' + 1}}
 <div soda-repeat="item in list" data-id="{{item.name}}">
   {{item.show|date:2}}
@@ -26,8 +27,8 @@ sodaFilter("date", function(input, length){
 var data = {
   a: 1,
    list: [
-         {list: [{'title': '<>aa</h1>'}, {'title': 'bb'}], name: 'a', show: 1},
-         {list: [{'title': 'aa'}, {'title': 'bb'}], name: 'b'},
+         {list: [{'title': '<>aa</h1>'}, {'title': 'bb'}], name: 0, show: 1},
+         {list: [{'title': 0 }, {'title': 'bb'}], name: 'b'},
          {list: [{'title': 'aa'}, {'title': 'bb'}], name: 'b'},
          {list: [{'title': 'aa'}, {'title': 'bb'}], name: 'b'},
          {list: [{'title': 'aa'}, {'title': 'bb'}], name: 'b'},

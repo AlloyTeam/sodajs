@@ -35,7 +35,7 @@
                 return "";
             }
         }else{
-            return data[attrStr] || "";
+            return (typeof data[attrStr] !== "undefined") ? data[attrStr] : "";
         }
     };
 
