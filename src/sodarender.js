@@ -185,8 +185,8 @@
                 var itemName;
                 var valueName;
 
-                if(/in/.test(opt)){
-                    opt = opt.split("in");
+                if(/\s+in\s+/.test(opt)){
+                    opt = opt.split(/\s+in\s+/);
 
                     itemName = opt[0].trim();
                     valueName = opt[1].trim();
