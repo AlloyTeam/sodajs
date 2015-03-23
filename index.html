@@ -1,0 +1,180 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Sodarender by AlloyTeam</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Sodarender</h1>
+        <p class="header">lite template render engine for JavaScript</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/AlloyTeam/SodaRender/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/AlloyTeam/SodaRender/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/AlloyTeam/SodaRender">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/AlloyTeam">AlloyTeam</a></p>
+
+
+      </header>
+      <section>
+        <h3>
+<a id="welcome-to-sodarender" class="anchor" href="#welcome-to-sodarender" aria-hidden="true"><span class="octicon octicon-link"></span></a>Welcome to SodaRender.</h3>
+
+<p>SodaRender is a lite angular-like template engine for JavaScript.</p>
+
+<h3>
+<a id="why-using-sodarender" class="anchor" href="#why-using-sodarender" aria-hidden="true"><span class="octicon octicon-link"></span></a>why using SodaRender?</h3>
+
+<blockquote>
+<h4>
+<a id="sodarender-is-just-3kb-in-size" class="anchor" href="#sodarender-is-just-3kb-in-size" aria-hidden="true"><span class="octicon octicon-link"></span></a>SodaRender is just 3KB in size.</h4>
+
+<h4>
+<a id="sodarender-has-angularjs-template-like-apis-it-will-make-your-template-file-tidy-clearly-to-read" class="anchor" href="#sodarender-has-angularjs-template-like-apis-it-will-make-your-template-file-tidy-clearly-to-read" aria-hidden="true"><span class="octicon octicon-link"></span></a>SodaRender has AngularJs Template like Apis. It will make your template file tidy, clearly to read.</h4>
+
+<h4>
+<a id="sodarender-reduces-the-error-while-cgi-responses-the-data-in-unexpected-way-such-as-losting-some-keys-error-value-types" class="anchor" href="#sodarender-reduces-the-error-while-cgi-responses-the-data-in-unexpected-way-such-as-losting-some-keys-error-value-types" aria-hidden="true"><span class="octicon octicon-link"></span></a>SodaRender reduces the error while cgi responses the data in unexpected way, such as losting some keys, error value types.</h4>
+
+<h4>
+<a id="sodarender-prevents-xss-holes-in-your-template-file" class="anchor" href="#sodarender-prevents-xss-holes-in-your-template-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>SodaRender prevents XSS holes in your template file.</h4>
+
+<h4>
+<a id="sodarender-uses-dom-parsor-to-render-your-template-rather-than-string-replacement-so-its-more-effective" class="anchor" href="#sodarender-uses-dom-parsor-to-render-your-template-rather-than-string-replacement-so-its-more-effective" aria-hidden="true"><span class="octicon octicon-link"></span></a>SodaRender uses DOM parsor to render your template rather than string replacement, so it's more effective.</h4>
+</blockquote>
+
+<h2>
+<a id="how-to-use-sodarender" class="anchor" href="#how-to-use-sodarender" aria-hidden="true"><span class="octicon octicon-link"></span></a>how to use SodaRender</h2>
+
+<h3>
+<a id="examples" class="anchor" href="#examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Examples</h3>
+
+<div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">html</span>&gt;
+    &lt;<span class="pl-ent">head</span>&gt;
+        &lt;<span class="pl-ent">title</span>&gt;
+            SodaRender Examaple
+        &lt;/<span class="pl-ent">title</span>&gt;
+    &lt;/<span class="pl-ent">head</span>&gt;
+
+    &lt;<span class="pl-ent">div</span>&gt;
+    &lt;<span class="pl-ent">ul</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>targetUl<span class="pl-pds">"</span></span>&gt;
+        &lt;<span class="pl-ent">script</span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>text/soda<span class="pl-pds">"</span></span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>dataList<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">li</span> <span class="pl-e">soda-repeat</span>=<span class="pl-s"><span class="pl-pds">"</span>item in list<span class="pl-pds">"</span></span> <span class="pl-e">soda-if</span>=<span class="pl-s"><span class="pl-pds">"</span>item.show<span class="pl-pds">"</span></span>&gt;
+            {{item.name}}
+            &lt;/<span class="pl-ent">li</span>&gt;
+        &lt;/<span class="pl-ent">script</span>&gt;
+    &lt;/<span class="pl-ent">ul</span>&gt;
+&lt;/<span class="pl-ent">div</span>&gt;
+&lt;/<span class="pl-ent">html</span>&gt;</pre></div>
+
+<div class="highlight highlight-JavaScript"><pre><span class="pl-k">var</span> templateStr <span class="pl-k">=</span> <span class="pl-c1">document</span>.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">"</span>dataList<span class="pl-pds">"</span></span>);
+<span class="pl-k">var</span> target <span class="pl-k">=</span> <span class="pl-c1">document</span>.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">"</span>targetUl<span class="pl-pds">"</span></span>);
+
+<span class="pl-k">var</span> data <span class="pl-k">=</span> {
+    list<span class="pl-k">:</span> [
+        {name<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>A<span class="pl-pds">"</span></span>},
+        {name<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>B<span class="pl-pds">"</span></span>}
+    ]
+};
+
+<span class="pl-k">var</span> result <span class="pl-k">=</span> sodaRender(templateStr, data);
+target.<span class="pl-c1">appendChild</span>(result);</pre></div>
+
+<h2>
+<a id="apis-of-sodarender" class="anchor" href="#apis-of-sodarender" aria-hidden="true"><span class="octicon octicon-link"></span></a>APIs Of SodaRender</h2>
+
+<blockquote>
+<h3>
+<a id="sodarender" class="anchor" href="#sodarender" aria-hidden="true"><span class="octicon octicon-link"></span></a>sodaRender</h3>
+
+<p>USING :   SodaRender(String templateStr, Object data)<br>
+DESCR :   Using templateStr with data to render template<br>
+RETURN: DOM Fragment<br>
+the DOM Frament Object has a method innerHTML which will return the rendered HTML code.<br>
+Meanwhile, you can use it like a common DOM Node, such as appending it to your target node.</p>
+
+<h3>
+<a id="sodafilter" class="anchor" href="#sodafilter" aria-hidden="true"><span class="octicon octicon-link"></span></a>sodaFilter</h3>
+
+<p>USING :   SodaFilter(String filterName, Function func(input, args...))<br>
+DESCR :   Defining Filters, so you can use filters in template<br></p>
+</blockquote>
+
+<h2>
+<a id="template-language-angularjs-template-like" class="anchor" href="#template-language-angularjs-template-like" aria-hidden="true"><span class="octicon octicon-link"></span></a>Template Language (AngularJs Template Like)</h2>
+
+<h3>
+<a id="now-we-just-offer-three-directives-as-below-more-will-be-added-soon-later-but-the-three-directives-are-able-to-meet-our-daily-needs" class="anchor" href="#now-we-just-offer-three-directives-as-below-more-will-be-added-soon-later-but-the-three-directives-are-able-to-meet-our-daily-needs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Now, we just offer three directives as below. More will be added soon later. But the three directives are able to meet our daily needs.</h3>
+
+<h4>
+<a id="" class="anchor" href="#" aria-hidden="true"><span class="octicon octicon-link"></span></a>{{}}</h4>
+
+<blockquote>
+<p>out put expressions</p>
+
+<p>{{item.name + 1}}</p>
+</blockquote>
+
+<h4>
+<a id="soda-repeat" class="anchor" href="#soda-repeat" aria-hidden="true"><span class="octicon octicon-link"></span></a>soda-repeat</h4>
+
+<blockquote>
+<p>soda-repeat="item in array"
+USING :   SodaRender(String templateStr, Object data)<br>
+DESCR :   Using templateStr with data to render template<br></p>
+</blockquote>
+
+<h4>
+<a id="soda-if" class="anchor" href="#soda-if" aria-hidden="true"><span class="octicon octicon-link"></span></a>soda-if</h4>
+
+<blockquote>
+<p>soda-if="item.show"</p>
+</blockquote>
+
+<h4>
+<a id="soda-class" class="anchor" href="#soda-class" aria-hidden="true"><span class="octicon octicon-link"></span></a>soda-class</h4>
+
+<blockquote>
+<p>soda-class="currItem === 'list1' ? 'active' : ''"</p>
+</blockquote>
+
+<h4>
+<a id="filters" class="anchor" href="#filters" aria-hidden="true"><span class="octicon octicon-link"></span></a>filters</h4>
+
+<blockquote>
+<p>{{input|filte1:args1:args2...|filter2:args...}}
+how to define filters? Just using sodaFilter Method as methioned above. Here is an example.</p>
+
+<div class="highlight highlight-JavaScript"><pre>SodaFilter(<span class="pl-s"><span class="pl-pds">'</span>shortTitle<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">input</span>, <span class="pl-smi">length</span>){
+        <span class="pl-k">return</span> (input <span class="pl-k">||</span> <span class="pl-s"><span class="pl-pds">'</span><span class="pl-pds">'</span></span>).<span class="pl-c1">substr</span>(<span class="pl-c1">0</span>, length);
+});</pre></div>
+
+<p>Template below</p>
+
+<div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">div</span> <span class="pl-e">soda-repeat</span>=<span class="pl-s"><span class="pl-pds">"</span>item in list<span class="pl-pds">"</span></span>&gt;
+    &lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>title<span class="pl-pds">"</span></span>&gt;
+        {{item.title|shortTitle:10}}
+    &lt;/<span class="pl-ent">div</span>&gt;
+&lt;/<span class="pl-ent">div</span>&gt;</pre></div>
+</blockquote>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
