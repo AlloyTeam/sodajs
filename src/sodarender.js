@@ -54,13 +54,22 @@
 
     var NOT_ATTR_REG = /[^\.|]([a-zA-Z_\$]+[\w\$]*)/g;
 
+    var OR_REG = /\|\|/g;
+
+    var OR_REPLACE = "OR_OPERATOR\x1E";
+
     var getRandom = function(){
         return "$$" + ~~ (Math.random() * 1E6);
     };
 
     var parseSodaExpression = function(str, scope){
         // 对filter进行处理
-        var str = str.split("|");
+        str = str.replace(OR_REG, OR_REPLACE).split("|");
+
+        for(var i = 0; i < str.length; i ++){
+            str[i] = str[i].replace(new RegExp(OR_REPLACE, 'g'), "||");
+        }
+
         var expr = str[0] || "";
         var filters = str.slice(1);
 
