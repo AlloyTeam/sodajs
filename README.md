@@ -64,6 +64,7 @@ DESCR&nbsp;: &nbsp;&nbsp;Defining Filters, so you can use filters in template<br
 >out put expressions
 
 >{{item.name + 1}}
+
 ####soda-repeat
 >soda-repeat="item in array"
 USING&nbsp;: &nbsp;&nbsp;SodaRender(String templateStr, Object data)<br />
@@ -72,7 +73,23 @@ DESCR&nbsp;: &nbsp;&nbsp;Using templateStr with data to render template<br />
 ####soda-if
 >soda-if="item.show"
 
+####soda-class
+>soda-class="currItem === 'list1' ? 'active' : ''"
+
 ####filters
 >{{input|filte1:args1:args2...|filter2:args...}}
-
+how to define filters? Just using sodaFilter Method as methioned above. Here is an example.
+```JavaScript
+SodaFilter('shortTitle', function(input, length){
+        return (input || '').substr(0, length);
+});
+```
+Template below
+```html
+<div soda-repeat="item in list">
+    <div class="title">
+        {{item.title|shortTitle:10}}
+    </div>
+</div>
+```
 
