@@ -293,6 +293,19 @@
         };
     });
 
+    sodaDirective('bind-html', function(){
+        return {
+            link: function(scope, el, attrs){
+                var opt = el.getAttribute("soda-bind-html");
+                var expressFunc = parseSodaExpression(opt, scope);
+
+                if(expressFunc){
+                    el.innerHTML = expressFunc;
+                }
+            }
+        };
+    });
+
     var sodaRender = function(str, data){
         // 解析模板DOM
         var div = document.createElement("div");

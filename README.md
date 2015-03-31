@@ -79,6 +79,10 @@ DESCR&nbsp;: &nbsp;&nbsp;Using templateStr with data to render template<br />
 ####soda-src
 >soda-src="hello{{index}}.png"
 
+####soda-bind-html
+>soda-bind-html="<div><a href=pp>click</a></div>"
+
+
 ####filters
 >{{input|filte1:args1:args2...|filter2:args...}}
 how to define filters? Just using sodaFilter Method as methioned above. Here is an example.

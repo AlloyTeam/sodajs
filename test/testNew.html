@@ -12,7 +12,12 @@
 <img soda-src="pp{{'aa'}}.img" />
 <div soda-repeat="item in list" data-id="{{item.name}}" id="sd{{$index}}">
   {{item.show|date:2}}
+
+<div soda-bind-html="'<div><a href=pp>sadfdsf</a></div>'">
+  <div>sadf</div>
 </div>
+</div>
+
 
 <div class="{{a+1}}" soda-if="a" soda-class="!a ? 'active' : 'p'">{{a}}</div>
 {{list[0]['name']}}
