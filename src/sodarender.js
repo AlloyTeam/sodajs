@@ -276,6 +276,23 @@
         };
     });
 
+    sodaDirective('src', function(){
+        return {
+            link: function(scope, el, attrs){
+                var opt = el.getAttribute("soda-src");
+
+                var expressFunc = opt.replace(valueoutReg, function(item, $1){
+                    return parseSodaExpression($1, scope); 
+                });
+
+                if(expressFunc){
+                    el.setAttribute("src", expressFunc);
+                }else{
+                }
+            }
+        };
+    });
+
     var sodaRender = function(str, data){
         // 解析模板DOM
         var div = document.createElement("div");
