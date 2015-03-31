@@ -2,13 +2,15 @@ SodaRender
 ====
 ###A lite angular-like template engine for JavaScript
 
-
 ##why using SodaRender?
 >####SodaRender is just 3KB in size.
 >####SodaRender has AngularJs Template like Apis. It will make your template file tidy, clearly to read.
 >####SodaRender reduces the error while cgi responses the data in unexpected way, such as losting some keys, error value types.
 >####SodaRender prevents XSS holes in your template file.
 >####SodaRender uses DOM parsor to render your template rather than string replacement, so it's more effective.
+
+##who using sodaRender?
+SodaRender is currently using by QQ Tribes(兴趣部落) and other projects
 
 ##how to use SodaRender
 
