@@ -185,11 +185,29 @@
                 var itemName;
                 var valueName;
 
-                if(/\s+in\s+/.test(opt)){
-                    opt = opt.split(/\s+in\s+/);
+                var trackReg = /\s+track\s+by\s+([^\s]+)$/;
 
-                    itemName = opt[0].trim();
-                    valueName = opt[1].trim();
+                var trackName;
+                opt = opt.replace(trackReg, function(item, $1){
+                    if($1){
+                        trackName = ($1 || '').trim();
+                    }
+
+                    return '';
+                });
+
+                trackName = trackName || '$index';
+
+                var inReg = /([^\s]+)\s+in\s+([^\s]+)/;
+
+                var r = inReg.exec(opt);
+                if(r){
+                    itemName = (r[1] || '').trim();
+                    valueName = (r[2] || '').trim();
+
+                    if(! (itemName && valueName)){
+                        return;
+                    }
                 }else{
                     return;
                 }
@@ -201,7 +219,9 @@
                 for(var i = 0; i < repeatObj.length; i ++){
                     var itemNode = el.cloneNode();
 
-                    var itemScope = {$index: i};
+                    var itemScope = {};
+                    itemScope[trackName] = i;
+
                     itemScope[itemName] = repeatObj[i];
 
                     itemScope.__proto__ = scope;
@@ -311,7 +331,6 @@
         var div = document.createElement("div");
 
         div.innerHTML = str;
-
 
         parseChild(div, data);
 
