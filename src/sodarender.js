@@ -88,10 +88,10 @@
             });
         }
 
-
         expr = expr.replace(OBJECT_REG, function(value){
             return "getValue(scope,'" + value.trim() + "')";
         });
+
 
         var parseFilter = function(){
             var filterExpr = filters.shift();
@@ -103,6 +103,22 @@
             var filterExpr = filterExpr.split(":");
             var args = filterExpr.slice(1) || [];
             var name = filterExpr[0] || "";
+
+            var stringReg = /^'.*'$|^".*"$/;
+            for(var i = 0; i < args.length; i ++){
+                //if(typeof args[i] === "number"){
+                //    args[i] =  "getValue(scope," + args[i] + ")";
+                //}else{
+                //    args[i] =  "getValue(scope,'" + args[i] + "')";
+                //}
+
+                //这里根据类型进行判断
+                if(stringReg.test(args[i])){
+                    args[i] =  "getValue(scope," + args[i] + ")";
+                }else{
+                    args[i] =  "getValue(scope,'" + args[i] + "')";
+                }
+            }
 
             if(sodaFilterMap[name]){
                 args.unshift(expr);
