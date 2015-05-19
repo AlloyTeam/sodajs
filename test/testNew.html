@@ -13,8 +13,8 @@
 {{'aa' + 1}}
 <img soda-src="pp{{'aa'}}.img" soda-if='1' />
 <div soda-repeat="item in list track by p" data-id="{{item.name}}" id="sd{{p}}">
-{{item.show|date:'2'}}
-{{item.show|filter1:p}}
+{{item.show |   date:'2'}}
+{{item.show |        filter1:p}}
   <div soda-bind-html="'b{{fsadf}}'">
     <div>sadf</div>
   </div>
@@ -37,6 +37,7 @@ sodaFilter("date", function(input, length){
 });
 
 sodaFilter("filter1", function(input, show){
+    console.log(input, show);
     return input + show;
 });
 var data = {
