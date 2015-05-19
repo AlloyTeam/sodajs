@@ -106,17 +106,10 @@
 
             var stringReg = /^'.*'$|^".*"$/;
             for(var i = 0; i < args.length; i ++){
-                //if(typeof args[i] === "number"){
-                //    args[i] =  "getValue(scope," + args[i] + ")";
-                //}else{
-                //    args[i] =  "getValue(scope,'" + args[i] + "')";
-                //}
-
                 //这里根据类型进行判断
-                if(stringReg.test(args[i])){
-                    args[i] =  "getValue(scope," + args[i] + ")";
-                }else{
+                if(OBJECT_REG.test(args[i])){
                     args[i] =  "getValue(scope,'" + args[i] + "')";
+                }else{
                 }
             }
 

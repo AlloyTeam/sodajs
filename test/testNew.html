@@ -6,15 +6,16 @@
 </head>
 <body>
 <script type="text/ppp" id="p">
+{{2}}
 <span soda-if="2">显示</span>
 <span soda-if="0">不显示</span>
 {{a.p || a}}
 {{0}}
 {{'aa' + 1}}
 <img soda-src="pp{{'aa'}}.img" soda-if='1' />
-<div soda-repeat="item in list track by p" data-id="{{item.name}}" id="sd{{p}}">
+<div soda-repeat="item in list" data-id="{{item.name}}" id="sd{{p}}">
 {{item.show |   date:'2'}}
-{{item.show |        filter1:p}}
+{{item.show |        filter1:$index}}
   <div soda-bind-html="'b{{fsadf}}'">
     <div>sadf</div>
   </div>
