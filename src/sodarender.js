@@ -150,25 +150,37 @@
                 // 优先处理 soda-repeat
                 if(/in/.test(child.getAttribute("soda-repeat") || "")){
                     sodaDirectiveMap['soda-repeat'].link(scope, child, child.attributes);
+
+                //ng-if优先处理
                 }else{
+                    if((child.getAttribute("soda-if") || '').trim()){
+                        sodaDirectiveMap['soda-if'].link(scope, child, child.attributes);
+
+                        if(child.getAttribute("removed") === "removed"){
+                            return;
+                        }
+                    }
+                    
                     var childDone;
                     [].map.call(child.attributes, function(attr){
-                        if(/^soda-/.test(attr.name)){
-                            if(sodaDirectiveMap[attr.name]){
-                                var dire = sodaDirectiveMap[attr.name]
+                        if(attr.name !== 'soda-if'){
+                            if(/^soda-/.test(attr.name)){
+                                if(sodaDirectiveMap[attr.name]){
+                                    var dire = sodaDirectiveMap[attr.name]
 
-                                var msg = dire.link(scope, child, child.attributes);
+                                    var msg = dire.link(scope, child, child.attributes);
 
-                                if(msg && msg.command === "childDone"){
-                                    childDone = 1;
+                                    if(msg && msg.command === "childDone"){
+                                        childDone = 1;
+                                    }
                                 }
-                            }
 
-                        // 对其他属性里含expr 处理
-                        }else{
-                            attr.value = attr.value.replace(valueoutReg, function(item, $1){
-                                return parseSodaExpression($1, scope); 
-                            });
+                            // 对其他属性里含expr 处理
+                            }else{
+                                attr.value = attr.value.replace(valueoutReg, function(item, $1){
+                                    return parseSodaExpression($1, scope); 
+                                });
+                            }
                         }
                     });
 
@@ -250,6 +262,14 @@
                     itemScope.__proto__ = scope;
 
                     itemNode.innerHTML = el.innerHTML;
+
+                    if((itemNode.getAttribute("soda-if") || '').trim()){
+                          sodaDirectiveMap['soda-if'].link(itemScope, itemNode, itemNode.attributes);
+
+                          if(itemNode.getAttribute("removed") === "removed"){
+                            continue;
+                          }
+                    }
 
                     // 依次分析该节点上的其他属性
                     [].map.call(itemNode.attributes, function(attr){
