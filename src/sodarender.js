@@ -277,7 +277,7 @@
                             return;
                         }
 
-                        if(attr.name.trim() !== "soda-repeat"){
+                        if(attr.name.trim() !== "soda-repeat" && attr.name.trim() !== "soda-if"){
                             if(/^soda-/.test(attr.name)){
                                 if(sodaDirectiveMap[attr.name]){
                                     var dire = sodaDirectiveMap[attr.name]
