@@ -66,8 +66,6 @@
         // 对filter进行处理
         str = str.replace(OR_REG, OR_REPLACE).split("|");
 
-        console.log(str);
-
         for(var i = 0; i < str.length; i ++){
             str[i] = (str[i].replace(new RegExp(OR_REPLACE, 'g'), "||") || '').trim();
         }
