@@ -13,7 +13,7 @@
 <div soda-repeat="item in list track by p" data-id="{{item.name}}" id="sd{{p}}">
 {{item.show|date:'2'}}
 {{item.show|filter1:p}}
-<div soda-bind-html="'<div><a href=pp>sadfdsf</a></div>'">
+<div soda-bind-html="'b{{fsadf}}'">
   <div>sadf</div>
 </div>
 </div>
@@ -34,7 +34,6 @@ sodaFilter("date", function(input, length){
 });
 
 sodaFilter("filter1", function(input, show){
-      console.log(show);
     return input + show;
 });
 var data = {
@@ -47,13 +46,15 @@ var data = {
          {list: [{'title': 'aa'}, {'title': 'bb'}], name: 'b'},
          {list: [{'title': 'aa'}, {'title': 'bb'}], name: 'b'},
          {list: [{'title': 'aa'}, {'title': 'bb'}], name: 'c'}
-   ]
+   ],
+
+     b: '<div><a href=pp>{{s|sdfsdf{{adfdsf}}</a></div>'
 };
 var t = + new Date();
 var target = document.getElementById("pp");
 var result = sodaRender(document.getElementById("p").innerHTML, data);
 
-console.dir(result.innerHTML);
+//console.dir(result.innerHTML);
 
 target.appendChild(result);
 

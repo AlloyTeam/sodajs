@@ -151,12 +151,17 @@
                 if(/in/.test(child.getAttribute("soda-repeat") || "")){
                     sodaDirectiveMap['soda-repeat'].link(scope, child, child.attributes);
                 }else{
+                    var childDone;
                     [].map.call(child.attributes, function(attr){
                         if(/^soda-/.test(attr.name)){
                             if(sodaDirectiveMap[attr.name]){
                                 var dire = sodaDirectiveMap[attr.name]
 
-                                dire.link(scope, child, child.attributes);
+                                var msg = dire.link(scope, child, child.attributes);
+
+                                if(msg && msg.command === "childDone"){
+                                    childDone = 1;
+                                }
                             }
 
                         // 对其他属性里含expr 处理
@@ -167,7 +172,9 @@
                         }
                     });
 
-                    parseChild(child, scope);
+                    if(! childDone){
+                        parseChild(child, scope);
+                    }
                 }
             }
         });
@@ -337,6 +344,10 @@
 
                 if(expressFunc){
                     el.innerHTML = expressFunc;
+
+                    return {
+                        command: "childDone"
+                    };
                 }
             }
         };
