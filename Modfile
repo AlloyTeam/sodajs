@@ -2,7 +2,7 @@
 module.exports = {
     tasks:{
         cat:{
-            source:['src/copyright.js', 'combined/sodarender.min.js']
+            source:['src/copyright.js', 'combined/sodarender.js']
             ,dest: 'combined/sodarender.js'
         },
         
@@ -16,6 +16,6 @@ module.exports = {
      }
     },
     targets:{
-        dist: "min cat rm"
+        dist: "min cat"
     }
 };

@@ -22,21 +22,51 @@
         el.className = el.className.replace(classNameRegExp(className), "");
     };
 
-    var getValue = function(data, attrStr){
-        var dotIndex = attrStr.indexOf(".");
+    var getValue = function(_data, _attrStr){
+        var _getValue = function(data, attrStr){
+            var dotIndex = attrStr.indexOf(".");
 
-        if(dotIndex > -1){
-            var attr = attrStr.substr(0, dotIndex);
-            attrStr = attrStr.substr(dotIndex + 1);
+            if(dotIndex > -1){
+                var attr = attrStr.substr(0, dotIndex);
+                attrStr = attrStr.substr(dotIndex + 1);
 
-            if(data[attr]){
-                return getValue(data[attr], attrStr);
+                if(typeof data[attr] !== "undefined"){
+                    return _getValue(data[attr], attrStr);
+                }else{
+                    var eventData = {
+                        name: _attrStr,
+                        data: _data
+                    };
+
+                    triggerEvent("nullvalue", {
+                        type: "nullvalue",
+                        data: eventData
+                    }, eventData);
+                    return "";
+                }
             }else{
-                return "";
+                var rValue;
+                if(typeof data[attrStr] !== "undefined"){
+                    rValue = data[attrStr];
+                }else{
+                    var eventData = {
+                        name: _attrStr,
+                        data: _data
+                    };
+
+                    triggerEvent("nullvalue", {
+                        type: "nullvalue",
+                        data: eventData
+                    }, eventData);
+
+                    rValue = '';
+                }
+
+                return rValue;
             }
-        }else{
-            return (typeof data[attrStr] !== "undefined") ? data[attrStr] : "";
-        }
+        };
+
+        return _getValue(_data, _attrStr);
     };
 
     // 注释node
@@ -241,7 +271,7 @@
                 }
 
                 // 这里要处理一下
-                var repeatObj = getValue(scope, valueName);
+                var repeatObj = getValue(scope, valueName) || [];
                 var lastNode = el;
 
                 for(var i = 0; i < repeatObj.length; i ++){
@@ -386,10 +416,31 @@
         return frament;
     };
 
+    var eventPool = {};
+    sodaRender.addEventListener = function(type, func){
+        if(eventPool[type]){
+        }else{
+            eventPool[type] = [];
+        }
+
+        eventPool[type].push(func);
+    };
+
+    var triggerEvent = function(type, e, data){
+        var events = eventPool[type] || [];
+
+        for(var i = 0; i < events.length; i ++){
+            var eventFunc = events[i];
+            eventFunc && eventFunc(e, data);
+        }
+    };
+
     // 预先编译
     var compile = function(str, data){
     };
 
     window.sodaRender = sodaRender;
     window.sodaFilter = sodaFilter;
+
+    // 监听数据异常情况
 })();
