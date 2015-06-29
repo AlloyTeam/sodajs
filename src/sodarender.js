@@ -39,9 +39,11 @@
                     };
 
                     triggerEvent("nullvalue", {
-                        type: "nullvalue",
+                        type: "nullattr",
                         data: eventData
                     }, eventData);
+
+                    // 如果还有
                     return "";
                 }
             }else{
