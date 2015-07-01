@@ -85,6 +85,9 @@ DESCR&nbsp;: &nbsp;&nbsp;Using templateStr with data to render template<br />
 ####soda-bind-html
 >soda-bind-html="<div><a href=pp>click</a></div>"
 
+####soda-style
+>soda-stle="style"
+
 
 ####filters
 >{{input|filte1:args1:args2...|filter2:args...}}

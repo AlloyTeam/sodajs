@@ -435,6 +435,48 @@
         };
     });
 
+    sodaDirective("style", function(){
+        return {
+            link: function(scope, el, attrs){
+                var opt = el.getAttribute("soda-style");
+                var expressFunc = parseSodaExpression(opt, scope);
+
+                var getCssValue = function(name, value){
+                    if(isNaN(value)){
+                        return value;
+                    }else{
+                        return value + "px";
+                    }
+                };
+
+                if(expressFunc){
+                    var stylelist = [];
+
+                    for(var i in expressFunc){
+                        if(expressFunc.hasOwnProperty(i)){
+                            var provalue = getCssValue(i, expressFunc[i]);
+
+                            stylelist.push([i, provalue].join(":"));
+                        }
+                    }
+
+                    var style = el.style;
+                    for(var i = 0; i < style.length; i ++){
+                        var name = style[i];
+                        if(expressFunc[name]){
+                        }else{
+                            stylelist.push([name, style[name]].join(":"));
+                        }
+                    }
+
+                    var styleStr = stylelist.join(";");
+
+                    el.setAttribute("style", styleStr);
+                }
+            }
+        };
+    });
+
     var sodaRender = function(str, data){
         // 解析模板DOM
         var div = document.createElement("div");
