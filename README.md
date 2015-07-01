@@ -88,6 +88,9 @@ DESCR&nbsp;: &nbsp;&nbsp;Using templateStr with data to render template<br />
 ####soda-style
 >soda-style="style"
 
+####soda-*
+>soda-rx="{{rx}}%"
+
 
 ####filters
 >{{input|filte1:args1:args2...|filter2:args...}}

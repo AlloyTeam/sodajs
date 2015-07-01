@@ -235,6 +235,18 @@
                                     if(msg && msg.command === "childDone"){
                                         childDone = 1;
                                     }
+                                }else{
+
+                                    var attrName = attr.name.replace(/^soda-/, '');
+
+                                    if(attrName){
+                                        var attrValue = attr.value.replace(valueoutReg, function(item, $1){
+                                            return parseSodaExpression($1, scope); 
+                                        });
+
+                                        child.setAttribute(attrName, attrValue);
+                                    }
+
                                 }
 
                             // 对其他属性里含expr 处理
@@ -345,6 +357,16 @@
                                     var dire = sodaDirectiveMap[attr.name]
 
                                     dire.link(itemScope, itemNode, itemNode.attributes);
+
+                                }else{
+                                    var attrName = attr.name.replace(/^soda-/, '');
+                                    if(attrName){
+                                        var attrValue = attr.value.replace(valueoutReg, function(item, $1){
+                                            return parseSodaExpression($1, scope); 
+                                        });
+
+                                        itemNode.setAttribute(attrName, attrValue);
+                                    }
 
                                 }
                             }else{
