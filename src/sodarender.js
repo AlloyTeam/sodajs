@@ -442,6 +442,11 @@
                 var expressFunc = parseSodaExpression(opt, scope);
 
                 var getCssValue = function(name, value){
+                    var numberWithoutpx = /opacity|z-index/;
+                    if(numberWithoutpx.test(name)){
+                        return parseFloat(value);
+                    }
+
                     if(isNaN(value)){
                         return value;
                     }else{
