@@ -86,7 +86,7 @@ DESCR&nbsp;: &nbsp;&nbsp;Using templateStr with data to render template<br />
 >soda-bind-html="<div><a href=pp>click</a></div>"
 
 ####soda-style
->soda-stle="style"
+>soda-style="style"
 
 
 ####filters
