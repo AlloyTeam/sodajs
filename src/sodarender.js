@@ -23,6 +23,15 @@
     };
 
     var getValue = function(_data, _attrStr){
+        CONST_REGG.lastIndex = 0;
+        var realAttrStr = _attrStr.replace(CONST_REGG, function(r){
+            if(typeof _data[r] === "undefined"){
+                return r;
+            }else{
+                return _data[r];
+            }
+        });
+
         var _getValue = function(data, attrStr){
             var dotIndex = attrStr.indexOf(".");
 
@@ -30,11 +39,16 @@
                 var attr = attrStr.substr(0, dotIndex);
                 attrStr = attrStr.substr(dotIndex + 1);
 
+                // 检查attrStr是否属性变量并转换
+                if(_data[attr] && CONST_REG.test(attr)){
+                    attr = _data[attr];
+                }
+
                 if(typeof data[attr] !== "undefined"){
                     return _getValue(data[attr], attrStr);
                 }else{
                     var eventData = {
-                        name: _attrStr,
+                        name: realAttrStr,
                         data: _data
                     };
 
@@ -47,12 +61,18 @@
                     return "";
                 }
             }else{
+
+                // 检查attrStr是否属性变量并转换
+                if(_data[attrStr] && CONST_REG.test(attrStr)){
+                    attrStr = _data[attrStr];
+                }
+
                 var rValue;
                 if(typeof data[attrStr] !== "undefined"){
                     rValue = data[attrStr];
                 }else{
                     var eventData = {
-                        name: _attrStr,
+                        name: realAttrStr,
                         data: _data
                     };
 
@@ -94,6 +114,14 @@
         return "$$" + ~~ (Math.random() * 1E6);
     };
 
+    var CONST_PRIFIX = "_$C$_";
+    var CONST_REG = /^_\$C\$_/;
+    var CONST_REGG = /_\$C\$_[^\.]+/g;
+
+    var getAttrVarKey = function(){
+        return CONST_PRIFIX + ~~ (Math.random() * 1E6);
+    };
+
     var parseSodaExpression = function(str, scope){
         // 对filter进行处理
         str = str.replace(OR_REG, OR_REPLACE).split("|");
@@ -105,6 +133,7 @@
         var expr = str[0] || "";
         var filters = str.slice(1);
 
+        // 将字符常量保存下来
         expr = expr.replace(STRING_REG, function(r, $1, $2){
             var key = getRandom();
             scope[key] = $1 || $2;
@@ -116,7 +145,15 @@
 
             //对expr预处理
             expr = expr.replace(ATTR_REG, function(r, $1){
-                return "." + parseSodaExpression($1, scope);
+                var key = getAttrVarKey();
+                // 属性名字 为字符常量
+                var attrName = parseSodaExpression($1, scope);
+
+                // 给一个特殊的前缀 表示是属性变量
+
+                scope[key] = attrName;
+
+                return "." + key;
             });
         }
 
