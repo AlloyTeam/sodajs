@@ -63,7 +63,7 @@ DESCR&nbsp;: &nbsp;&nbsp;Defining Filters, so you can use filters in template<br
 
 ## Template Language (AngularJs Template Like)
 ### Now, we just offer three directives as below. More will be added soon later. But the three directives are able to meet our daily needs.
-####{{}}
+#### {{}}
 >out put expressions
 
 >{{item.name + 1}}
