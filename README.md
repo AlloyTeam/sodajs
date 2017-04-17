@@ -1,6 +1,6 @@
 SodaRender
 ====
-### A lite angular-like template engine for JavaScript
+### Light weight but powerful template engine for JavaScript
 
 ## why using SodaRender?
 >#### SodaRender is just 3KB in size.
@@ -61,7 +61,7 @@ Meanwhile, you can use it like a common DOM Node, such as appending it to your t
 USING&nbsp;: &nbsp;&nbsp;SodaFilter(String filterName, Function func(input, args...))<br />
 DESCR&nbsp;: &nbsp;&nbsp;Defining Filters, so you can use filters in template<br />
 
-## Template Language (AngularJs Template Like)
+## Template Language 
 ### Now, we just offer three directives as below. More will be added soon later. But the three directives are able to meet our daily needs.
 #### {{}}
 >out put expressions
