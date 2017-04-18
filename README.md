@@ -1,6 +1,6 @@
-<h1 align="center">
+<p align="center" style="font-size:40px;">
   sodajs
-</h1>
+</p>
 <p align="center">
 Light weight but powerful template engine for JavaScript.
 </p>
