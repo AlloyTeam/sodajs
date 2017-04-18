@@ -64,7 +64,7 @@ var tpl = '<div>Hello, {{count+1}}</div>'
 document.body.innerHTML = soda(tpl,{ count : 1 })
 ```
 
-➜ [repeat example](http://alloyteam.github.io/sodajs/pg/rd.html?type=expression)
+➜ [expression example](http://alloyteam.github.io/sodajs/pg/rd.html?type=expression)
 
 ### filter
 
@@ -92,7 +92,7 @@ document.body.innerHTML = soda(tpl,{ list : [
 ] })
 ```
 
-➜ [repeat example](http://alloyteam.github.io/sodajs/pg/rd.html?type=filter)
+➜ [filter example](http://alloyteam.github.io/sodajs/pg/rd.html?type=filter)
 
 ### Others
 
