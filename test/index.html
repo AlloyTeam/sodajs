@@ -18,7 +18,7 @@
 {{list[0].show}}                                      <span class="result">=> 1 </span><br />
 {{list[0]}}                                            <span class="result">=> [object object] </span><br />
 <span soda-repeat="item in mm"></span>
-{{2}}{{3}}                                                <span class="result">=> 2 </span><br />
+{{2}}{{3}}                                                <span class="result">=> 23 </span><br />
 <span soda-if="2">显示</span>                          <span class="result">=> 显示 </span><br />
 <span soda-if="0">不显示</span>                        <span class="result">=> </span><br />
 <span soda-if="true">true显示</span>                     <span class="result">=> true显示 </span><br />
@@ -42,13 +42,13 @@
 {{list[0]['name']}}
 <div id="pp" soda-style="style" style="opacity: 1;"></div>
 
-<span soda-repeat="item in list track by $mm">
+<span soda-repeat="item in list by $mm">
 {{$mm}}
 </span>
 <span class="result">=> 0 1 ... 6</span><br />
 
 
-<span soda-repeat="item in list track by $ff">
+<span soda-repeat="item in list by $ff">
 {{$ff + 1}}
 </span>
 <span class="result">=> 1 ... 7</span><br />

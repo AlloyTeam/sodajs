@@ -1,3 +1,10 @@
+/**
+ * sodajs v0.3.0 by dorsywang
+ * Light weight but powerful template engine for JavaScript
+ * Github: https://github.com/AlloyTeam/sodajs
+ * MIT License
+ */
+
 ;(function(){
     var valueoutReg = /\{\{([^\}]*)\}\}/g;
 
@@ -47,7 +54,7 @@
                 var attr = attrStr.substr(0, dotIndex);
                 attrStr = attrStr.substr(dotIndex + 1);
 
-                // 检查attrStr是否属性变量并转换
+                // �?查attrStr是否属�?�变量并转换
                 if(typeof _data[attr] !== "undefined" && CONST_REG.test(attr)){
                     attr = _data[attr];
                 }
@@ -70,7 +77,7 @@
                 }
             }else{
 
-                // 检查attrStr是否属性变量并转换
+                // �?查attrStr是否属�?�变量并转换
                 if(typeof _data[attrStr] !== "undefined" && CONST_REG.test(attrStr)){
                     attrStr = _data[attrStr];
                 }
@@ -103,7 +110,7 @@
     var commentNode = function(node){
     };
 
-    // 标识符
+    // 标识�?
     var IDENTOR_REG = /[a-zA-Z_\$]+[\w\$]*/g;
     var STRING_REG = /"([^"]*)"|'([^']*)'/g
     var NUMBER_REG = /\d+|\d*\.\d+/g;
@@ -141,7 +148,7 @@
         var expr = str[0] || "";
         var filters = str.slice(1);
 
-        // 将字符常量保存下来
+        // 将字符常量保存下�?
         expr = expr.replace(STRING_REG, function(r, $1, $2){
             var key = getRandom();
             scope[key] = $1 || $2;
@@ -151,13 +158,13 @@
         while(ATTR_REG.test(expr)){
             ATTR_REG.lastIndex = 0;
 
-            //对expr预处理
+            //对expr预处�?
             expr = expr.replace(ATTR_REG, function(r, $1){
                 var key = getAttrVarKey();
-                // 属性名字 为字符常量
+                // 属�?�名�? 为字符常�?
                 var attrName = parseSodaExpression($1, scope);
 
-                // 给一个特殊的前缀 表示是属性变量
+                // 给一个特殊的前缀 表示是属性变�?
 
                 scope[key] = attrName;
 
@@ -259,7 +266,7 @@
 
             // 处理输出 包含 soda-*
             [].map.call(node.attributes, function(attr){
-                // 如果dirctiveMap有的就跳过不再处理
+                // 如果dirctiveMap有的就跳过不再处�?
                 if(! sodaDirectiveMap[attr.name]){
                     if(/^soda-/.test(attr.name)){
                         var attrName = attr.name.replace(/^soda-/, '');
@@ -329,7 +336,7 @@
                 var itemName;
                 var valueName;
 
-                var trackReg = /\s+track\s+by\s+([^\s]+)$/;
+                var trackReg = /\s+by\s+([^\s]+)$/;
 
                 var trackName;
                 opt = opt.replace(trackReg, function(item, $1){
@@ -363,13 +370,13 @@
 
                 trackName = trackName || '$index';
 
-                // 这里要处理一下
+                // 这里要处理一�?
                 var repeatObj = getValue(scope, valueName) || [];
 
                 var repeatFunc = function(i){
                     var itemNode = el.cloneNode(true);
 
-                    // 这里创建一个新的scope
+                    // 这里创建�?个新的scope
                     var itemScope = {};
                     itemScope[trackName] = i;
 
@@ -381,7 +388,7 @@
 
                     el.parentNode.insertBefore(itemNode, el);
 
-                    // 这里是新加的dom, 要单独编译
+                    // 这里是新加的dom, 要单独编�?
                     compileNode(itemNode, itemScope);
 
                 };
