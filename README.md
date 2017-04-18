@@ -105,7 +105,7 @@ var tpl = '<div soda-bind-html="html"></div>'
 document.body.innerHTML = soda(tpl,{ html : '<span style="color:red;">test soda-bind-html</span>' })
 ```
 
-➜ [bind-html example](http://alloyteam.github.io/sodajs/pg/rd.html?type=bindhtml)
+➜ [bind-html example](http://alloyteam.github.io/sodajs/pg/rd.html?type=bind-html)
 
 ### Others
 
