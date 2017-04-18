@@ -1,10 +1,3 @@
-/**
- * sodajs v0.1.0 by dorsywang
- * Light weight but powerful template engine for JavaScript
- * Github: https://github.com/AlloyTeam/sodajs
- * MIT License
- */
-
 ;(function(){
     var valueoutReg = /\{\{([^\}]*)\}\}/g;
 
@@ -21,7 +14,7 @@
 
         if(el.className.match(classNameRegExp(className))){
         }else{
-            el.className += " " + className;
+          el.className += " " + className;
         }
     };
 
@@ -39,6 +32,14 @@
             }
         });
 
+        if(_attrStr === 'true'){
+            return true;
+        }
+
+        if(_attrStr === 'false'){
+            return false;
+        }
+
         var _getValue = function(data, attrStr){
             var dotIndex = attrStr.indexOf(".");
 
@@ -46,8 +47,8 @@
                 var attr = attrStr.substr(0, dotIndex);
                 attrStr = attrStr.substr(dotIndex + 1);
 
-                // ¼ì²éattrStrÊÇ·ñÊôĞÔ±äÁ¿²¢×ª»»
-                if(_data[attr] && CONST_REG.test(attr)){
+                // æ£€æŸ¥attrStræ˜¯å¦å±æ€§å˜é‡å¹¶è½¬æ¢
+                if(typeof _data[attr] !== "undefined" && CONST_REG.test(attr)){
                     attr = _data[attr];
                 }
 
@@ -64,13 +65,13 @@
                         data: eventData
                     }, eventData);
 
-                    // Èç¹û»¹ÓĞ
+                    // å¦‚æœè¿˜æœ‰
                     return "";
                 }
             }else{
 
-                // ¼ì²éattrStrÊÇ·ñÊôĞÔ±äÁ¿²¢×ª»»
-                if(_data[attrStr] && CONST_REG.test(attrStr)){
+                // æ£€æŸ¥attrStræ˜¯å¦å±æ€§å˜é‡å¹¶è½¬æ¢
+                if(typeof _data[attrStr] !== "undefined" && CONST_REG.test(attrStr)){
                     attrStr = _data[attrStr];
                 }
 
@@ -98,11 +99,11 @@
         return _getValue(_data, _attrStr);
     };
 
-    // ×¢ÊÍnode
+    // æ³¨é‡Šnode
     var commentNode = function(node){
     };
 
-    // ±êÊ¶·û
+    // æ ‡è¯†ç¬¦
     var IDENTOR_REG = /[a-zA-Z_\$]+[\w\$]*/g;
     var STRING_REG = /"([^"]*)"|'([^']*)'/g
     var NUMBER_REG = /\d+|\d*\.\d+/g;
@@ -130,7 +131,7 @@
     };
 
     var parseSodaExpression = function(str, scope){
-        // ¶Ôfilter½øĞĞ´¦Àí
+        // å¯¹filterè¿›è¡Œå¤„ç†
         str = str.replace(OR_REG, OR_REPLACE).split("|");
 
         for(var i = 0; i < str.length; i ++){
@@ -140,7 +141,7 @@
         var expr = str[0] || "";
         var filters = str.slice(1);
 
-        // ½«×Ö·û³£Á¿±£´æÏÂÀ´
+        // å°†å­—ç¬¦å¸¸é‡ä¿å­˜ä¸‹æ¥
         expr = expr.replace(STRING_REG, function(r, $1, $2){
             var key = getRandom();
             scope[key] = $1 || $2;
@@ -150,13 +151,13 @@
         while(ATTR_REG.test(expr)){
             ATTR_REG.lastIndex = 0;
 
-            //¶ÔexprÔ¤´¦Àí
+            //å¯¹expré¢„å¤„ç†
             expr = expr.replace(ATTR_REG, function(r, $1){
                 var key = getAttrVarKey();
-                // ÊôĞÔÃû×Ö Îª×Ö·û³£Á¿
+                // å±æ€§åå­— ä¸ºå­—ç¬¦å¸¸é‡
                 var attrName = parseSodaExpression($1, scope);
 
-                // ¸øÒ»¸öÌØÊâµÄÇ°×º ±íÊ¾ÊÇÊôĞÔ±äÁ¿
+                // ç»™ä¸€ä¸ªç‰¹æ®Šçš„å‰ç¼€ è¡¨ç¤ºæ˜¯å±æ€§å˜é‡
 
                 scope[key] = attrName;
 
@@ -182,7 +183,7 @@
 
             var stringReg = /^'.*'$|^".*"$/;
             for(var i = 0; i < args.length; i ++){
-                //ÕâÀï¸ù¾İÀàĞÍ½øĞĞÅĞ¶Ï
+                //è¿™é‡Œæ ¹æ®ç±»å‹è¿›è¡Œåˆ¤æ–­
                 if(OBJECT_REG.test(args[i])){
                     args[i] =  "getValue(scope,'" + args[i] + "')";
                 }else{
@@ -207,69 +208,83 @@
         return evalFunc(scope);
     };
 
-    var parseChild = function(parent, scope){
-        [].map.call([].slice.call(parent.childNodes, []), function(child){
-            if(child.nodeType === 3){
-                child.nodeValue = child.nodeValue.replace(valueoutReg, function(item, $1){
-                    return parseSodaExpression($1, scope);
-                });
-            }
+    var hashTable = {
+        id2Expression: {
+        },
 
-            if(child.attributes){
-                // ÓÅÏÈ´¦Àí soda-repeat
-                if(/in/.test(child.getAttribute("soda-repeat") || "")){
-                    sodaDirectiveMap['soda-repeat'].link(scope, child, child.attributes);
+        expression2id: {
+        },
 
-                    //ng-ifÓÅÏÈ´¦Àí
-                }else{
-                    if((child.getAttribute("soda-if") || '').trim()){
-                        sodaDirectiveMap['soda-if'].link(scope, child, child.attributes);
+        getRandId: function(){
+            return 'soda' + ~~ (Math.random() * 1E5);
+        }
+    };
 
-                        if(child.getAttribute("removed") === "removed"){
-                            return;
-                        }
-                    }
+    // è§£ææŒ‡ä»¤
+    // è§£æattr
+    var compileNode = function(node, scope){
+        // å¦‚æœåªæ˜¯æ–‡æœ¬
+        if(node.nodeType === 3){
+            node.nodeValue = node.nodeValue.replace(valueoutReg, function(item, $1){
+                /*
+                var id = hashTable.getRandId();
 
-                    var childDone;
-                    [].map.call(child.attributes, function(attr){
-                        if(attr.name !== 'soda-if'){
-                            if(/^soda-/.test(attr.name)){
-                                if(sodaDirectiveMap[attr.name]){
-                                    var dire = sodaDirectiveMap[attr.name]
+                hashTable.id2Expression[id] = {
+                    expression: $1,
+                    el: child
+                };
 
-                                    var msg = dire.link(scope, child, child.attributes);
+                hashTable.expression2id[$1] = {
+                    id: id,
+                    el: child
+                };
+                */
 
-                                    if(msg && msg.command === "childDone"){
-                                        childDone = 1;
-                                    }
-                                }else{
 
-                                    var attrName = attr.name.replace(/^soda-/, '');
+                return parseSodaExpression($1, scope); 
+            });
+        }
 
-                                    if(attrName){
-                                        var attrValue = attr.value.replace(valueoutReg, function(item, $1){
-                                            return parseSodaExpression($1, scope);
-                                        });
+        if(node.attributes){
+            // æŒ‡ä»¤å¤„ç†
+            sodaDirectiveArr.map(function(item){
+                var name = item.name;
 
-                                        child.setAttribute(attrName, attrValue);
-                                    }
+                var opt = item.opt;
 
-                                }
-
-                                // ¶ÔÆäËûÊôĞÔÀïº¬expr ´¦Àí
-                            }else{
-                                attr.value = attr.value.replace(valueoutReg, function(item, $1){
-                                    return parseSodaExpression($1, scope);
-                                });
-                            }
-                        }
-                    });
-
-                    if(! childDone){
-                        parseChild(child, scope);
-                    }
+                if(node.getAttribute(name) && node.parentNode){
+                    opt.link(scope, node, node.attributes);
                 }
-            }
+            });
+
+            // å¤„ç†è¾“å‡º åŒ…å« soda-*
+            [].map.call(node.attributes, function(attr){
+                // å¦‚æœdirctiveMapæœ‰çš„å°±è·³è¿‡ä¸å†å¤„ç†
+                if(! sodaDirectiveMap[attr.name]){
+                    if(/^soda-/.test(attr.name)){
+                        var attrName = attr.name.replace(/^soda-/, '');
+
+                        if(attrName){
+                            var attrValue = attr.value.replace(valueoutReg, function(item, $1){
+                                return parseSodaExpression($1, scope); 
+                            });
+
+                            node.setAttribute(attrName, attrValue);
+                        }
+
+                    // å¯¹å…¶ä»–å±æ€§é‡Œå«expr å¤„ç†
+                    }else{
+                        attr.value = attr.value.replace(valueoutReg, function(item, $1){
+                            return parseSodaExpression($1, scope); 
+                        });
+                    }                    
+                }
+            });
+
+        }        
+
+        [].map.call([].slice.call(node.childNodes, []), function(child){
+            compileNode(child, scope);
         });
     };
 
@@ -279,12 +294,24 @@
     var sodaFilterMap = {
     };
 
+    var sodaDirectiveArr = [];
+
     var sodaDirective = function(name, func){
-        sodaDirectiveMap['soda-' + name] = func();
+        var name = 'soda-' + name;
+        sodaDirectiveMap[name] = func();
+
+        sodaDirectiveArr.push({
+            name: name,
+            opt: sodaDirectiveMap[name]
+        });
     };
 
     var sodaFilter = function(name, func){
         sodaFilterMap[name] = func;
+    };
+
+    sodaFilter.get = function(name){
+        return sodaFilterMap[name];
     };
 
     sodaFilter("date", function(input, lenth){
@@ -293,8 +320,9 @@
 
     sodaDirective('repeat', function(){
         return {
+            priority: 10,
             compile: function(scope, el, attrs){
-
+                
             },
             link: function(scope, el, attrs){
                 var opt = el.getAttribute('soda-repeat');
@@ -312,29 +340,36 @@
                     return '';
                 });
 
-                trackName = trackName || '$index';
 
-                var inReg = /([^\s]+)\s+in\s+([^\s]+)/;
+                var inReg = /([^\s]+)\s+in\s+([^\s]+)|\(([^,]+)\s*,\s*([^)]+)\)\s+in\s+([^\s]+)/;
 
                 var r = inReg.exec(opt);
                 if(r){
-                    itemName = (r[1] || '').trim();
-                    valueName = (r[2] || '').trim();
+                    if(r[1] && r[2]){
+                        itemName = (r[1] || '').trim();
+                        valueName = (r[2] || '').trim();
 
-                    if(! (itemName && valueName)){
-                        return;
+                        if(! (itemName && valueName)){
+                            return;
+                        }
+                    }else if(r[3] && r[4] && r[5]){
+                        trackName = (r[3] || '').trim();
+                        itemName = (r[4] || '').trim();
+                        valueName = (r[5] || '').trim();
                     }
                 }else{
                     return;
                 }
 
-                // ÕâÀïÒª´¦ÀíÒ»ÏÂ
+                trackName = trackName || '$index';
+
+                // è¿™é‡Œè¦å¤„ç†ä¸€ä¸‹
                 var repeatObj = getValue(scope, valueName) || [];
-                var lastNode = el;
 
-                for(var i = 0; i < repeatObj.length; i ++){
-                    var itemNode = el.cloneNode();
+                var repeatFunc = function(i){
+                    var itemNode = el.cloneNode(true);
 
+                    // è¿™é‡Œåˆ›å»ºä¸€ä¸ªæ–°çš„scope
                     var itemScope = {};
                     itemScope[trackName] = i;
 
@@ -342,54 +377,24 @@
 
                     itemScope.__proto__ = scope;
 
-                    itemNode.innerHTML = el.innerHTML;
+                    itemNode.removeAttribute('soda-repeat');
 
-                    if((itemNode.getAttribute("soda-if") || '').trim()){
-                        sodaDirectiveMap['soda-if'].link(itemScope, itemNode, itemNode.attributes);
+                    el.parentNode.insertBefore(itemNode, el);
 
-                        if(itemNode.getAttribute("removed") === "removed"){
-                            continue;
-                        }
+                    // è¿™é‡Œæ˜¯æ–°åŠ çš„dom, è¦å•ç‹¬ç¼–è¯‘
+                    compileNode(itemNode, itemScope);
+
+                };
+
+                if('length' in repeatObj){
+                    for(var i = 0; i < repeatObj.length; i ++){
+                        repeatFunc(i);
                     }
-
-                    // ÒÀ´Î·ÖÎö¸Ã½ÚµãÉÏµÄÆäËûÊôĞÔ
-                    [].map.call(itemNode.attributes, function(attr){
-                        if(itemNode.getAttribute("removed") === "removed"){
-                            return;
+                }else{
+                    for(var i in repeatObj){
+                        if(repeatObj.hasOwnProperty(i)){
+                            repeatFunc(i);
                         }
-
-                        if(attr.name.trim() !== "soda-repeat" && attr.name.trim() !== "soda-if"){
-                            if(/^soda-/.test(attr.name)){
-                                if(sodaDirectiveMap[attr.name]){
-                                    var dire = sodaDirectiveMap[attr.name]
-
-                                    dire.link(itemScope, itemNode, itemNode.attributes);
-
-                                }else{
-                                    var attrName = attr.name.replace(/^soda-/, '');
-                                    if(attrName){
-                                        var attrValue = attr.value.replace(valueoutReg, function(item, $1){
-                                            return parseSodaExpression($1, scope);
-                                        });
-
-                                        itemNode.setAttribute(attrName, attrValue);
-                                    }
-
-                                }
-                            }else{
-                                attr.value = attr.value.replace(valueoutReg, function(item, $1){
-                                    return parseSodaExpression($1, itemScope);
-                                });
-                            }
-                        }
-                    });
-
-                    if(itemNode.getAttribute("removed") !== "removed"){
-                        parseChild(itemNode, itemScope);
-
-                        el.parentNode.insertBefore(itemNode, lastNode.nextSibling);
-
-                        lastNode = itemNode;
                     }
                 }
 
@@ -401,6 +406,7 @@
 
     sodaDirective('if', function(){
         return {
+            priority: 9,
             link: function(scope, el, attrs){
                 var opt = el.getAttribute('soda-if');
 
@@ -408,7 +414,7 @@
 
                 if(expressFunc){
                 }else{
-                    el.setAttribute("removed", "removed");
+                    // el.setAttribute("removed", "removed");
                     el.parentNode && el.parentNode.removeChild(el);
                 }
             }
@@ -436,7 +442,7 @@
                 var opt = el.getAttribute("soda-src");
 
                 var expressFunc = opt.replace(valueoutReg, function(item, $1){
-                    return parseSodaExpression($1, scope);
+                    return parseSodaExpression($1, scope); 
                 });
 
                 if(expressFunc){
@@ -512,25 +518,64 @@
     });
 
     var sodaRender = function(str, data){
-        // ½âÎöÄ£°åDOM
+        // å¯¹directiveè¿›è¡Œæ’åº
+        sodaDirectiveArr.sort(function(b, a){
+            return (Number(a.opt.priority || 0) - Number(b.opt.priority || 0));
+        });
+
+        console.log(sodaDirectiveArr);
+
+        // è§£ææ¨¡æ¿DOM
         var div = document.createElement("div");
 
         div.innerHTML = str;
 
-        parseChild(div, data);
+        [].map.call([].slice.call(div.childNodes, []), function(child){
+            compileNode(child, data);
+        });
 
         return div.innerHTML;
-        //ÈÃÓÃ»§×Ô¼ºÈ¥×ªDocumentFragment
-        //var frament = document.createDocumentFragment();
-        //frament.innerHTML = div.innerHTML;
-        //
-        //var child;
-        //while(child = div.childNodes[0]){
-        //    frament.appendChild(child);
-        //}
-        //
-        //
-        //return frament;
+
+      //  var frament = document.createDocumentFragment();
+      //  frament.innerHTML = div.innerHTML;
+
+        /*
+        frament.update = function(newData){
+            //checkingDirtyData(data, d);
+            var diff = DeepDiff.noConflict();
+
+            var diffResult = diff(data, newData);
+
+            console.log(diffResult);
+
+            var dirtyData = ['a'];
+
+            for(var i = 0; i < dirtyData.length; i ++){
+                var item = dirtyData[i];
+
+                var id = hashTable.expression2id[item];
+
+                var nowValue = parseSodaExpression(item, newData);
+                //console.log(nowValue);
+
+                if(id.el){
+                    id.el.nodeValue = nowValue;
+                }
+            }
+
+            console.log(hashTable);
+
+
+        };
+        */
+
+        var child;
+        while(child = div.childNodes[0]){
+            frament.appendChild(child);
+        }
+        
+
+        return frament;
     };
 
     var eventPool = {};
@@ -543,6 +588,8 @@
         eventPool[type].push(func);
     };
 
+    sodaRender.author = "dorsy";
+
     var triggerEvent = function(type, e, data){
         var events = eventPool[type] || [];
 
@@ -551,12 +598,6 @@
             eventFunc && eventFunc(e, data);
         }
     };
-
-    // Ô¤ÏÈ±àÒë
-    var compile = function(str, data){
-    };
-
-
 
     sodaRender.filter = sodaFilter;
 
@@ -571,6 +612,5 @@
     else
         window.soda = sodaRender;
 
-
-    // ¼àÌıÊı¾İÒì³£Çé¿ö
+    // ç›‘å¬æ•°æ®å¼‚å¸¸æƒ…å†µ
 })();
