@@ -42,9 +42,9 @@ var tpl = '\
 
 var data = {
     list: [
-        {name: "A" ,show: true},
-        {name: "B" ,show: true},
-        {name: "C"}
+        {name: "Hello" ,show: true},
+        {name: "sodajs" ,show: true},
+        {name: "AlloyTeam"}
     ]
 };
 
