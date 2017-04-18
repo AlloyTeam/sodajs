@@ -98,6 +98,15 @@ document.body.innerHTML = soda(tpl,{ list : [
 
 ➜ [filter example](http://alloyteam.github.io/sodajs/pg/rd.html?type=filter)
 
+### bind-html
+
+```js
+var tpl = '<div soda-bind-html="html"></div>'
+document.body.innerHTML = soda(tpl,{ html : '<span style="color:red;">test soda-bind-html</span>' })
+```
+
+➜ [bind-html example](http://alloyteam.github.io/sodajs/pg/rd.html?type=bind-html)
+
 ### Others
 
 #### soda-class
@@ -105,9 +114,6 @@ document.body.innerHTML = soda(tpl,{ list : [
 
 #### soda-src
 > soda-src="hello{{index}}.png"
-
-#### soda-bind-html
-> soda-bind-html="<div><a href=pp>click</a></div>"
 
 #### soda-style
 > soda-style="style"

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<script src="../soda.js"></script>
+<script>
+    var tpl = '<div soda-bind-html="html"></div>'
+
+    document.body.innerHTML = soda(tpl,{ html : '<span style="color:red;">test soda-bind-html</span>' })
+</script>
+</body>
+</html>
