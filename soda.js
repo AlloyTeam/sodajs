@@ -54,7 +54,7 @@
                 var attr = attrStr.substr(0, dotIndex);
                 attrStr = attrStr.substr(dotIndex + 1);
 
-                // �?查attrStr是否属�?�变量并转换
+                // �?查attrStr是否属�?�变量并转换
                 if(typeof _data[attr] !== "undefined" && CONST_REG.test(attr)){
                     attr = _data[attr];
                 }
@@ -77,7 +77,7 @@
                 }
             }else{
 
-                // �?查attrStr是否属�?�变量并转换
+                // �?查attrStr是否属�?�变量并转换
                 if(typeof _data[attrStr] !== "undefined" && CONST_REG.test(attrStr)){
                     attrStr = _data[attrStr];
                 }
@@ -110,7 +110,7 @@
     var commentNode = function(node){
     };
 
-    // 标识�?
+    // 标识�?
     var IDENTOR_REG = /[a-zA-Z_\$]+[\w\$]*/g;
     var STRING_REG = /"([^"]*)"|'([^']*)'/g
     var NUMBER_REG = /\d+|\d*\.\d+/g;
@@ -148,7 +148,7 @@
         var expr = str[0] || "";
         var filters = str.slice(1);
 
-        // 将字符常量保存下�?
+        // 将字符常量保存下�?
         expr = expr.replace(STRING_REG, function(r, $1, $2){
             var key = getRandom();
             scope[key] = $1 || $2;
@@ -158,13 +158,13 @@
         while(ATTR_REG.test(expr)){
             ATTR_REG.lastIndex = 0;
 
-            //对expr预处�?
+            //对expr预处�?
             expr = expr.replace(ATTR_REG, function(r, $1){
                 var key = getAttrVarKey();
-                // 属�?�名�? 为字符常�?
+                // 属�?�名�? 为字符常�?
                 var attrName = parseSodaExpression($1, scope);
 
-                // 给一个特殊的前缀 表示是属性变�?
+                // 给一个特殊的前缀 表示是属性变�?
 
                 scope[key] = attrName;
 
@@ -266,7 +266,7 @@
 
             // 处理输出 包含 soda-*
             [].map.call(node.attributes, function(attr){
-                // 如果dirctiveMap有的就跳过不再处�?
+                // 如果dirctiveMap有的就跳过不再处�?
                 if(! sodaDirectiveMap[attr.name]){
                     if(/^soda-/.test(attr.name)){
                         var attrName = attr.name.replace(/^soda-/, '');
@@ -370,13 +370,13 @@
 
                 trackName = trackName || '$index';
 
-                // 这里要处理一�?
+                // 这里要处理一�?
                 var repeatObj = getValue(scope, valueName) || [];
 
                 var repeatFunc = function(i){
                     var itemNode = el.cloneNode(true);
 
-                    // 这里创建�?个新的scope
+                    // 这里创建�?个新的scope
                     var itemScope = {};
                     itemScope[trackName] = i;
 
@@ -388,7 +388,7 @@
 
                     el.parentNode.insertBefore(itemNode, el);
 
-                    // 这里是新加的dom, 要单独编�?
+                    // 这里是新加的dom, 要单独编�?
                     compileNode(itemNode, itemScope);
 
                 };
@@ -464,6 +464,23 @@
         return {
             link: function(scope, el, attrs){
                 var opt = el.getAttribute("soda-bind-html");
+                var expressFunc = parseSodaExpression(opt, scope);
+
+                if(expressFunc){
+                    el.innerHTML = expressFunc;
+
+                    return {
+                        command: "childDone"
+                    };
+                }
+            }
+        };
+    });
+
+    sodaDirective('html', function(){
+        return {
+            link: function(scope, el, attrs){
+                var opt = el.getAttribute("soda-html");
                 var expressFunc = parseSodaExpression(opt, scope);
 
                 if(expressFunc){
