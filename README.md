@@ -18,6 +18,8 @@ var tpl = '<div>Hello, {{name}}</div>'
 document.body.innerHTML = soda(tpl,{ name : 'soda' })
 ```
 
+➜ [simple example](http://alloyteam.github.io/sodajs/pg/rd.html?type=simple)
+
 ### if
 
 ``` js
@@ -25,6 +27,8 @@ var tpl = '<div soda-if="show">Hello, {{name}}</div>' +
             '<div soda-if="!show">I\'m hidden!</div>'
 document.body.innerHTML = soda(tpl,{ name : 'soda',show: true })
 ```
+
+➜ [if example](http://alloyteam.github.io/sodajs/pg/rd.html?type=if)
 
 ### repeat
 
@@ -51,12 +55,16 @@ var data = {
 document.body.innerHTML =  soda(tpl, data);
 ```
 
+➜ [repeat example](http://alloyteam.github.io/sodajs/pg/rd.html?type=repeat)
+
 ### expression
 
 ``` js
 var tpl = '<div>Hello, {{count+1}}</div>'
 document.body.innerHTML = soda(tpl,{ count : 1 })
 ```
+
+➜ [repeat example](http://alloyteam.github.io/sodajs/pg/rd.html?type=expression)
 
 ### filter
 
@@ -83,6 +91,8 @@ document.body.innerHTML = soda(tpl,{ list : [
     {title:'i am too long!'}
 ] })
 ```
+
+➜ [repeat example](http://alloyteam.github.io/sodajs/pg/rd.html?type=filter)
 
 ### Others
 
