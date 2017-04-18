@@ -2,6 +2,10 @@
 
 Light weight but powerful template engine for JavaScript.
 
+``` js
+npm install sodajs
+```
+
 ## Why using sodajs?
 * super tiny size (2kb gzip)
 * make your template file tidy, clearly to read.
