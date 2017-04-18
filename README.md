@@ -38,13 +38,25 @@ document.body.innerHTML = soda(tpl,{ name : 'soda',show: true })
 
 > soda-repeat="item in array"
 
-> soda-repeat="item in array track by index"
+> soda-repeat="item in object"
+
+> soda-repeat="item in array by index"
+
+> soda-repeat="item in object by key"
+
+> soda-repeat="(index, value) in array"
+
+> soda-repeat="(key, value) in object"
+
+default index or key is $index
+
 
 ``` js
 var tpl = '\
 <ul>\
     <li soda-repeat="item in list" soda-if="item.show">\
         {{item.name}}\
+        {{$index}}
     </li>\
 </ul>'
 
