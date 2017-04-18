@@ -1,11 +1,7 @@
-<p align="center" style="font-size:40px;">
-  sodajs
-</p>
-<p align="center">
-Light weight but powerful template engine for JavaScript.
-</p>
+## sodajs
 
----
+Light weight but powerful template engine for JavaScript.
+
 ## Why using sodajs?
 * super tiny size (2kb gzip)
 * make your template file tidy, clearly to read.
