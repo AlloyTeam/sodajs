@@ -56,7 +56,7 @@ var tpl = '\
 <ul>\
     <li soda-repeat="item in list" soda-if="item.show">\
         {{item.name}}\
-        {{$index}}
+        {{$index}}\
     </li>\
 </ul>'
 
