@@ -117,7 +117,7 @@ var tpl = '<div soda-html="html"></div>'
 document.body.innerHTML = soda(tpl,{ html : '<span style="color:red;">test soda-html</span>' })
 ```
 
-➜ [bind-html example](http://alloyteam.github.io/sodajs/pg/rd.html?type=bind-html)
+➜ [html example](http://alloyteam.github.io/sodajs/pg/rd.html?type=html)
 
 ### Others
 
@@ -129,6 +129,13 @@ document.body.innerHTML = soda(tpl,{ html : '<span style="color:red;">test soda-
 
 #### soda-style
 > soda-style="style"
+
+data example:
+
+```js
+var data = { style : { width : '100px', height : '100px' } };
+```
+
 
 #### soda-*
 > soda-rx="{{rx}}%"

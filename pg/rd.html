@@ -23,8 +23,8 @@
             goto('https://alloyteam.github.io/sodajs/pg/index.html?code=var%20tpl%20%3D%20%27%3Cdiv%3EHello%2C%20%7B%7Bcount%2B1%7D%7D%3C%2Fdiv%3E%27%0A%0Adocument.getElementById(%27container%27).innerHTML%20%3D%20%20soda(tpl%2C%20%7B%20count%20%3A1%20%7D)%3B')
         }else if(type==='filter'){
             goto('https://alloyteam.github.io/sodajs/pg/index.html?code=soda.filter(%27shortTitle%27%2C%20function(input%2C%20length)%7B%0A%20%20return%20(input%20%7C%7C%20%27%27).substr(0%2C%20length)%3B%0A%7D)%3B%0A%0Avar%20tpl%20%3D%20%60%0A%20%20%3Cul%20soda-repeat%3D%22item%20in%20list%22%3E%0A%20%20%20%20%3Cli%20class%3D%22title%22%3E%0A%20%20%20%20%09%7B%7Bitem.title%7CshortTitle%3A10%7D%7D%0A%20%20%20%20%3C%2Fli%3E%0A%20%20%3C%2Ful%3E%60%0A%0Avar%20data%20%3D%20%7B%20list%20%3A%20%5B%0A%20%20%20%20%20%20%20%20%7Btitle%3A%27short%27%7D%2C%0A%20%20%20%20%20%20%20%20%7Btitle%3A%27i%20am%20too%20long!%27%7D%0A%20%20%20%20%5D%20%7D%0A%0A%0Adocument.getElementById(%27container%27).innerHTML%20%3D%20%20soda(tpl%2C%20data)%3B')
-        }else if(type==='bind-html'){
-            goto('https://alloyteam.github.io/sodajs/pg/index.html?code=var%20tpl%20%3D%20%27%3Cdiv%20soda-bind-html%3D%22html%22%3E%3C%2Fdiv%3E%27%0Avar%20data%20%3D%20%7B%20html%20%3A%20%27%3Cspan%20style%3D%22color%3Ared%3B%22%3Etest%20soda-bind-html%3C%2Fspan%3E%27%20%7D%0A%20%0Adocument.getElementById(%27container%27).innerHTML%20%3D%20%20soda(tpl%2C%20data)')
+        }else if(type==='html'){
+            goto('https://alloyteam.github.io/sodajs/pg/index.html?code=var%20tpl%20%3D%20%27%3Cdiv%20soda-html%3D%22html%22%3E%3C%2Fdiv%3E%27%0Avar%20data%20%3D%20%7B%20html%20%3A%20%27%3Cspan%20style%3D%22color%3Ared%3B%22%3Etest%20soda-html%3C%2Fspan%3E%27%20%7D%0A%20%0Adocument.getElementById(%27container%27).innerHTML%20%3D%20%20soda(tpl%2C%20data)')
         }else{
             goto('https://alloyteam.github.io/sodajs/pg/index.html?code=var%20tpl%20%3D%20%27%3Cdiv%3EHello%2C%20%7B%7Bname%7D%7D%3C%2Fdiv%3E%27%0A%0Adocument.getElementById(%27container%27).innerHTML%20%3D%20%20soda(tpl%2C%20%7B%20name%20%3A%20%27soda%27%20%7D)%3B')
         }
