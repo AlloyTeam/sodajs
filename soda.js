@@ -1,12 +1,8 @@
 /**
- * SodaRender
- * light Tml render engine
- * copyright @ Tencent AlloyTeam
- * License under MIT License
- * @author dorsywang
- * @email 314416946@qq.com
- * @blog http://www.dorsywang.com
- * @TeamBlog http://www.alloyteam.com
+ * sodajs v0.1.0 by dorsywang
+ * Light weight but powerful template engine for JavaScript
+ * Github: https://github.com/AlloyTeam/sodajs
+ * MIT License
  */
 
 ;(function(){
@@ -523,16 +519,18 @@
 
         parseChild(div, data);
 
-        var frament = document.createDocumentFragment();
-        frament.innerHTML = div.innerHTML;
-
-        var child;
-        while(child = div.childNodes[0]){
-            frament.appendChild(child);
-        }
-
-
-        return frament;
+        return div.innerHTML;
+        //让用户自己去转DocumentFragment
+        //var frament = document.createDocumentFragment();
+        //frament.innerHTML = div.innerHTML;
+        //
+        //var child;
+        //while(child = div.childNodes[0]){
+        //    frament.appendChild(child);
+        //}
+        //
+        //
+        //return frament;
     };
 
     var eventPool = {};
@@ -558,8 +556,21 @@
     var compile = function(str, data){
     };
 
-    window.sodaRender = sodaRender;
-    window.sodaFilter = sodaFilter;
+
+
+    sodaRender.filter = sodaFilter;
+
+    if(typeof exports === 'object' && typeof module === 'object')
+        module.exports = sodaRender;
+    else if(typeof define === 'function' && define.amd)
+        define([], function(){
+            return sodaRender;
+        });
+    else if(typeof exports === 'object')
+        exports["soda"] = sodaRender;
+    else
+        window.soda = sodaRender;
+
 
     // 监听数据异常情况
 })();

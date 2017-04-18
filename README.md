@@ -1,25 +1,25 @@
-SodaRender
+sodajs
 ====
 ### Light weight but powerful template engine for JavaScript
 
-## why using SodaRender?
->#### SodaRender is just 3KB in size.
->#### SodaRender will make your template file tidy, clearly to read.
->#### SodaRender reduces the error while cgi responses the data in unexpected way, such as losting some keys, error value types.
->#### SodaRender prevents XSS holes in your template file.
->#### SodaRender uses DOM parsor to render your template rather than string replacement, so it's more effective.
+## why using sodajs?
+>#### sodajs is just 3KB in size.
+>#### sodajs will make your template file tidy, clearly to read.
+>#### sodajs reduces the error while cgi responses the data in unexpected way, such as losting some keys, error value types.
+>#### sodajs prevents XSS holes in your template file.
+>#### sodajs uses DOM parsor to render your template rather than string replacement, so it's more effective.
 
-## who using SodaRender?
-SodaRender is currently using by QQ Tribes(兴趣部落), QQ Group(群) and other projects
+## who using sodajs?
+sodajs is currently using by QQ Tribes(兴趣部落), QQ Group(群) and other projects
 
-## how to use SodaRender
+## how to use sodajs
 
 ### Examples
 ```html
 <html>
     <head>
         <title>
-            SodaRender Examaple
+            sodajs examaple
         </title>
     </head>
     
@@ -46,19 +46,19 @@ var data = {
     ]
 };
 
-var result = sodaRender(templateStr, data);
+var result = soda(templateStr, data);
 target.appendChild(result);
 ```
 
-## APIs Of SodaRender
->### sodaRender
-USING&nbsp;: &nbsp;&nbsp;SodaRender(String templateStr, Object data)<br />
+## APIs Of sodajs
+>### soda
+USING&nbsp;: &nbsp;&nbsp;soda(String templateStr, Object data)<br />
 DESCR&nbsp;: &nbsp;&nbsp;Using templateStr with data to render template<br />
 RETURN: DOM Fragment<br />
 the DOM Frament Object has a method innerHTML which will return the rendered HTML code.<br />
 Meanwhile, you can use it like a common DOM Node, such as appending it to your target node.
->### sodaFilter
-USING&nbsp;: &nbsp;&nbsp;SodaFilter(String filterName, Function func(input, args...))<br />
+>### soda.filter
+USING&nbsp;: &nbsp;&nbsp;soda.filter(String filterName, Function func(input, args...))<br />
 DESCR&nbsp;: &nbsp;&nbsp;Defining Filters, so you can use filters in template<br />
 
 ## Template Language 
@@ -71,7 +71,7 @@ DESCR&nbsp;: &nbsp;&nbsp;Defining Filters, so you can use filters in template<br
 #### soda-repeat
 >soda-repeat="item in array"
 >soda-repeat="item in array track by index"
-USING&nbsp;: &nbsp;&nbsp;SodaRender(String templateStr, Object data)<br />
+USING&nbsp;: &nbsp;&nbsp;soda(String templateStr, Object data)<br />
 DESCR&nbsp;: &nbsp;&nbsp;Using templateStr with data to render template<br />
 
 #### soda-if
@@ -95,9 +95,9 @@ DESCR&nbsp;: &nbsp;&nbsp;Using templateStr with data to render template<br />
 
 #### filters
 >{{input|filte1:args1:args2...|filter2:args...}}
-how to define filters? Just using sodaFilter Method as methioned above. Here is an example.
+how to define filters? Just using soda.filter Method as methioned above. Here is an example.
 ```JavaScript
-SodaFilter('shortTitle', function(input, length){
+soda.filter('shortTitle', function(input, length){
         return (input || '').substr(0, length);
 });
 ```
