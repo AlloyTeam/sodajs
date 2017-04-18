@@ -9,7 +9,7 @@ SodaRender
 >#### SodaRender prevents XSS holes in your template file.
 >#### SodaRender uses DOM parsor to render your template rather than string replacement, so it's more effective.
 
-## who using sodaRender?
+## who using SodaRender?
 SodaRender is currently using by QQ Tribes(兴趣部落), QQ Group(群) and other projects
 
 ## how to use SodaRender
