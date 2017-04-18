@@ -1,4 +1,4 @@
-## sodajs
+# sodajs
 
 Light weight but powerful template engine for JavaScript.
 
