@@ -140,6 +140,31 @@ var data = { style : { width : '100px', height : '100px' } };
 #### soda-*
 > soda-rx="{{rx}}%"
 
+### soda.prefix
+
+``` js
+soda.prefix('o')
+
+var tpl = '\
+<ul>\
+    <li o-repeat="item in list" o-if="item.show">\
+        {{item.name}}\
+    </li>\
+</ul>'
+
+
+var data = {
+    list: [
+        {name: "Hello" ,show: true},
+        {name: "sodajs" ,show: true},
+        {name: "AlloyTeam"}
+    ]
+};
+
+document.body.innerHTML =  soda(tpl, data);
+```
+
+you can customize your prefix by `soda.prefix` method.
 
 ## Who using sodajs?
 sodajs is currently using by QQ Tribes(兴趣部落), QQ Group(群) and other projects
