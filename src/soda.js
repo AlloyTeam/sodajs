@@ -6,6 +6,36 @@
  */
 
 ;(function() {
+    if(! Array.prototype.map){
+        Array.prototype.map = function(func){
+            var arr = [];
+            for(var i = 0; i < this.length; i ++){
+                var item = this[i];
+
+                [].push(func && func.call(item, item, i));
+            }
+
+            return arr;
+        };
+    }
+
+    if(! String.prototype.trim){
+        String.prototype.trim = function(){
+            return this.replace(/^\s*|\s*$/g, '');
+        };
+    }
+
+
+    var nodes2Arr = function(nodes){
+        var arr = [];
+
+        for(var i = 0; i < nodes.length; i ++){
+            arr.push(nodes[i]);
+        }
+
+        return arr;
+    };
+
     var valueoutReg = /\{\{([^\}]*)\}\}/g;
 
     var prefix = 'soda';
@@ -119,7 +149,11 @@
     var NUMBER_REG = /\d+|\d*\.\d+/g;
 
     var OBJECT_REG = /[a-zA-Z_\$]+[\w\$]*(?:\s*\.\s*(?:[a-zA-Z_\$]+[\w\$]*|\d+))*/g;
+    // 非global 做test用
+    var OBJECT_REG_NG = /[a-zA-Z_\$]+[\w\$]*(?:\s*\.\s*(?:[a-zA-Z_\$]+[\w\$]*|\d+))*/;
+
     var ATTR_REG = /\[([^\[\]]*)\]/g;
+    var ATTR_REG_NG = /\[([^\[\]]*)\]/;
     var ATTR_REG_DOT = /\.([a-zA-Z_\$]+[\w\$]*)/g;
 
     var NOT_ATTR_REG = /[^\.|]([a-zA-Z_\$]+[\w\$]*)/g;
@@ -158,7 +192,7 @@
             return key;
         });
 
-        while (ATTR_REG.test(expr)) {
+        while (ATTR_REG_NG.test(expr)) {
             ATTR_REG.lastIndex = 0;
 
             //对expr预处�?
@@ -194,7 +228,7 @@
             var stringReg = /^'.*'$|^".*"$/;
             for (var i = 0; i < args.length; i++) {
                 //这里根据类型进行判断
-                if (OBJECT_REG.test(args[i])) {
+                if (OBJECT_REG_NG.test(args[i])) {
                     args[i] = "getValue(scope,'" + args[i] + "')";
                 } else {
                 }
@@ -273,25 +307,29 @@
                         var attrName = attr.name.replace(prefixReg, '');
 
                         if (attrName) {
-                            var attrValue = attr.value.replace(valueoutReg, function (item, $1) {
-                                return parseSodaExpression($1, scope);
-                            });
+                            if(attr.value){
+                                var attrValue = attr.value.replace(valueoutReg, function (item, $1) {
+                                    return parseSodaExpression($1, scope);
+                                });
 
-                            node.setAttribute(attrName, attrValue);
+                                node.setAttribute(attrName, attrValue);
+                            }
                         }
 
                         // 对其他属性里含expr 处理
                     } else {
-                        attr.value = attr.value.replace(valueoutReg, function (item, $1) {
-                            return parseSodaExpression($1, scope);
-                        });
+                        if(attr.value){
+                            attr.value = attr.value.replace(valueoutReg, function (item, $1) {
+                                return parseSodaExpression($1, scope);
+                            });
+                        }
                     }
                 }
             });
 
         }
 
-        [].map.call([].slice.call(node.childNodes, []), function (child) {
+        nodes2Arr(node.childNodes).map(function (child) {
             compileNode(child, scope);
         });
     };
@@ -551,13 +589,21 @@
         // 解析模板DOM
         var div = document.createElement("div");
 
+        // 必须加入到body中去，不然自定义标签不生效
+        div.style.display = 'none';
+        document.body.appendChild(div);
+
         div.innerHTML = str;
 
-        [].map.call([].slice.call(div.childNodes, []), function (child) {
+        nodes2Arr(div.childNodes).map(function (child) {
             compileNode(child, data);
         });
 
-        return div.innerHTML;
+        var innerHTML = div.innerHTML;
+
+        document.body.removeChild(div);
+
+        return innerHTML;
 
         //  var frament = document.createDocumentFragment();
         //  frament.innerHTML = div.innerHTML;

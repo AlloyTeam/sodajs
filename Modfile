@@ -1,0 +1,12 @@
+// https://github.com/modulejs/modjs
+module.exports = {
+    tasks:{
+        min: {
+                src: 'src/soda.js',
+                dest: './'
+     }
+    },
+    targets:{
+        dist: "min "
+    }
+};
