@@ -1,5 +1,5 @@
 /**
- * sodajs v0.4.3 by dorsywang
+ * sodajs v0.4.4 by dorsywang
  * Light weight but powerful template engine for JavaScript
  * Github: https://github.com/AlloyTeam/sodajs
  * MIT License
