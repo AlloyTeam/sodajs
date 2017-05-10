@@ -531,6 +531,29 @@
         };
     });
 
+    sodaDirective('replace', function () {
+        return {
+            link: function (scope, el, attrs) {
+                var opt = el.getAttribute(prefix + "-replace");
+                var expressFunc = parseSodaExpression(opt, scope);
+
+                if (expressFunc) {
+                    var div = document.createElement('div');
+                    div.innerHTML = expressFunc;
+
+                    if(el.parentNode){
+                        while(div.childNodes[0]){
+                            el.parentNode.insertBefore(div.childNodes[0], el);
+                        }
+                    }
+                }
+
+                el.parentNode.removeChild(el);
+            }
+        };
+    });
+
+
     sodaDirective("style", function () {
         return {
             link: function (scope, el, attrs) {

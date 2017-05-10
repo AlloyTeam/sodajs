@@ -119,6 +119,15 @@ document.body.innerHTML = soda(tpl,{ html : '<span style="color:red;">test soda-
 
 ➜ [html example](http://alloyteam.github.io/sodajs/pg/rd.html?type=html)
 
+### replace
+replace this node with html
+
+```js
+var tpl = '<div soda-replace="html"></div>'
+document.body.innerHTML = soda(tpl,{ html : '<span style="color:red;">test soda-html</span>' })
+```
+div will be replaced with given html
+
 ### Others
 
 #### soda-class
