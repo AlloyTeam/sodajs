@@ -1,5 +1,5 @@
 /**
- * sodajs v0.4.1 by dorsywang
+ * sodajs v0.4.3 by dorsywang
  * Light weight but powerful template engine for JavaScript
  * Github: https://github.com/AlloyTeam/sodajs
  * MIT License
@@ -613,9 +613,10 @@
         var div = document.createElement("div");
 
         // 必须加入到body中去，不然自定义标签不生效
-        div.style.display = 'none';
-        document.body.appendChild(div);
-
+        if(document.documentMode < 9) {
+            div.style.display = 'none';
+            document.body.appendChild(div);
+        }
         div.innerHTML = str;
 
         nodes2Arr(div.childNodes).map(function (child) {
@@ -623,8 +624,9 @@
         });
 
         var innerHTML = div.innerHTML;
-
-        document.body.removeChild(div);
+        if(document.documentMode < 9) {
+            document.body.removeChild(div);
+        }
 
         return innerHTML;
 
