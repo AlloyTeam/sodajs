@@ -127,7 +127,7 @@ var tpl = '<div soda-replace="html"></div>'
 document.body.innerHTML = soda(tpl,{ html : '<span style="color:red;">test soda-html</span>' })
 ```
 
-➜ [html example](http://alloyteam.github.io/sodajs/pg/rd.html?type=replace)
+➜ [replace example](http://alloyteam.github.io/sodajs/pg/rd.html?type=replace)
 
 div will be replaced with given html
 
