@@ -1,6 +1,6 @@
 {
   "name": "sodajs",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "Light weight but powerful template engine for JavaScript.",
   "main": "dist/soda.js",
   "repository": {
@@ -10,12 +10,15 @@
   "keywords": [
     "sodajs",
     "soda",
-	"template"
+    "template"
   ],
   "author": "dorsywang",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/AlloyTeam/sodajs/issues/new"
   },
-  "homepage": "http://alloyteam.github.io/sodajs"
+  "homepage": "http://alloyteam.github.io/sodajs",
+  "dependencies": {
+    "nodewindow": "^1.0.0"
+  }
 }

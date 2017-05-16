@@ -6,6 +6,19 @@
  */
 
 ;(function() {
+    var document;
+    if(typeof require === "function" && typeof window === 'undefined'){
+        var NodeWindow = require('nodewindow');
+        var nodeWindow  = new NodeWindow();
+
+        var win = nodeWindow.runHTML(`
+        `, {}, {});
+
+        document = win.document;
+    }else{
+        document = window.document;
+    }
+
     if(! Array.prototype.map){
         Array.prototype.map = function(func){
             var arr = [];
