@@ -5,24 +5,26 @@
  * MIT License
  */
 
-;(function() {
-    var document;
-    if(typeof require === "function" && typeof window === 'undefined'){
+; (function () {
+    var document, isBrowser;
+    if (typeof require === "function" && typeof window === 'undefined') {
         var NodeWindow = require('nodewindow');
-        var nodeWindow  = new NodeWindow();
+        var nodeWindow = new NodeWindow();
 
         var win = nodeWindow.runHTML(`
         `, {}, {});
 
         document = win.document;
-    }else{
+        isBrowser = false;
+    } else {
         document = window.document;
+        isBrowser = true;
     }
 
-    if(! Array.prototype.map){
-        Array.prototype.map = function(func){
+    if (!Array.prototype.map) {
+        Array.prototype.map = function (func) {
             var arr = [];
-            for(var i = 0; i < this.length; i ++){
+            for (var i = 0; i < this.length; i++) {
                 var item = this[i];
 
                 [].push(func && func.call(item, item, i));
@@ -32,17 +34,17 @@
         };
     }
 
-    if(! String.prototype.trim){
-        String.prototype.trim = function(){
+    if (!String.prototype.trim) {
+        String.prototype.trim = function () {
             return this.replace(/^\s*|\s*$/g, '');
         };
     }
 
 
-    var nodes2Arr = function(nodes){
+    var nodes2Arr = function (nodes) {
         var arr = [];
 
-        for(var i = 0; i < nodes.length; i ++){
+        for (var i = 0; i < nodes.length; i++) {
             arr.push(nodes[i]);
         }
 
@@ -100,7 +102,7 @@
                 var attr = attrStr.substr(0, dotIndex);
                 attrStr = attrStr.substr(dotIndex + 1);
 
-                // �?查attrStr是否属�?�变量并转换
+                // 检查attrStr是否属于变量并转换
                 if (typeof _data[attr] !== "undefined" && CONST_REG.test(attr)) {
                     attr = _data[attr];
                 }
@@ -123,7 +125,7 @@
                 }
             } else {
 
-                // �?查attrStr是否属�?�变量并转换
+                // 检查attrStr是否属于变量并转换
                 if (typeof _data[attrStr] !== "undefined" && CONST_REG.test(attrStr)) {
                     attrStr = _data[attrStr];
                 }
@@ -156,7 +158,7 @@
     var commentNode = function (node) {
     };
 
-    // 标识�?
+    // 标识符
     var IDENTOR_REG = /[a-zA-Z_\$]+[\w\$]*/g;
     var STRING_REG = /"([^"]*)"|'([^']*)'/g
     var NUMBER_REG = /\d+|\d*\.\d+/g;
@@ -198,7 +200,7 @@
         var expr = str[0] || "";
         var filters = str.slice(1);
 
-        // 将字符常量保存下�?
+        // 将字符常量保存下来
         expr = expr.replace(STRING_REG, function (r, $1, $2) {
             var key = getRandom();
             scope[key] = $1 || $2;
@@ -208,13 +210,13 @@
         while (ATTR_REG_NG.test(expr)) {
             ATTR_REG.lastIndex = 0;
 
-            //对expr预处�?
+            //对expr预处理
             expr = expr.replace(ATTR_REG, function (r, $1) {
                 var key = getAttrVarKey();
-                // 属�?�名�? 为字符常�?
+                // 属性名称为字符常量
                 var attrName = parseSodaExpression($1, scope);
 
-                // 给一个特殊的前缀 表示是属性变�?
+                // 给一个特殊的前缀 表示是属性变量
 
                 scope[key] = attrName;
 
@@ -314,13 +316,13 @@
 
             // 处理输出 包含 prefix-*
             [].map.call(node.attributes, function (attr) {
-                // 如果dirctiveMap有的就跳过不再处�?
+                // 如果dirctiveMap有的就跳过不再处理
                 if (!sodaDirectiveMap[attr.name]) {
                     if (prefixReg.test(attr.name)) {
                         var attrName = attr.name.replace(prefixReg, '');
 
                         if (attrName) {
-                            if(attr.value){
+                            if (attr.value) {
                                 var attrValue = attr.value.replace(valueoutReg, function (item, $1) {
                                     return parseSodaExpression($1, scope);
                                 });
@@ -331,7 +333,7 @@
 
                         // 对其他属性里含expr 处理
                     } else {
-                        if(attr.value){
+                        if (attr.value) {
                             attr.value = attr.value.replace(valueoutReg, function (item, $1) {
                                 return parseSodaExpression($1, scope);
                             });
@@ -420,13 +422,13 @@
 
                 trackName = trackName || '$index';
 
-                // 这里要处理一�?
+                // 这里要处理一下
                 var repeatObj = getValue(scope, valueName) || [];
 
                 var repeatFunc = function (i) {
                     var itemNode = el.cloneNode(true);
 
-                    // 这里创建�?个新的scope
+                    // 这里创建一个新的scope
                     var itemScope = {};
                     itemScope[trackName] = i;
 
@@ -434,14 +436,19 @@
 
                     itemScope.__proto__ = scope;
 
-                    itemNode.removeAttribute(prefix + '-repeat');
+                    // REMOVE cjd6568358
+                    // itemNode.removeAttribute(prefix + '-repeat');
 
                     el.parentNode.insertBefore(itemNode, el);
 
-                    // 这里是新加的dom, 要单独编�?
+                    // 这里是新加的dom, 要单独编译
                     compileNode(itemNode, itemScope);
 
                 };
+
+                // ADD cjd6568358
+                // 提前移除当前节点指令，否则Node端会重复渲染
+                el.removeAttribute(prefix + '-repeat');
 
                 if ('length' in repeatObj) {
                     for (var i = 0; i < repeatObj.length; i++) {
@@ -554,8 +561,8 @@
                     var div = document.createElement('div');
                     div.innerHTML = expressFunc;
 
-                    if(el.parentNode){
-                        while(div.childNodes[0]){
+                    if (el.parentNode) {
+                        while (div.childNodes[0]) {
                             el.parentNode.insertBefore(div.childNodes[0], el);
                         }
                     }
@@ -566,6 +573,35 @@
         };
     });
 
+    sodaDirective('include', function () {
+        return {
+            priority: 11,
+            link: function (scope, el, attrs) {
+                var opt = el.getAttribute(prefix + "-include");
+                if (isBrowser) {
+                    // browser
+                    el.innerHTML = sodaRender.browserTemplates[opt] || window.templates[opt] || "";
+                }
+                else {
+                    // Node
+                    el.innerHTML = require("fs").readFileSync(require("path").resolve(sodaRender.templateDir, opt), "utf-8");
+                }
+                
+                return {
+                    command: "childDone"
+                };
+                // var expressFunc = parseSodaExpression(opt, scope);
+
+                // if (expressFunc) {
+                //     el.innerHTML = expressFunc;
+
+                //     return {
+                //         command: "childDone"
+                //     };
+                // }
+            }
+        };
+    });
 
     sodaDirective("style", function () {
         return {
@@ -626,7 +662,7 @@
         var div = document.createElement("div");
 
         // 必须加入到body中去，不然自定义标签不生效
-        if(document.documentMode < 9) {
+        if (document.documentMode < 9) {
             div.style.display = 'none';
             document.body.appendChild(div);
         }
@@ -637,7 +673,7 @@
         });
 
         var innerHTML = div.innerHTML;
-        if(document.documentMode < 9) {
+        if (document.documentMode < 9) {
             document.body.removeChild(div);
         }
 
@@ -705,20 +741,22 @@
     };
 
     sodaRender.filter = sodaFilter;
+    // ADD cjd6568358
+    sodaRender.templateDir = "";//服务端模版目录(用于include指令)
+    sodaRender.browserTemplates = null;//浏览器端模版缓存对象(用于include指令)
 
     sodaRender.prefix = function (newPrefix) {
 
-
-        for(var key in sodaDirectiveMap){
-            if(sodaDirectiveMap.hasOwnProperty(key)){
-                sodaDirectiveMap[key.replace(prefix,newPrefix)] = sodaDirectiveMap[key];
+        for (var key in sodaDirectiveMap) {
+            if (sodaDirectiveMap.hasOwnProperty(key)) {
+                sodaDirectiveMap[key.replace(prefix, newPrefix)] = sodaDirectiveMap[key];
                 delete sodaDirectiveMap[key];
             }
         }
 
         var i = 0,
             len = sodaDirectiveArr.length;
-        for(;i<len;i++) {
+        for (; i < len; i++) {
             sodaDirectiveArr[i].name = sodaDirectiveArr[i].name.replace(prefix, newPrefix);
         }
 
