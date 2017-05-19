@@ -478,7 +478,6 @@
 
                 if (expressFunc) {
                 } else {
-                    // el.setAttribute("removed", "removed");
                     el.parentNode && el.parentNode.removeChild(el);
                 }
             }
@@ -586,19 +585,15 @@
                     // Node
                     el.innerHTML = require("fs").readFileSync(require("path").resolve(sodaRender.templateDir, opt), "utf-8");
                 }
-                
+                // 修复head标签中使用include，include代码中ng-if指令失效BUG
+                [].forEach.call(el.childNodes, function (item, index) {
+                    el.parentNode.insertBefore(item, el);
+                })
+                el.parentNode.removeChild(el);
+                compileNode(el.parentNode, scope);
                 return {
                     command: "childDone"
                 };
-                // var expressFunc = parseSodaExpression(opt, scope);
-
-                // if (expressFunc) {
-                //     el.innerHTML = expressFunc;
-
-                //     return {
-                //         command: "childDone"
-                //     };
-                // }
             }
         };
     });
