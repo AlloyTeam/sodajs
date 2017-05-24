@@ -19,6 +19,6 @@
   },
   "homepage": "http://alloyteam.github.io/sodajs",
   "dependencies": {
-    "nodewindow": "^1.0.0"
+    "nodewindow": "^1.0.3"
   }
 }
