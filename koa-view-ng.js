@@ -1,3 +1,28 @@
+// app.js
+// let ngViews = require('./server/middleware/koa-view-ng');
+
+// 加载模板引擎
+// ngViews(app, {
+//   extension: ".html",
+//   filters: ngTemplateFilter,
+//   templateDir: path.join(__dirname, './server/views'),
+//   cache: LRU({
+//     max: 500,                   // The maximum number of items allowed in the cache
+//     max_age: 1000 * 60 * 60 * 24     // The maximum life of a cached item in milliseconds
+//   })
+// });
+
+// router.get('/', async (ctx, next) => {
+//   let scope = {
+//     state,
+//     page: "index"
+//   }
+//   let setting = {
+//     noCache: false,
+//     serverCacheKey: scope
+//   }
+//   await ctx.render("index", scope, setting||null)
+// })
 'use strict';
 
 /**
@@ -5,15 +30,8 @@
  */
 const fs = require('fs');
 const path = require('path');
-const ngTemplate = require('../util/soda');
-
-// app.js
-// let ngViews = require('./server/middleware/koa-view-ng');
-// 加载模板引擎
-// ngViews(app, {
-//   extension: ".html",
-//   templateDir: path.join(__dirname, './server/views')
-// });
+const ngTemplate = require('../../client/src/js/lib/soda');
+const crypto = require('crypto');
 
 /**
  * default render options
@@ -21,9 +39,10 @@ const ngTemplate = require('../util/soda');
  */
 const defaultSettings = {
   prefix: 'ng',
-  templateDir: __dirname,
-  lruCache: false
+  templateDir: __dirname
 };
+
+let tplCache = new Map()
 
 /**
  * set app.context.render
@@ -44,17 +63,20 @@ exports = module.exports = function (app, settings) {
     throw new Error('settings.templateDir required');
   }
 
-  /**
-   * cache the generate package
-   * @type {Object}
-   */
-  const cache = Object.create(null);
-
   settings = Object.assign({}, defaultSettings, settings);
+
+  if (settings.cache) {
+    tplCache = settings.cache;
+    settings.cache = null;
+  }
+
 
   // 初始化ngTemplate设置
   ngTemplate.prefix(settings.prefix);
   ngTemplate.templateDir = settings.templateDir;
+  for (var key in settings.filters) {
+    ngTemplate.filter(key, settings.filters[key])
+  }
 
   /**
    * generate html with view name and options
@@ -62,52 +84,44 @@ exports = module.exports = function (app, settings) {
    * @param {Object} options
    * @return {String} html
    */
-  async function render(view, options) {
-    const viewPath = path.join(settings.templateDir, view + settings.extension);
-    // 从缓存获取模版
-    // if (settings.cache && cache[viewPath]) {
-    //   return cache[viewPath].call(options.scope, options);
-    // }
-
+  async function render(view, options, ctx, setting) {
+    const viewPath = path.join(setting.templateDir, view + setting.extension);
     const tpl = await fs.readFileSync(viewPath, 'utf-8');
+    let hashKey = "";
+    let hash = crypto.createHmac('sha256', "hmc_secret");
+    if (process.env.NODE_ENV === 'development') {
+      hashKey = hash.update(tpl + JSON.stringify(setting.serverCacheKey || options)).digest('hex');
+    }
+    else {
+      hashKey = hash.update(viewPath + JSON.stringify(setting.serverCacheKey || options)).digest('hex');
+    }
+    // 从缓存获取模版
+    if (!setting.noCache && tplCache && tplCache.get(hashKey)) {
+      ctx.set("fromCache", true);
+      return tplCache.get(hashKey);
+    }
 
+    let template = ngTemplate(tpl, options)
     // 加入缓存
-    // if (settings.cache) {
-    //   cache[viewPath] = fn;
-    // }
-
-    return ngTemplate(tpl, options);
+    if (!setting.noCache && tplCache) {
+      tplCache.set(hashKey, template);
+    }
+    return template;
   }
 
-  app.context.render = async function (view, _context) {
+  app.context.render = async function (view, _context, setting) {
     const ctx = this;
-
+    setting = Object.assign({}, settings, setting);
+    let { prefix, extension } = setting;
+    Object.assign(ctx.state, {
+      tplSettings: { prefix, extension }
+    });
     const context = Object.assign({}, ctx.state, _context);
 
-    let html = await render(view, context);
+    let html = await render(view, context, ctx, setting);
     ctx.type = 'html';
-    ctx.body = html;
-    // const layout = context.layout === false ? false : (context.layout || settings.layout);
-    // if (layout) {
-    //   // if using layout
-    //   context.body = html;
-    //   html = await render(layout, context);
-    // }
-
-    // const writeResp = context.writeResp === false ? false : (context.writeResp || settings.writeResp);
-    // if (writeResp) {
-    //   // normal operation
-    //   ctx.type = 'html';
-    //   ctx.body = html;
-    // } else {
-    //   // only return the html
-    //   return html;
-    // }
+    ctx.body = html.replace("</!DOCTYPE>", "").replace("<!DOCTYPE>", "<!DOCTYPE html>");
   };
 };
-
-/**
- * Expose ngTemplate
- */
 
 exports.ngTemplate = ngTemplate;

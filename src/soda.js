@@ -11,8 +11,7 @@
         var NodeWindow = require('nodewindow');
         var nodeWindow = new NodeWindow();
 
-        var win = nodeWindow.runHTML(`
-        `, {}, {});
+        var win = nodeWindow.runHTML("", {}, {});
 
         document = win.document;
         isBrowser = false;
@@ -31,6 +30,32 @@
             }
 
             return arr;
+        };
+    }
+
+    if (!Array.prototype.forEach) {
+        Array.prototype.forEach = function (callback) {
+            var T, k;
+            if (this == null) {
+                throw new TypeError('this is null or not defined');
+            }
+            var O = Object(this);
+            var len = O.length >>> 0;
+            if (typeof callback !== 'function') {
+                throw new TypeError(callback + ' is not a function');
+            }
+            if (arguments.length > 1) {
+                T = arguments[1];
+            }
+            k = 0;
+            while (k < len) {
+                var kValue;
+                if (k in O) {
+                    kValue = O[k];
+                    callback.call(T, kValue, k, O);
+                }
+                k++;
+            }
         };
     }
 
@@ -297,8 +322,11 @@
                  };
                  */
 
-
-                return parseSodaExpression($1, scope);
+                var value = parseSodaExpression($1, scope);
+                if (typeof value === "object") {
+                    value = JSON.stringify(value, null, 2)
+                }
+                return value;
             });
         }
 
@@ -478,7 +506,6 @@
 
                 if (expressFunc) {
                 } else {
-                    // el.setAttribute("removed", "removed");
                     el.parentNode && el.parentNode.removeChild(el);
                 }
             }
@@ -575,30 +602,29 @@
 
     sodaDirective('include', function () {
         return {
-            priority: 11,
+            priority: 8,
             link: function (scope, el, attrs) {
                 var opt = el.getAttribute(prefix + "-include");
+                var template = "";
                 if (isBrowser) {
                     // browser
-                    el.innerHTML = sodaRender.browserTemplates[opt] || window.templates[opt] || "";
+                    template = sodaRender.browserTemplates[opt] || window.templates[opt] || "";
+                    // el.outerHTML = sodaRender(template, scope);
                 }
                 else {
                     // Node
-                    el.innerHTML = require("fs").readFileSync(require("path").resolve(sodaRender.templateDir, opt), "utf-8");
+                    template = require("fs").readFileSync(require("path").resolve(sodaRender.templateDir, opt), "utf-8");
+                    // el.innerHTML = sodaRender(template, scope);
+                    // // 修复head标签中使用include，include代码中ng-if指令失效BUG
+                    // [].forEach.call(el.childNodes, function (item, index) {
+                    //     el.parentNode.insertBefore(item, el);
+                    // })
+                    // el.parentNode.removeChild(el);
                 }
-                
+                el.outerHTML = sodaRender(template, scope);
                 return {
                     command: "childDone"
                 };
-                // var expressFunc = parseSodaExpression(opt, scope);
-
-                // if (expressFunc) {
-                //     el.innerHTML = expressFunc;
-
-                //     return {
-                //         command: "childDone"
-                //     };
-                // }
             }
         };
     });
@@ -746,7 +772,6 @@
     sodaRender.browserTemplates = null;//浏览器端模版缓存对象(用于include指令)
 
     sodaRender.prefix = function (newPrefix) {
-
         for (var key in sodaDirectiveMap) {
             if (sodaDirectiveMap.hasOwnProperty(key)) {
                 sodaDirectiveMap[key.replace(prefix, newPrefix)] = sodaDirectiveMap[key];
@@ -760,9 +785,9 @@
             sodaDirectiveArr[i].name = sodaDirectiveArr[i].name.replace(prefix, newPrefix);
         }
 
-        prefix = newPrefix
+        prefix = newPrefix;
         prefixReg = new RegExp('^' + prefix + '-')
-    }
+    };
 
     if (typeof exports === 'object' && typeof module === 'object')
         module.exports = sodaRender;
