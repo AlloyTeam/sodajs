@@ -2,7 +2,7 @@
   "name": "sodajs",
   "version": "0.4.4",
   "description": "Light weight but powerful template engine for JavaScript.",
-  "main": "dist/soda.js",
+  "main": "src/soda.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AlloyTeam/sodajs.git"
