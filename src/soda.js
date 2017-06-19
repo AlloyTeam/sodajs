@@ -80,7 +80,7 @@
     var valueoutReg = /\{\{([^\}]*)\}\}/g;
 
     var prefix = 'soda';
-    var prefixReg = new RegExp('^' + prefix + '-')
+    var prefixReg = new RegExp('^' + prefix + '-');
 
     var classNameRegExp = function(className) {
         return new RegExp('(^|\\s+)' + className + '(\\s+|$)', 'g');
