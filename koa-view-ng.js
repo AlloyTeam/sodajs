@@ -3,14 +3,30 @@
 
 // 加载模板引擎
 // ngViews(app, {
-//   extension: ".html",
-//   filters: ngTemplateFilter,
-//   templateDir: path.join(__dirname, './server/views'),
-//   cache: LRU({
-//     max: 500,                   // The maximum number of items allowed in the cache
-//     max_age: 1000 * 60 * 60 * 24     // The maximum life of a cached item in milliseconds
-//   }),
-//   disabledCache: process.env.NODE_ENV === 'development'
+//     extension: ".html",
+//     filters: ngTemplateFilter,
+//     templateDir: path.join(__dirname, './common/templates/views'),
+//     cache: LRU({
+//         max: 500, // The maximum number of items allowed in the cache
+//         max_age: 1000 * 60 * 60 * 24 // The maximum life of a cached item in milliseconds
+//     }),
+//     beforeRender: (viewName, scope, ctx, setting) => {
+//         let { prefix, extension } = setting;
+//         let combScope = Object.assign({
+//             HMC: Object.assign({}, ctx.state, {
+//                 tplSettings: { prefix, extension },
+//                 currPage: viewName,
+//                 jsRev: ctx.state.jsRevList[viewName + ".min.js"],
+//                 pointList: ctx.state.pointData.common.concat(ctx.state.pointData.pages[viewName] || [])
+//             })
+//         }, scope, {
+//             templates: scope && scope.templates || {}
+//         })
+//         delete combScope.HMC.jsRevList;
+//         delete combScope.HMC.pointData;
+//         return { viewName, combScope, setting }
+//     },
+//     disabledCache: process.env.NODE_ENV === 'development'
 // });
 
 // router.get('/', async (ctx, next) => {
