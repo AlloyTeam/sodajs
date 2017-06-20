@@ -5,7 +5,8 @@
  * MIT License
  */
 
-; (function () {
+;
+(function() {
     var document, isBrowser;
     if (typeof require === "function" && typeof window === 'undefined') {
         var NodeWindow = require('nodewindow');
@@ -21,7 +22,7 @@
     }
 
     if (!Array.prototype.map) {
-        Array.prototype.map = function (func) {
+        Array.prototype.map = function(func) {
             var arr = [];
             for (var i = 0; i < this.length; i++) {
                 var item = this[i];
@@ -34,7 +35,7 @@
     }
 
     if (!Array.prototype.forEach) {
-        Array.prototype.forEach = function (callback) {
+        Array.prototype.forEach = function(callback) {
             var T, k;
             if (this == null) {
                 throw new TypeError('this is null or not defined');
@@ -60,13 +61,13 @@
     }
 
     if (!String.prototype.trim) {
-        String.prototype.trim = function () {
+        String.prototype.trim = function() {
             return this.replace(/^\s*|\s*$/g, '');
         };
     }
 
 
-    var nodes2Arr = function (nodes) {
+    var nodes2Arr = function(nodes) {
         var arr = [];
 
         for (var i = 0; i < nodes.length; i++) {
@@ -79,32 +80,31 @@
     var valueoutReg = /\{\{([^\}]*)\}\}/g;
 
     var prefix = 'soda';
-    var prefixReg = new RegExp('^' + prefix + '-')
+    var prefixReg = new RegExp('^' + prefix + '-');
 
-    var classNameRegExp = function (className) {
+    var classNameRegExp = function(className) {
         return new RegExp('(^|\\s+)' + className + '(\\s+|$)', 'g');
     };
 
-    var addClass = function (el, className) {
+    var addClass = function(el, className) {
         if (!el.className) {
             el.className = className;
 
             return;
         }
 
-        if (el.className.match(classNameRegExp(className))) {
-        } else {
+        if (el.className.match(classNameRegExp(className))) {} else {
             el.className += " " + className;
         }
     };
 
-    var removeClass = function (el, className) {
+    var removeClass = function(el, className) {
         el.className = el.className.replace(classNameRegExp(className), "");
     };
 
-    var getValue = function (_data, _attrStr) {
+    var getValue = function(_data, _attrStr) {
         CONST_REGG.lastIndex = 0;
-        var realAttrStr = _attrStr.replace(CONST_REGG, function (r) {
+        var realAttrStr = _attrStr.replace(CONST_REGG, function(r) {
             if (typeof _data[r] === "undefined") {
                 return r;
             } else {
@@ -120,7 +120,7 @@
             return false;
         }
 
-        var _getValue = function (data, attrStr) {
+        var _getValue = function(data, attrStr) {
             var dotIndex = attrStr.indexOf(".");
 
             if (dotIndex > -1) {
@@ -169,7 +169,7 @@
                         data: eventData
                     }, eventData);
 
-                    rValue = '';
+                    rValue = attrStr;
                 }
 
                 return rValue;
@@ -180,8 +180,7 @@
     };
 
     // 注释node
-    var commentNode = function (node) {
-    };
+    var commentNode = function(node) {};
 
     // 标识符
     var IDENTOR_REG = /[a-zA-Z_\$]+[\w\$]*/g;
@@ -202,7 +201,7 @@
 
     var OR_REPLACE = "OR_OPERATOR\x1E";
 
-    var getRandom = function () {
+    var getRandom = function() {
         return "$$" + ~~(Math.random() * 1E6);
     };
 
@@ -210,11 +209,11 @@
     var CONST_REG = /^_\$C\$_/;
     var CONST_REGG = /_\$C\$_[^\.]+/g;
 
-    var getAttrVarKey = function () {
+    var getAttrVarKey = function() {
         return CONST_PRIFIX + ~~(Math.random() * 1E6);
     };
 
-    var parseSodaExpression = function (str, scope) {
+    var parseSodaExpression = function(str, scope) {
         // 对filter进行处理
         str = str.replace(OR_REG, OR_REPLACE).split("|");
 
@@ -226,7 +225,7 @@
         var filters = str.slice(1);
 
         // 将字符常量保存下来
-        expr = expr.replace(STRING_REG, function (r, $1, $2) {
+        expr = expr.replace(STRING_REG, function(r, $1, $2) {
             var key = getRandom();
             scope[key] = $1 || $2;
             return key;
@@ -236,7 +235,7 @@
             ATTR_REG.lastIndex = 0;
 
             //对expr预处理
-            expr = expr.replace(ATTR_REG, function (r, $1) {
+            expr = expr.replace(ATTR_REG, function(r, $1) {
                 var key = getAttrVarKey();
                 // 属性名称为字符常量
                 var attrName = parseSodaExpression($1, scope);
@@ -249,12 +248,12 @@
             });
         }
 
-        expr = expr.replace(OBJECT_REG, function (value) {
+        expr = expr.replace(OBJECT_REG, function(value) {
             return "getValue(scope,'" + value.trim() + "')";
         });
 
 
-        var parseFilter = function () {
+        var parseFilter = function() {
             var filterExpr = filters.shift();
 
             if (!filterExpr) {
@@ -269,9 +268,8 @@
             for (var i = 0; i < args.length; i++) {
                 //这里根据类型进行判断
                 if (OBJECT_REG_NG.test(args[i])) {
-                    args[i] = "getValue(scope,'" + args[i] + "')";
-                } else {
-                }
+                    args[i] = "getValue(scope,'" + args[i].replace(/^'(.*)'$|^"(.*)"$/g, "$1") + "')";
+                } else {}
             }
 
             if (sodaFilterMap[name]) {
@@ -297,17 +295,17 @@
 
         expression2id: {},
 
-        getRandId: function () {
+        getRandId: function() {
             return 'soda' + ~~(Math.random() * 1E5);
         }
     };
 
     // 解析指令
     // 解析attr
-    var compileNode = function (node, scope) {
+    var compileNode = function(node, scope) {
         // 如果只是文本
         if (node.nodeType === 3) {
-            node.nodeValue = node.nodeValue.replace(valueoutReg, function (item, $1) {
+            node.nodeValue = node.nodeValue.replace(valueoutReg, function(item, $1) {
                 /*
                  var id = hashTable.getRandId();
 
@@ -332,7 +330,7 @@
 
         if (node.attributes) {
             // 指令处理
-            sodaDirectiveArr.map(function (item) {
+            sodaDirectiveArr.map(function(item) {
                 var name = item.name;
 
                 var opt = item.opt;
@@ -343,7 +341,7 @@
             });
 
             // 处理输出 包含 prefix-*
-            [].map.call(node.attributes, function (attr) {
+            [].map.call(node.attributes, function(attr) {
                 // 如果dirctiveMap有的就跳过不再处理
                 if (!sodaDirectiveMap[attr.name]) {
                     if (prefixReg.test(attr.name)) {
@@ -351,7 +349,7 @@
 
                         if (attrName) {
                             if (attr.value) {
-                                var attrValue = attr.value.replace(valueoutReg, function (item, $1) {
+                                var attrValue = attr.value.replace(valueoutReg, function(item, $1) {
                                     return parseSodaExpression($1, scope);
                                 });
 
@@ -362,7 +360,7 @@
                         // 对其他属性里含expr 处理
                     } else {
                         if (attr.value) {
-                            attr.value = attr.value.replace(valueoutReg, function (item, $1) {
+                            attr.value = attr.value.replace(valueoutReg, function(item, $1) {
                                 return parseSodaExpression($1, scope);
                             });
                         }
@@ -372,7 +370,7 @@
 
         }
 
-        nodes2Arr(node.childNodes).map(function (child) {
+        nodes2Arr(node.childNodes).map(function(child) {
             compileNode(child, scope);
         });
     };
@@ -383,7 +381,7 @@
 
     var sodaDirectiveArr = [];
 
-    var sodaDirective = function (name, func) {
+    var sodaDirective = function(name, func) {
         var name = prefix + '-' + name;
         sodaDirectiveMap[name] = func();
 
@@ -393,25 +391,25 @@
         });
     };
 
-    var sodaFilter = function (name, func) {
+    var sodaFilter = function(name, func) {
         sodaFilterMap[name] = func;
     };
 
-    sodaFilter.get = function (name) {
+    sodaFilter.get = function(name) {
         return sodaFilterMap[name];
     };
 
-    sodaFilter("date", function (input, lenth) {
+    sodaFilter("date", function(input, lenth) {
         return lenth;
     });
 
-    sodaDirective('repeat', function () {
+    sodaDirective('repeat', function() {
         return {
             priority: 10,
-            compile: function (scope, el, attrs) {
+            compile: function(scope, el, attrs) {
 
             },
-            link: function (scope, el, attrs) {
+            link: function(scope, el, attrs) {
                 var opt = el.getAttribute(prefix + '-repeat');
                 var itemName;
                 var valueName;
@@ -419,7 +417,7 @@
                 var trackReg = /\s+by\s+([^\s]+)$/;
 
                 var trackName;
-                opt = opt.replace(trackReg, function (item, $1) {
+                opt = opt.replace(trackReg, function(item, $1) {
                     if ($1) {
                         trackName = ($1 || '').trim();
                     }
@@ -453,7 +451,7 @@
                 // 这里要处理一下
                 var repeatObj = getValue(scope, valueName) || [];
 
-                var repeatFunc = function (i) {
+                var repeatFunc = function(i) {
                     var itemNode = el.cloneNode(true);
 
                     // 这里创建一个新的scope
@@ -496,57 +494,54 @@
         };
     });
 
-    sodaDirective('if', function () {
+    sodaDirective('if', function() {
         return {
             priority: 9,
-            link: function (scope, el, attrs) {
+            link: function(scope, el, attrs) {
                 var opt = el.getAttribute(prefix + '-if');
 
                 var expressFunc = parseSodaExpression(opt, scope);
 
-                if (expressFunc) {
-                } else {
+                if (expressFunc) {} else {
                     el.parentNode && el.parentNode.removeChild(el);
                 }
             }
         };
     });
 
-    sodaDirective('class', function () {
+    sodaDirective('class', function() {
         return {
-            link: function (scope, el, attrs) {
+            link: function(scope, el, attrs) {
                 var opt = el.getAttribute(prefix + "-class");
 
                 var expressFunc = parseSodaExpression(opt, scope);
 
                 if (expressFunc) {
                     addClass(el, expressFunc);
-                } else {
-                }
+                } else {}
             }
         };
     });
 
-    sodaDirective('src', function () {
+    sodaDirective('src', function() {
         return {
-            link: function (scope, el, attrs) {
+            link: function(scope, el, attrs) {
                 var opt = el.getAttribute(prefix + "-src");
 
-                var expressFunc = opt.replace(valueoutReg, function (item, $1) {
+                var expressFunc = opt.replace(valueoutReg, function(item, $1) {
                     return parseSodaExpression($1, scope);
                 });
 
                 if (expressFunc) {
                     el.setAttribute("src", expressFunc);
-                } else {
-                }
+                } else {}
             }
         };
     });
 
-    sodaDirective('bind-html', function () {
+    sodaDirective('bind-html', function() {
         return {
-            link: function (scope, el, attrs) {
+            link: function(scope, el, attrs) {
                 var opt = el.getAttribute(prefix + "-bind-html");
                 var expressFunc = parseSodaExpression(opt, scope);
 
@@ -561,9 +556,9 @@
         };
     });
 
-    sodaDirective('html', function () {
+    sodaDirective('html', function() {
         return {
-            link: function (scope, el, attrs) {
+            link: function(scope, el, attrs) {
                 var opt = el.getAttribute(prefix + "-html");
                 var expressFunc = parseSodaExpression(opt, scope);
 
@@ -578,9 +573,9 @@
         };
     });
 
-    sodaDirective('replace', function () {
+    sodaDirective('replace', function() {
         return {
-            link: function (scope, el, attrs) {
+            link: function(scope, el, attrs) {
                 var opt = el.getAttribute(prefix + "-replace");
                 var expressFunc = parseSodaExpression(opt, scope);
 
@@ -600,18 +595,17 @@
         };
     });
 
-    sodaDirective('include', function () {
+    sodaDirective('include', function() {
         return {
             priority: 8,
-            link: function (scope, el, attrs) {
+            link: function(scope, el, attrs) {
                 var opt = el.getAttribute(prefix + "-include");
                 var template = "";
                 if (isBrowser) {
                     // browser
                     template = sodaRender.browserTemplates[opt] || window.templates[opt] || "";
                     // el.outerHTML = sodaRender(template, scope);
-                }
-                else {
+                } else {
                     // Node
                     template = require("fs").readFileSync(require("path").resolve(sodaRender.templateDir, opt), "utf-8");
                     // el.innerHTML = sodaRender(template, scope);
@@ -629,13 +623,13 @@
         };
     });
 
-    sodaDirective("style", function () {
+    sodaDirective("style", function() {
         return {
-            link: function (scope, el, attrs) {
+            link: function(scope, el, attrs) {
                 var opt = el.getAttribute(prefix + "-style");
                 var expressFunc = parseSodaExpression(opt, scope);
 
-                var getCssValue = function (name, value) {
+                var getCssValue = function(name, value) {
                     var numberWithoutpx = /opacity|z-index/;
                     if (numberWithoutpx.test(name)) {
                         return parseFloat(value);
@@ -662,8 +656,7 @@
                     var style = el.style;
                     for (var i = 0; i < style.length; i++) {
                         var name = style[i];
-                        if (expressFunc[name]) {
-                        } else {
+                        if (expressFunc[name]) {} else {
                             stylelist.push([name, style[name]].join(":"));
                         }
                     }
@@ -676,9 +669,9 @@
         };
     });
 
-    var sodaRender = function (str, data) {
+    var sodaRender = function(str, data) {
         // 对directive进行排序
-        sodaDirectiveArr.sort(function (b, a) {
+        sodaDirectiveArr.sort(function(b, a) {
             return (Number(a.opt.priority || 0) - Number(b.opt.priority || 0));
         });
 
@@ -694,7 +687,7 @@
         }
         div.innerHTML = str;
 
-        nodes2Arr(div.childNodes).map(function (child) {
+        nodes2Arr(div.childNodes).map(function(child) {
             compileNode(child, data);
         });
 
@@ -748,16 +741,15 @@
     };
 
     var eventPool = {};
-    sodaRender.addEventListener = function (type, func) {
-        if (eventPool[type]) {
-        } else {
+    sodaRender.addEventListener = function(type, func) {
+        if (eventPool[type]) {} else {
             eventPool[type] = [];
         }
 
         eventPool[type].push(func);
     };
 
-    var triggerEvent = function (type, e, data) {
+    var triggerEvent = function(type, e, data) {
         var events = eventPool[type] || [];
 
         for (var i = 0; i < events.length; i++) {
@@ -768,10 +760,10 @@
 
     sodaRender.filter = sodaFilter;
     // ADD cjd6568358
-    sodaRender.templateDir = "";//服务端模版目录(用于include指令)
-    sodaRender.browserTemplates = null;//浏览器端模版缓存对象(用于include指令)
+    sodaRender.templateDir = ""; //服务端模版目录(用于include指令)
+    sodaRender.browserTemplates = null; //浏览器端模版缓存对象(用于include指令)
 
-    sodaRender.prefix = function (newPrefix) {
+    sodaRender.prefix = function(newPrefix) {
         for (var key in sodaDirectiveMap) {
             if (sodaDirectiveMap.hasOwnProperty(key)) {
                 sodaDirectiveMap[key.replace(prefix, newPrefix)] = sodaDirectiveMap[key];
@@ -785,14 +777,14 @@
             sodaDirectiveArr[i].name = sodaDirectiveArr[i].name.replace(prefix, newPrefix);
         }
 
-        prefix = newPrefix;
+        prefix = newPrefix
         prefixReg = new RegExp('^' + prefix + '-')
-    };
+    }
 
     if (typeof exports === 'object' && typeof module === 'object')
         module.exports = sodaRender;
     else if (typeof define === 'function' && define.amd)
-        define([], function () {
+        define([], function() {
             return sodaRender;
         });
     else if (typeof exports === 'object')

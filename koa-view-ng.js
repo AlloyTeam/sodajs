@@ -3,13 +3,30 @@
 
 // 加载模板引擎
 // ngViews(app, {
-//   extension: ".html",
-//   filters: ngTemplateFilter,
-//   templateDir: path.join(__dirname, './server/views'),
-//   cache: LRU({
-//     max: 500,                   // The maximum number of items allowed in the cache
-//     max_age: 1000 * 60 * 60 * 24     // The maximum life of a cached item in milliseconds
-//   })
+//     extension: ".html",
+//     filters: ngTemplateFilter,
+//     templateDir: path.join(__dirname, './common/templates/views'),
+//     cache: LRU({
+//         max: 500, // The maximum number of items allowed in the cache
+//         max_age: 1000 * 60 * 60 * 24 // The maximum life of a cached item in milliseconds
+//     }),
+//     beforeRender: (viewName, scope, ctx, setting) => {
+//         let { prefix, extension } = setting;
+//         let combScope = Object.assign({
+//             HMC: Object.assign({}, ctx.state, {
+//                 tplSettings: { prefix, extension },
+//                 currPage: viewName,
+//                 jsRev: ctx.state.jsRevList[viewName + ".min.js"],
+//                 pointList: ctx.state.pointData.common.concat(ctx.state.pointData.pages[viewName] || [])
+//             })
+//         }, scope, {
+//             templates: scope && scope.templates || {}
+//         })
+//         delete combScope.HMC.jsRevList;
+//         delete combScope.HMC.pointData;
+//         return { viewName, combScope, setting }
+//     },
+//     disabledCache: process.env.NODE_ENV === 'development'
 // });
 
 // router.get('/', async (ctx, next) => {
@@ -18,7 +35,7 @@
 //     page: "index"
 //   }
 //   let setting = {
-//     noCache: false,
+//     disabledCache: false,
 //     serverCacheKey: scope
 //   }
 //   await ctx.render("index", scope, setting||null)
@@ -96,14 +113,14 @@ exports = module.exports = function (app, settings) {
       hashKey = hash.update(viewPath + JSON.stringify(setting.serverCacheKey || options)).digest('hex');
     }
     // 从缓存获取模版
-    if (!setting.noCache && tplCache && tplCache.get(hashKey)) {
+    if (!setting.disabledCache && tplCache && tplCache.get(hashKey)) {
       ctx.set("fromCache", true);
       return tplCache.get(hashKey);
     }
 
     let template = ngTemplate(tpl, options)
     // 加入缓存
-    if (!setting.noCache && tplCache) {
+    if (!setting.disabledCache && tplCache) {
       tplCache.set(hashKey, template);
     }
     return template;
