@@ -268,7 +268,7 @@
             for (var i = 0; i < args.length; i++) {
                 //这里根据类型进行判断
                 if (OBJECT_REG_NG.test(args[i])) {
-                    args[i] = "getValue(scope,'" + args[i].replace(/^'(.*)'$|^"(.*)"$/g, "$1") + "')";
+                    args[i] = "getValue(scope,'" + args[i].replace(/^['|"](.*)['|"]$/g, "$1") + "')";
                 } else {}
             }
 
@@ -604,18 +604,11 @@
                 if (isBrowser) {
                     // browser
                     template = sodaRender.browserTemplates[opt] || window.templates[opt] || "";
-                    // el.outerHTML = sodaRender(template, scope);
                 } else {
                     // Node
                     template = require("fs").readFileSync(require("path").resolve(sodaRender.templateDir, opt), "utf-8");
-                    // el.innerHTML = sodaRender(template, scope);
-                    // // 修复head标签中使用include，include代码中ng-if指令失效BUG
-                    // [].forEach.call(el.childNodes, function (item, index) {
-                    //     el.parentNode.insertBefore(item, el);
-                    // })
-                    // el.parentNode.removeChild(el);
                 }
-                el.outerHTML = sodaRender(template, scope);
+                el.outerHTML = el.getAttribute('compiled') ? template : sodaRender(template, scope);
                 return {
                     command: "childDone"
                 };
@@ -759,6 +752,7 @@
     };
 
     sodaRender.filter = sodaFilter;
+    sodaRender.filter = sodaDirective;
     // ADD cjd6568358
     sodaRender.templateDir = ""; //服务端模版目录(用于include指令)
     sodaRender.browserTemplates = null; //浏览器端模版缓存对象(用于include指令)
