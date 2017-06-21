@@ -3,7 +3,7 @@
 Light weight but powerful template engine for JavaScript.
 
 ``` js
-npm install sodajs
+npm install --save sodajs 
 ```
 
 ## Why using sodajs?
@@ -17,22 +17,83 @@ npm install sodajs
 
 ### simple
 
-``` js
-var tpl = '<div>Hello, {{name}}</div>'
+### Output
+
+#### plain
+
+```js
+var tpl = '<div>{{name}}</div>';
+
 document.body.innerHTML = soda(tpl,{ name : 'soda' })
+
 ```
 
-➜ [simple example](http://alloyteam.github.io/sodajs/pg/rd.html?type=simple)
 
-### if
+#### safe propery chain output
+```js
+var data = {
+    name: 'soda',
+    info: {
+        version: '2.0'
+    }
+}
+
+soda("{{info.version}}", data);  
+// result => "2.0"
+
+
+soda("{{info.foo.foo1}}", data)
+// result => ""      without errors
+
+soda("{{info['name']}}", data)
+// result => "2.0"
+
+```
+
+#### expression
+
+```js
+var data = {}
+
+soda("{{1 + 2}}", data);  
+// result => 2
+
+
+soda("{{true ? 'soda' : 'foo'}}", data)
+// result => "soda"      
+
+soda("{{1 > 3 && 'soda'}}", data)
+// result => "soda"
+
+```
+
+#### complex expression
+```js
+ var data = {
+      list: [
+         {list: [{'title': '<>aa</h1>'}, {'title': 'bb'}], name: 0, show: 1},
+         {list: [{'title': 0 }, {'title': 'bb'}], name: 'b'}
+        ]
+       
+ };
+
+ soda('{{list[list[0].show === 1 ? list[0].name : 1].list[0].title}}', data)
+ // result => '<>aa</h1>'
+```
+
+###Directives
+
+#### if
 
 ``` js
-var tpl = '<div soda-if="show">Hello, {{name}}</div>' +
-            '<div soda-if="!show">I\'m hidden!</div>'
-document.body.innerHTML = soda(tpl,{ name : 'soda',show: true })
+var data = { name : 'soda',show: true };
+soda(` <div soda-if="show">Hello, {{name}}</div>
+       <div soda-if="!show">I\'m hidden!</div>`,
+       data
+    )
+// result => <div>Hello, soda</div>
 ```
 
-➜ [if example](http://alloyteam.github.io/sodajs/pg/rd.html?type=if)
 
 ### repeat
 
@@ -177,6 +238,10 @@ document.body.innerHTML =  soda(tpl, data);
 ```
 
 you can customize your prefix by `soda.prefix` method.
+
+
+
+
 
 ## Who using sodajs?
 sodajs is currently using by QQ Tribes(兴趣部落), QQ Group(群) and other projects

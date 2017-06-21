@@ -1,7 +1,7 @@
-import Sodajs from './../sodajs';
+import Soda from './../soda';
 
-Sodajs.directive('replace', { 
-    link({scope, el, expression, parseSodaExpression}) {
+Soda.directive('replace', { 
+    link({scope, el, expression, parseSodaExpression, document}) {
         var result = parseSodaExpression(expression, scope);
 
         if (result) {

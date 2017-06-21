@@ -23,52 +23,59 @@ import {
     nodes2Arr
 } from './util';
 
+var doc = typeof document !== 'undefined' ? document : {};
 
-
-export default class Sodajs{
+export default class Soda{
     static sodaDirectives = [];
     static sodaFilterMap = {};
+    static template = {};
 
     constructor(prefix = 'soda-'){
-        this.prefix = prefix;
+        this._prefix = prefix;
     }
+
+    setDocument(_doc){
+        doc = _doc;
+    }
+
 
     run(str, data){
         // 解析模板DOM
-        var div = document.createElement("div");
+        var div = doc.createElement("div");
 
         // 必须加入到body中去，不然自定义标签不生效
-        if (document.documentMode < 9) {
+        if (doc.documentMode < 9) {
             div.style.display = 'none';
-            document.body.appendChild(div);
+            doc.body.appendChild(div);
         }
 
         div.innerHTML = str;
+
 
         nodes2Arr(div.childNodes).map(child => {
             this.compileNode(child, data);
         });
 
         var innerHTML = div.innerHTML;
-        if (document.documentMode < 9) {
-            document.body.removeChild(div);
+        if (doc.documentMode < 9) {
+            doc.body.removeChild(div);
         }
 
         return innerHTML;
     }
 
     prefix(prefix){
-        this.prefix = prefix;
+        this._prefix = prefix;
     }
 
     _getPrefixReg(){
-        return new RegExp('^' + this.prefix);
+        return new RegExp('^' + this._prefix);
     }
 
     _getPrefixedDirectiveMap(){
         var map = {};
-        Sodajs.sodaDirectives.map(item => {
-            var prefixedName = this.prefix + item.name;
+        Soda.sodaDirectives.map(item => {
+            var prefixedName = this._prefix + item.name;
 
             map[prefixedName] = item;
         });
@@ -85,7 +92,7 @@ export default class Sodajs{
 
         let {
             sodaDirectives
-        } = Sodajs;
+        } = Soda;
 
         let prefixedDirectiveMap = this._getPrefixedDirectiveMap();
 
@@ -112,7 +119,7 @@ export default class Sodajs{
                         opt
                     } = item;
 
-                    let prefixedName = this.prefix + name;
+                    let prefixedName = this._prefix + name;
 
                     // 这里移除了对parentNode的判断
                     // 允许使用无值的指令
@@ -125,7 +132,8 @@ export default class Sodajs{
                             el: node,
                             parseSodaExpression: this.parseSodaExpression.bind(this),
                             getValue: this.getValue.bind(this),
-                            compileNode: this.compileNode.bind(this)
+                            compileNode: this.compileNode.bind(this),
+                            document: doc
                         });
 
                         // 移除标签
@@ -178,7 +186,7 @@ export default class Sodajs{
     }
 
     getEvalFunc(expr){
-       var evalFunc = new Function("getValue", "sodaFilterMap", "return function sodaExp(scope){ return " + expr + "}")(this.getValue, Sodajs.sodaFilterMap);
+       var evalFunc = new Function("getValue", "sodaFilterMap", "return function sodaExp(scope){ return " + expr + "}")(this.getValue, Soda.sodaFilterMap);
 
        return evalFunc;
     }
@@ -226,6 +234,7 @@ export default class Sodajs{
                     return "";
                 }
             } else {
+               attrStr = attrStr.trim();
 
                 // 检查attrStr是否属于变量并转换
                 if (typeof _data[attrStr] !== "undefined" && CONST_REG.test(attrStr)) {
@@ -299,7 +308,7 @@ export default class Sodajs{
     }
 
     parseFilter(filters, expr) {
-        let {sodaFilterMap} = Sodajs;
+        let {sodaFilterMap} = Soda;
 
         var parse = () => {
             var filterExpr = filters.shift();
@@ -311,7 +320,7 @@ export default class Sodajs{
 
             var filterExpr = filterExpr.split(":");
             var args = filterExpr.slice(1) || [];
-            var name = filterExpr[0] || "";
+            var name = (filterExpr[0] || "").trim();
 
             for (var i = 0; i < args.length; i++) {
                 //这里根据类型进行判断
@@ -366,5 +375,22 @@ export default class Sodajs{
             name,
             opt
         });
+    }
+
+    static discribe(name, funcOrStr){
+        this.template[name] = funcOrStr;
+    }
+
+    static getTmpl(name, args){
+        let funcOrStr = this.template[name];
+        let result;
+
+        if(typeof funcOrStr === 'function'){
+            result = funcOrStr.apply(null, args);
+        }else{
+            result = funcOrStr;
+        }
+
+        return result;
     }
 }

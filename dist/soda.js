@@ -43,9 +43,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
 /******/
-/******/ 	// identity function for calling harmony imports with the correct context
-/******/ 	__webpack_require__.i = function(value) { return value; };
-/******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
@@ -73,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -91,33 +88,40 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _const = __webpack_require__(7);
+var _const = __webpack_require__(1);
 
-var _util = __webpack_require__(1);
+var _util = __webpack_require__(2);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Sodajs = function () {
-    function Sodajs() {
+var doc = typeof document !== 'undefined' ? document : {};
+
+var Soda = function () {
+    function Soda() {
         var prefix = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'soda-';
 
-        _classCallCheck(this, Sodajs);
+        _classCallCheck(this, Soda);
 
-        this.prefix = prefix;
+        this._prefix = prefix;
     }
 
-    _createClass(Sodajs, [{
+    _createClass(Soda, [{
+        key: 'setDocument',
+        value: function setDocument(_doc) {
+            doc = _doc;
+        }
+    }, {
         key: 'run',
         value: function run(str, data) {
             var _this = this;
 
             // 解析模板DOM
-            var div = document.createElement("div");
+            var div = doc.createElement("div");
 
             // 必须加入到body中去，不然自定义标签不生效
-            if (document.documentMode < 9) {
+            if (doc.documentMode < 9) {
                 div.style.display = 'none';
-                document.body.appendChild(div);
+                doc.body.appendChild(div);
             }
 
             div.innerHTML = str;
@@ -127,8 +131,8 @@ var Sodajs = function () {
             });
 
             var innerHTML = div.innerHTML;
-            if (document.documentMode < 9) {
-                document.body.removeChild(div);
+            if (doc.documentMode < 9) {
+                doc.body.removeChild(div);
             }
 
             return innerHTML;
@@ -136,12 +140,12 @@ var Sodajs = function () {
     }, {
         key: 'prefix',
         value: function prefix(_prefix) {
-            this.prefix = _prefix;
+            this._prefix = _prefix;
         }
     }, {
         key: '_getPrefixReg',
         value: function _getPrefixReg() {
-            return new RegExp('^' + this.prefix);
+            return new RegExp('^' + this._prefix);
         }
     }, {
         key: '_getPrefixedDirectiveMap',
@@ -149,8 +153,8 @@ var Sodajs = function () {
             var _this2 = this;
 
             var map = {};
-            Sodajs.sodaDirectives.map(function (item) {
-                var prefixedName = _this2.prefix + item.name;
+            Soda.sodaDirectives.map(function (item) {
+                var prefixedName = _this2._prefix + item.name;
 
                 map[prefixedName] = item;
             });
@@ -169,7 +173,7 @@ var Sodajs = function () {
 
             var prefixReg = this._getPrefixReg();
 
-            var sodaDirectives = Sodajs.sodaDirectives;
+            var sodaDirectives = Soda.sodaDirectives;
 
 
             var prefixedDirectiveMap = this._getPrefixedDirectiveMap();
@@ -196,7 +200,7 @@ var Sodajs = function () {
                             opt = item.opt;
 
 
-                        var prefixedName = _this3.prefix + name;
+                        var prefixedName = _this3._prefix + name;
 
                         // 这里移除了对parentNode的判断
                         // 允许使用无值的指令
@@ -209,7 +213,8 @@ var Sodajs = function () {
                                 el: node,
                                 parseSodaExpression: _this3.parseSodaExpression.bind(_this3),
                                 getValue: _this3.getValue.bind(_this3),
-                                compileNode: _this3.compileNode.bind(_this3)
+                                compileNode: _this3.compileNode.bind(_this3),
+                                document: doc
                             });
 
                             // 移除标签
@@ -258,7 +263,7 @@ var Sodajs = function () {
     }, {
         key: 'getEvalFunc',
         value: function getEvalFunc(expr) {
-            var evalFunc = new Function("getValue", "sodaFilterMap", "return function sodaExp(scope){ return " + expr + "}")(this.getValue, Sodajs.sodaFilterMap);
+            var evalFunc = new Function("getValue", "sodaFilterMap", "return function sodaExp(scope){ return " + expr + "}")(this.getValue, Soda.sodaFilterMap);
 
             return evalFunc;
         }
@@ -306,6 +311,7 @@ var Sodajs = function () {
                         return "";
                     }
                 } else {
+                    attrStr = attrStr.trim();
 
                     // 检查attrStr是否属于变量并转换
                     if (typeof _data[attrStr] !== "undefined" && _const.CONST_REG.test(attrStr)) {
@@ -380,7 +386,7 @@ var Sodajs = function () {
     }, {
         key: 'parseFilter',
         value: function parseFilter(filters, expr) {
-            var sodaFilterMap = Sodajs.sodaFilterMap;
+            var sodaFilterMap = Soda.sodaFilterMap;
 
 
             var parse = function parse() {
@@ -392,7 +398,7 @@ var Sodajs = function () {
 
                 var filterExpr = filterExpr.split(":");
                 var args = filterExpr.slice(1) || [];
-                var name = filterExpr[0] || "";
+                var name = (filterExpr[0] || "").trim();
 
                 for (var i = 0; i < args.length; i++) {
                     //这里根据类型进行判断
@@ -455,17 +461,72 @@ var Sodajs = function () {
                 opt: opt
             });
         }
+    }, {
+        key: 'discribe',
+        value: function discribe(name, funcOrStr) {
+            this.template[name] = funcOrStr;
+        }
+    }, {
+        key: 'getTmpl',
+        value: function getTmpl(name, args) {
+            var funcOrStr = this.template[name];
+            var result = void 0;
+
+            if (typeof funcOrStr === 'function') {
+                result = funcOrStr.apply(null, args);
+            } else {
+                result = funcOrStr;
+            }
+
+            return result;
+        }
     }]);
 
-    return Sodajs;
+    return Soda;
 }();
 
-Sodajs.sodaDirectives = [];
-Sodajs.sodaFilterMap = {};
-exports.default = Sodajs;
+Soda.sodaDirectives = [];
+Soda.sodaFilterMap = {};
+Soda.template = {};
+exports.default = Soda;
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+// 标识符
+var IDENTOR_REG = exports.IDENTOR_REG = /[a-zA-Z_\$]+[\w\$]*/g;
+var STRING_REG = exports.STRING_REG = /"([^"]*)"|'([^']*)'/g;
+var NUMBER_REG = exports.NUMBER_REG = /\d+|\d*\.\d+/g;
+
+var OBJECT_REG = exports.OBJECT_REG = /[a-zA-Z_\$]+[\w\$]*(?:\s*\.\s*(?:[a-zA-Z_\$]+[\w\$]*|\d+))*/g;
+
+// 非global 做test用
+var OBJECT_REG_NG = exports.OBJECT_REG_NG = /[a-zA-Z_\$]+[\w\$]*(?:\s*\.\s*(?:[a-zA-Z_\$]+[\w\$]*|\d+))*/;
+
+var ATTR_REG = exports.ATTR_REG = /\[([^\[\]]*)\]/g;
+var ATTR_REG_NG = exports.ATTR_REG_NG = /\[([^\[\]]*)\]/;
+var ATTR_REG_DOT = exports.ATTR_REG_DOT = /\.([a-zA-Z_\$]+[\w\$]*)/g;
+
+var NOT_ATTR_REG = exports.NOT_ATTR_REG = /[^\.|]([a-zA-Z_\$]+[\w\$]*)/g;
+
+var OR_REG = exports.OR_REG = /\|\|/g;
+
+var OR_REPLACE = exports.OR_REPLACE = "OR_OPERATOR\x1E";
+
+var CONST_PRIFIX = exports.CONST_PRIFIX = "_$C$_";
+var CONST_REG = exports.CONST_REG = /^_\$C\$_/;
+var CONST_REGG = exports.CONST_REGG = /_\$C\$_[^\.]+/g;
+var VALUE_OUT_REG = exports.VALUE_OUT_REG = /\{\{([^\}]*)\}\}/g;
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -476,7 +537,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.assign = exports.nodes2Arr = exports.exist = exports.getRandom = exports.getAttrVarKey = undefined;
 
-var _const = __webpack_require__(7);
+var _const = __webpack_require__(1);
 
 var getAttrVarKey = exports.getAttrVarKey = function getAttrVarKey() {
 	return _const.CONST_PRIFIX + ~~(Math.random() * 1E6);
@@ -487,7 +548,7 @@ var getRandom = exports.getRandom = function getRandom() {
 };
 
 var exist = exports.exist = function exist(value) {
-	return value !== null && value !== undefined && typeof value !== 'undefined';
+	return value !== null && value !== undefined && value !== "" && typeof value !== 'undefined';
 };
 
 var nodes2Arr = exports.nodes2Arr = function nodes2Arr(nodes) {
@@ -540,124 +601,80 @@ var assign = exports.assign = Object.assign || function (target, source) {
 };
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _sodajs = __webpack_require__(0);
-
-var _sodajs2 = _interopRequireDefault(_sodajs);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var classNameRegExp = function classNameRegExp(className) {
-    return new RegExp('(^|\\s+)' + className + '(\\s+|$)', 'g');
-};
-
-var addClass = function addClass(el, className) {
-    if (!el.className) {
-        el.className = className;
-
-        return;
-    }
-
-    if (el.className.match(classNameRegExp(className))) {} else {
-        el.className += " " + className;
-    }
-};
-
-var removeClass = function removeClass(el, className) {
-    el.className = el.className.replace(classNameRegExp(className), "");
-};
-
-_sodajs2.default.directive('class', {
-    link: function link(_ref) {
-        var scope = _ref.scope,
-            el = _ref.el,
-            expression = _ref.expression,
-            parseSodaExpression = _ref.parseSodaExpression;
-
-        var expressFunc = parseSodaExpression(expression, scope);
-
-        if (expressFunc) {
-            addClass(el, expressFunc);
-        } else {}
-    }
-});
-
-/***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _sodajs = __webpack_require__(0);
+var _soda = __webpack_require__(0);
 
-var _sodajs2 = _interopRequireDefault(_sodajs);
+var _soda2 = _interopRequireDefault(_soda);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _util = __webpack_require__(2);
 
-_sodajs2.default.directive('html', {
-    link: function link(_ref) {
-        var expression = _ref.expression,
-            scope = _ref.scope,
-            el = _ref.el,
-            parseSodaExpression = _ref.parseSodaExpression;
+__webpack_require__(5);
 
-        var result = parseSodaExpression(expression, scope);
+__webpack_require__(6);
 
-        if (result) {
-            el.innerHTML = result;
-        }
-    }
-});
+__webpack_require__(7);
 
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
+__webpack_require__(8);
 
-"use strict";
+__webpack_require__(9);
 
+__webpack_require__(10);
 
-var _sodajs = __webpack_require__(0);
-
-var _sodajs2 = _interopRequireDefault(_sodajs);
+__webpack_require__(11);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_sodajs2.default.directive('if', {
-    priority: 9,
-    link: function link(_ref) {
-        var expression = _ref.expression,
-            parseSodaExpression = _ref.parseSodaExpression,
-            scope = _ref.scope,
-            el = _ref.el;
+var sodaInstance = new _soda2.default();
 
-        var expressFunc = parseSodaExpression(expression, scope);
+var init = function init(str, data) {
+    return sodaInstance.run(str, data);
+};
 
-        if (expressFunc) {} else {
-            el.parentNode && el.parentNode.removeChild(el);
-        }
-    }
-});
+var mock = {
+    prefix: function prefix(_prefix) {
+        sodaInstance.prefix(_prefix);
+    },
+    filter: function filter(name, func) {
+        _soda2.default.filter(name, func);
+    },
+    directive: function directive(name, opt) {
+        _soda2.default.directive(name, opt);
+    },
+    setDocument: function setDocument(document) {
+        sodaInstance.setDocument(document);
+    },
+    discribe: function discribe(name, str) {
+        _soda2.default.discribe(name, str);
+    },
+
+
+    Soda: _soda2.default
+};
+
+var soda = (0, _util.assign)(init, mock);
+
+module.exports = soda;
 
 /***/ }),
+/* 4 */,
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _sodajs = __webpack_require__(0);
+var _soda = __webpack_require__(0);
 
-var _sodajs2 = _interopRequireDefault(_sodajs);
+var _soda2 = _interopRequireDefault(_soda);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_sodajs2.default.directive('repeat', {
+_soda2.default.directive('repeat', {
     priority: 10,
     link: function link(_ref) {
         var _this = this;
@@ -720,7 +737,7 @@ _sodajs2.default.directive('repeat', {
             itemScope.__proto__ = scope;
 
             // REMOVE cjd6568358
-            itemNode.removeAttribute(_this.prefix + 'repeat');
+            itemNode.removeAttribute(_this._prefix + 'repeat');
 
             el.parentNode.insertBefore(itemNode, el);
 
@@ -751,18 +768,124 @@ _sodajs2.default.directive('repeat', {
 "use strict";
 
 
-var _sodajs = __webpack_require__(0);
+var _soda = __webpack_require__(0);
 
-var _sodajs2 = _interopRequireDefault(_sodajs);
+var _soda2 = _interopRequireDefault(_soda);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_sodajs2.default.directive('replace', {
+_soda2.default.directive('if', {
+    priority: 9,
+    link: function link(_ref) {
+        var expression = _ref.expression,
+            parseSodaExpression = _ref.parseSodaExpression,
+            scope = _ref.scope,
+            el = _ref.el;
+
+        var expressFunc = parseSodaExpression(expression, scope);
+
+        if (expressFunc) {} else {
+            el.parentNode && el.parentNode.removeChild(el);
+        }
+    }
+});
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _soda = __webpack_require__(0);
+
+var _soda2 = _interopRequireDefault(_soda);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var classNameRegExp = function classNameRegExp(className) {
+    return new RegExp('(^|\\s+)' + className + '(\\s+|$)', 'g');
+};
+
+var addClass = function addClass(el, className) {
+    if (!el.className) {
+        el.className = className;
+
+        return;
+    }
+
+    if (el.className.match(classNameRegExp(className))) {} else {
+        el.className += " " + className;
+    }
+};
+
+var removeClass = function removeClass(el, className) {
+    el.className = el.className.replace(classNameRegExp(className), "");
+};
+
+_soda2.default.directive('class', {
     link: function link(_ref) {
         var scope = _ref.scope,
             el = _ref.el,
             expression = _ref.expression,
             parseSodaExpression = _ref.parseSodaExpression;
+
+        var expressFunc = parseSodaExpression(expression, scope);
+
+        if (expressFunc) {
+            addClass(el, expressFunc);
+        } else {}
+    }
+});
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _soda = __webpack_require__(0);
+
+var _soda2 = _interopRequireDefault(_soda);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_soda2.default.directive('html', {
+    link: function link(_ref) {
+        var expression = _ref.expression,
+            scope = _ref.scope,
+            el = _ref.el,
+            parseSodaExpression = _ref.parseSodaExpression;
+
+        var result = parseSodaExpression(expression, scope);
+
+        if (result) {
+            el.innerHTML = result;
+        }
+    }
+});
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _soda = __webpack_require__(0);
+
+var _soda2 = _interopRequireDefault(_soda);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_soda2.default.directive('replace', {
+    link: function link(_ref) {
+        var scope = _ref.scope,
+            el = _ref.el,
+            expression = _ref.expression,
+            parseSodaExpression = _ref.parseSodaExpression,
+            document = _ref.document;
 
         var result = parseSodaExpression(expression, scope);
 
@@ -782,86 +905,105 @@ _sodajs2.default.directive('replace', {
 });
 
 /***/ }),
-/* 7 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-// 标识符
-var IDENTOR_REG = exports.IDENTOR_REG = /[a-zA-Z_\$]+[\w\$]*/g;
-var STRING_REG = exports.STRING_REG = /"([^"]*)"|'([^']*)'/g;
-var NUMBER_REG = exports.NUMBER_REG = /\d+|\d*\.\d+/g;
+var _soda = __webpack_require__(0);
 
-var OBJECT_REG = exports.OBJECT_REG = /[a-zA-Z_\$]+[\w\$]*(?:\s*\.\s*(?:[a-zA-Z_\$]+[\w\$]*|\d+))*/g;
-
-// 非global 做test用
-var OBJECT_REG_NG = exports.OBJECT_REG_NG = /[a-zA-Z_\$]+[\w\$]*(?:\s*\.\s*(?:[a-zA-Z_\$]+[\w\$]*|\d+))*/;
-
-var ATTR_REG = exports.ATTR_REG = /\[([^\[\]]*)\]/g;
-var ATTR_REG_NG = exports.ATTR_REG_NG = /\[([^\[\]]*)\]/;
-var ATTR_REG_DOT = exports.ATTR_REG_DOT = /\.([a-zA-Z_\$]+[\w\$]*)/g;
-
-var NOT_ATTR_REG = exports.NOT_ATTR_REG = /[^\.|]([a-zA-Z_\$]+[\w\$]*)/g;
-
-var OR_REG = exports.OR_REG = /\|\|/g;
-
-var OR_REPLACE = exports.OR_REPLACE = "OR_OPERATOR\x1E";
-
-var CONST_PRIFIX = exports.CONST_PRIFIX = "_$C$_";
-var CONST_REG = exports.CONST_REG = /^_\$C\$_/;
-var CONST_REGG = exports.CONST_REGG = /_\$C\$_[^\.]+/g;
-var VALUE_OUT_REG = exports.VALUE_OUT_REG = /\{\{([^\}]*)\}\}/g;
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _sodajs = __webpack_require__(0);
-
-var _sodajs2 = _interopRequireDefault(_sodajs);
-
-var _util = __webpack_require__(1);
-
-__webpack_require__(5);
-
-__webpack_require__(4);
-
-__webpack_require__(2);
-
-__webpack_require__(3);
-
-__webpack_require__(6);
+var _soda2 = _interopRequireDefault(_soda);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var sodaInstance = new _sodajs2.default();
+_soda2.default.directive('style', {
+    link: function link(_ref) {
+        var scope = _ref.scope,
+            el = _ref.el,
+            expression = _ref.expression,
+            parseSodaExpression = _ref.parseSodaExpression;
 
-var init = function init(str, data) {
-    return sodaInstance.run(str, data);
-};
+        var expressFunc = parseSodaExpression(expression, scope);
 
-var mock = {
-    prefix: function prefix(_prefix) {
-        sodaInstance.prefix(_prefix);
-    },
-    filter: function filter(name, func) {
-        _sodajs2.default.filter(name, func);
-    },
-    directive: function directive(name, opt) {
-        _sodajs2.default.directive(name, opt);
+        var getCssValue = function getCssValue(name, value) {
+            var numberWithoutpx = /opacity|z-index/;
+            if (numberWithoutpx.test(name)) {
+                return parseFloat(value);
+            }
+
+            if (isNaN(value)) {
+                return value;
+            } else {
+                return value + "px";
+            }
+        };
+
+        if (expressFunc) {
+            var stylelist = [];
+
+            for (var i in expressFunc) {
+                if (expressFunc.hasOwnProperty(i)) {
+                    var provalue = getCssValue(i, expressFunc[i]);
+
+                    stylelist.push([i, provalue].join(":"));
+                }
+            }
+
+            var style = el.style;
+            for (var i = 0; i < style.length; i++) {
+                var name = style[i];
+                if (expressFunc[name]) {} else {
+                    stylelist.push([name, style[name]].join(":"));
+                }
+            }
+
+            var styleStr = stylelist.join(";");
+
+            el.setAttribute("style", styleStr);
+        }
     }
-};
+});
 
-var soda = (0, _util.assign)(init, mock);
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = soda;
+"use strict";
+
+
+var _soda = __webpack_require__(0);
+
+var _soda2 = _interopRequireDefault(_soda);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_soda2.default.directive('include', {
+        priority: 8,
+        link: function link(_ref) {
+                var scope = _ref.scope,
+                    el = _ref.el,
+                    parseSodaExpression = _ref.parseSodaExpression,
+                    expression = _ref.expression;
+
+                var VALUE_OUT_REG = /\{\{([^\}]*)\}\}/g;
+
+                var result = expression.replace(VALUE_OUT_REG, function (item, $1) {
+                        return parseSodaExpression($1, scope);
+                });
+
+                result = result.split(":");
+
+                var name = result[0];
+
+                var args = result.slice(1);
+
+                var template = _soda2.default.getTmpl(name, args);
+                if (template) {
+                        el.outerHTML = this.run(template, scope);
+                }
+        }
+});
 
 /***/ })
 /******/ ]);

@@ -1,4 +1,4 @@
-import Sodajs from './../sodajs';
+import Soda from './../soda';
 
 var classNameRegExp = function(className) {
     return new RegExp('(^|\\s+)' + className + '(\\s+|$)', 'g');
@@ -21,7 +21,7 @@ var removeClass = function(el, className){
     el.className = el.className.replace(classNameRegExp(className), "");
 };
 
-Sodajs.directive('class', {
+Soda.directive('class', {
     link: function({scope, el, expression, parseSodaExpression}){
         var expressFunc = parseSodaExpression(expression, scope);
 

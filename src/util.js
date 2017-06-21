@@ -8,7 +8,7 @@ export let getRandom = function() {
 };
 
 export let exist = function(value){
-    return value !== null && value !== undefined && typeof value !== 'undefined';
+    return value !== null && value !== undefined && value !== "" && typeof value !== 'undefined';
 };
 
 export let nodes2Arr = function(nodes) {

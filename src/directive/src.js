@@ -1,6 +1,6 @@
-import Sodajs from './../sodajs';
+import Soda from './../soda';
 
-Sodajs.directive('src', {
+Soda.directive('src', {
     link: function({scope, el, expression, parseSodaExpression}){
         const VALUE_OUT_REG = /\{\{([^\}]*)\}\}/g;
 

@@ -1,6 +1,6 @@
-import Sodajs from './../sodajs';
+import Soda from './../soda';
 
-Sodajs.directive('if', {
+Soda.directive('if', {
     priority: 9,
     link: function({expression, parseSodaExpression, scope, el}){
         var expressFunc = parseSodaExpression(expression, scope);

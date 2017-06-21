@@ -1,4 +1,5 @@
-var soda= require('../src/soda.js');
+var soda = require('./../node');
+//var soda = require('./../src/soda.old.js');
 
 soda.filter("date", function(input, length){
     return "2d" + length;

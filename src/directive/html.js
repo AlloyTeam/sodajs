@@ -1,6 +1,6 @@
-import Sodajs from './../sodajs';
+import Soda from './../soda';
 
-Sodajs.directive('html',{
+Soda.directive('html',{
     link({expression, scope, el, parseSodaExpression}) {
         var result = parseSodaExpression(expression, scope);
 

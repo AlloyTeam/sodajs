@@ -1,6 +1,6 @@
-import Sodajs from './../sodajs';
+import Soda from './../soda';
 
-Sodajs.directive('repeat', {
+Soda.directive('repeat', {
     priority: 10,
     link: function({scope, el, expression, getValue, parseSodaExpression, compileNode}){
         var itemName;
@@ -55,7 +55,7 @@ Sodajs.directive('repeat', {
             itemScope.__proto__ = scope;
 
             // REMOVE cjd6568358
-            itemNode.removeAttribute(this.prefix + 'repeat');
+            itemNode.removeAttribute(this._prefix + 'repeat');
 
             el.parentNode.insertBefore(itemNode, el);
 

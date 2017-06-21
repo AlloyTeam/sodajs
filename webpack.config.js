@@ -1,9 +1,14 @@
 var path = require("path");
+var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
-module.exports = {
-    entry: './src/index.js',
+var ENV = process.env.npm_lifecycle_event;
+
+var config = {
+    entry: {
+        'soda': './src/index.js'
+    },
     output: {
-        filename: 'soda.js',
+        filename: '[name].js',
         library: 'soda',
         path: path.resolve('./dist'),
         libraryTarget: 'umd'
@@ -20,5 +25,19 @@ module.exports = {
         alias: {
         }
     }
-    
 };
+
+if(ENV === 'build-min'){
+    config = Object.assign(config, {
+        entry: {
+            'soda.min': './src/index.js'
+        },
+
+        plugins: [
+            new UglifyJSPlugin()
+        ]
+
+    });
+}
+
+module.exports = config;
