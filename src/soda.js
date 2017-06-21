@@ -752,7 +752,7 @@
     };
 
     sodaRender.filter = sodaFilter;
-    sodaRender.filter = sodaDirective;
+    sodaRender.sodaDirective = sodaDirective;
     // ADD cjd6568358
     sodaRender.templateDir = ""; //服务端模版目录(用于include指令)
     sodaRender.browserTemplates = null; //浏览器端模版缓存对象(用于include指令)
