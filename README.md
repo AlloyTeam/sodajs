@@ -192,6 +192,40 @@ document.body.innerHTML = soda(tpl,{ html : '<span style="color:red;">test soda-
 
 div will be replaced with given html
 
+#### include
+include template
+
+soda-include="tmplateName:arg1:arg2:..."
+
+```js
+    var data = {
+        name: "soda"
+    };
+
+    soda.discribe('tmpl1', `<h1>{{name}}</h1>`);
+
+    soda(`<span soda-include="tmpl1">1</span>`, data);
+    // result => <h1>dorsy</h1>
+
+    soda.discribe('tmpl2', function(path){
+        return `<h1>{{name}}_${path}</h1>`;
+    });
+
+    soda(`<span soda-include="list3:sub{{'path' + 1}}">1</span>`, data);
+    //  result =>  <h1>soda_subpath1</h1>
+    
+
+    // In node env
+    soda.discribe('tmplNode', function(path){
+        return fs.readFileSync(path, 'utf-8');
+    });
+
+    soda(`<span soda-include="tmplNode:view.html">1</span>`, data);
+    //  result =>  view.html Tmplate
+
+
+```
+
 ### Others
 
 #### soda-class
