@@ -8,8 +8,16 @@
     "url": "git+https://github.com/AlloyTeam/sodajs.git"
   },
   "scripts": {
-    "build": "webpack -w",
-    "build-min": "webpack -w",
+    "build": "npm run build-uncom && npm run build-min &&  npm run build-node-uncom && npm run build-node-min && npm run build-test && npm run build-test-lite",
+    "build-uncom": "webpack",
+    "build-min": "webpack",
+    "build-test": "webpack",
+    "build-test-lite": "webpack",
+
+    "build-lite-uncom": "webpack",
+    "build-lite-min": "webpack",
+    "build-node-uncom": "webpack",
+    "build-node-min": "webpack",
     "test": "mocha test/index.js"
   },
   "keywords": [
@@ -32,6 +40,7 @@
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-es2015": "^6.24.1",
     "chai": "^4.0.2",
+    "es3ify-webpack-plugin": "0.0.1",
     "mocha": "^3.4.2",
     "uglifyjs-webpack-plugin": "^0.4.6",
     "webpack": "^3.0.0"

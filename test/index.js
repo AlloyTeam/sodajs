@@ -2,21 +2,23 @@ var chai = require('chai');
 var expect = chai.expect;
 var assert = chai.assert;
 
+//var soda = require('./../node');
 var soda = require('./../node');
-
-
+//}
+/*
 if(typeof describe === 'undefined'){
-    describe =  function(name, func){
+    var describe =  function(name, func){
         console.log(name);
 
         func && func();
     };
 
-    it = function(name, func){
+    var it = function(name, func){
         console.log(name);
         func && func();
     };
 }
+*/
 
 
  describe('Output', function() {
@@ -25,14 +27,7 @@ if(typeof describe === 'undefined'){
             <div>asdfasdf</div>
         `;
 
-        var html2 = `
-            <table>
-                <tr>
-                    <td>1</td>
-                    <td></td>
-                </tr>
-            </table>
-        `;
+        var html2 = `<tr><td>1</td><td></td></tr>`;
 
 
         assert.equal(soda(html1), html1);
@@ -151,7 +146,7 @@ if(typeof describe === 'undefined'){
 
         assert.equal(
             soda('{{list[list[0].show === 1 ? list[0].name : 1].list[0].title}}', data),
-            '<>aa</h1>'
+            '&lt;&gt;aa&lt;/h1&gt;'
         );
     });
 

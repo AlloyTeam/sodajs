@@ -47,7 +47,7 @@
  */
 const fs = require('fs');
 const path = require('path');
-const ngTemplate = require('../../client/src/js/lib/soda');
+const ngTemplate = require('sodajs/node');
 const crypto = require('crypto');
 
 /**
@@ -90,7 +90,8 @@ exports = module.exports = function (app, settings) {
 
   // 初始化ngTemplate设置
   ngTemplate.prefix(settings.prefix);
-  ngTemplate.templateDir = settings.templateDir;
+  //ngTemplate.templateDir = settings.templateDir;
+
   for (var key in settings.filters) {
     ngTemplate.filter(key, settings.filters[key])
   }

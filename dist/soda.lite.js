@@ -488,7 +488,7 @@ var Soda = function () {
 Soda.sodaDirectives = [];
 Soda.sodaFilterMap = {};
 Soda.template = {};
-exports["default"] = Soda;
+exports.default = Soda;
 
 /***/ }),
 /* 1 */
@@ -627,9 +627,9 @@ __webpack_require__(9);
 
 __webpack_require__(10);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var sodaInstance = new _soda2["default"]();
+var sodaInstance = new _soda2.default();
 
 var init = function init(str, data) {
     return sodaInstance.run(str, data);
@@ -640,20 +640,20 @@ var mock = {
         sodaInstance.prefix(_prefix);
     },
     filter: function filter(name, func) {
-        _soda2["default"].filter(name, func);
+        _soda2.default.filter(name, func);
     },
     directive: function directive(name, opt) {
-        _soda2["default"].directive(name, opt);
+        _soda2.default.directive(name, opt);
     },
     setDocument: function setDocument(document) {
         sodaInstance.setDocument(document);
     },
     discribe: function discribe(name, str) {
-        _soda2["default"].discribe(name, str);
+        _soda2.default.discribe(name, str);
     },
 
 
-    Soda: _soda2["default"]
+    Soda: _soda2.default
 };
 
 var soda = (0, _util.assign)(init, mock);
@@ -671,9 +671,9 @@ var _soda = __webpack_require__(0);
 
 var _soda2 = _interopRequireDefault(_soda);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_soda2["default"].directive('repeat', {
+_soda2.default.directive('repeat', {
     priority: 10,
     link: function link(_ref) {
         var _this = this;
@@ -771,9 +771,9 @@ var _soda = __webpack_require__(0);
 
 var _soda2 = _interopRequireDefault(_soda);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_soda2["default"].directive('if', {
+_soda2.default.directive('if', {
     priority: 9,
     link: function link(_ref) {
         var expression = _ref.expression,
@@ -800,7 +800,7 @@ var _soda = __webpack_require__(0);
 
 var _soda2 = _interopRequireDefault(_soda);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var classNameRegExp = function classNameRegExp(className) {
     return new RegExp('(^|\\s+)' + className + '(\\s+|$)', 'g');
@@ -822,7 +822,7 @@ var removeClass = function removeClass(el, className) {
     el.className = el.className.replace(classNameRegExp(className), "");
 };
 
-_soda2["default"].directive('class', {
+_soda2.default.directive('class', {
     link: function link(_ref) {
         var scope = _ref.scope,
             el = _ref.el,
@@ -848,9 +848,9 @@ var _soda = __webpack_require__(0);
 
 var _soda2 = _interopRequireDefault(_soda);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_soda2["default"].directive('html', {
+_soda2.default.directive('html', {
     link: function link(_ref) {
         var expression = _ref.expression,
             scope = _ref.scope,
@@ -876,9 +876,9 @@ var _soda = __webpack_require__(0);
 
 var _soda2 = _interopRequireDefault(_soda);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_soda2["default"].directive('replace', {
+_soda2.default.directive('replace', {
     link: function link(_ref) {
         var scope = _ref.scope,
             el = _ref.el,
@@ -914,9 +914,9 @@ var _soda = __webpack_require__(0);
 
 var _soda2 = _interopRequireDefault(_soda);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_soda2["default"].directive('style', {
+_soda2.default.directive('style', {
     link: function link(_ref) {
         var scope = _ref.scope,
             el = _ref.el,
@@ -975,9 +975,9 @@ var _soda = __webpack_require__(0);
 
 var _soda2 = _interopRequireDefault(_soda);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_soda2["default"].directive('include', {
+_soda2.default.directive('include', {
         priority: 8,
         link: function link(_ref) {
                 var scope = _ref.scope,
@@ -997,7 +997,7 @@ _soda2["default"].directive('include', {
 
                 var args = result.slice(1);
 
-                var template = _soda2["default"].getTmpl(name, args);
+                var template = _soda2.default.getTmpl(name, args);
                 if (template) {
                         el.outerHTML = this.run(template, scope);
                 }

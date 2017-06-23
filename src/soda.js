@@ -100,7 +100,7 @@ export default class Soda{
 
              // 如果只是文本
             // parseTextNode
-            if (node.nodeType === node.TEXT_NODE) {
+            if (node.nodeType === (node.TEXT_NODE || 3)) {
                 node.nodeValue = node.nodeValue.replace(VALUE_OUT_REG, (item, $1) => {
                     var value = this.parseSodaExpression($1, scope);
                     if (typeof value === "object") {

@@ -1,5 +1,6 @@
 var path = require("path");
 var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+var es3ifyPlugin = require('es3ify-webpack-plugin');
 
 var ENV = process.env.npm_lifecycle_event;
 
@@ -16,10 +17,13 @@ var config = {
 
     module: {
       loaders: [
-        { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" }
+        { test: /\.js$/,  loader: "babel-loader" }
       ]
     },
 
+    node: {
+        fs: "empty"
+    },
 
     resolve:{
         alias: {
@@ -27,17 +31,94 @@ var config = {
     }
 };
 
-if(ENV === 'build-min'){
-    config = Object.assign(config, {
-        entry: {
-            'soda.min': './src/index.js'
-        },
+switch(ENV){
+    // soda
+    case 'build-uncom':
+        config = Object.assign(config, {
+            plugins: [
+                new es3ifyPlugin(),
+            ]
 
-        plugins: [
-            new UglifyJSPlugin()
-        ]
+        });
+        break;
 
-    });
+    //soda.min
+    case 'build-min':
+        config = Object.assign(config, {
+            entry: {
+                'soda.min': './src/index.js'
+            },
+
+            plugins: [
+                new es3ifyPlugin(),
+                new UglifyJSPlugin()
+            ]
+
+        });
+
+        break;
+
+
+   // soda-all.js
+   case 'build-node-uncom':
+        config = Object.assign(config, {
+            entry: {
+                'soda.node': './node/index.js'
+            },
+
+            plugins: [
+            ]
+
+        });
+
+        break;
+
+   // soda-all.min
+   case 'build-node-min':
+        config = Object.assign(config, {
+            entry: {
+                'soda.node.min': './node/index.js'
+            },
+            plugins: [
+                new UglifyJSPlugin()
+            ]
+        });
+
+        break;
+ 
+
+   case 'build-test':
+        config = Object.assign(config, {
+            entry: {
+                'test.soda': './test/index.js'
+            },
+            resolve:{
+                alias: {
+                    './../node' : path.resolve(__dirname, "./dist/soda.js")
+                }
+            }
+        });
+
+        config.output.path = path.resolve('./test');
+
+        break;
+
+   case 'build-test-lite':
+        config = Object.assign(config, {
+            entry: {
+                'test.soda.lite': './test/index.js'
+            },
+            resolve:{
+                alias: {
+                    './../node' : path.resolve(__dirname, "./dist/soda.lite.js")
+                }
+            }
+        });
+
+        config.output.path = path.resolve('./test');
+
+        break;   
+
 }
 
 module.exports = config;
