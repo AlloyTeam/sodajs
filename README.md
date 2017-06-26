@@ -353,21 +353,21 @@ soda.directive('name',  {
 #### example
 ```js
 soda.directive('mydirective', {
-        priority: 8,
-		
-		link({ scope, el, parseSodaExpression, expression,  getValue, compileNode, document }) {
-				var value = parseSodaExpression(expression);
-				if(value){
-				      var textNode = document.createTextNode(value);
-					  el.appendChild(textNode);
-				}
+    priority: 8,
+
+    link({ scope, el, parseSodaExpression, expression,  getValue, compileNode, document }) {
+        var value = parseSodaExpression(expression);
+        if(value){
+            var textNode = document.createTextNode(value);
+            el.appendChild(textNode);
+        }
     }
 }
 
 soda(`
-       <div soda-mydirective="add one tips: {{tips}}"></div>
+    <div soda-mydirective="add one tips: {{tips}}"></div>
 `, {
-       tips: 'tips'
+    tips: 'tips'
 });
 
 // result  ==>   <div>add one tips: tips</div>
