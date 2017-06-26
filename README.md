@@ -29,7 +29,7 @@ npm install --save sodajs
 | ------------ | ------------ | ------------ |
 |   Mordern Browsers |  ✓|  ✓|
 |  Mobile Browsers |  ✓ | ✓ |
-|  ie 8 + | ✓ | ✗|
+|  ie  | >= 8 | >= 9|
 |  node |  ✗ | ✓|
 | DOM Parsor| Native |  Self |
 
