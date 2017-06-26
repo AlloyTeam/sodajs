@@ -374,3 +374,21 @@ describe('filter', function() {
        );
     });
 });
+
+describe('prefix', function() {
+     it('change prefix to v:', function(){
+      soda.prefix('v:');
+
+      assert.equal(
+            soda(`<span v:if="true">1</span><span v:if="false">2</span>`, {}),
+            '<span>1</span>'
+       );
+
+       assert.equal(
+            soda(`<span v:if="1">3</span><span v:if="0">4</span>`, {}),
+            '<span>3</span>'
+       );
+    });
+
+
+});
