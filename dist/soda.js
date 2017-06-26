@@ -464,12 +464,23 @@ var Soda = function () {
     }, {
         key: 'discribe',
         value: function discribe(name, funcOrStr) {
-            this.template[name] = funcOrStr;
+            var option = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : { compile: true };
+
+
+            this.template[name] = {
+                funcOrStr: funcOrStr,
+                option: option
+            };
         }
     }, {
         key: 'getTmpl',
         value: function getTmpl(name, args) {
-            var funcOrStr = this.template[name];
+            var template = this.template[name];
+            var funcOrStr = template.funcOrStr,
+                _template$option = template.option,
+                option = _template$option === undefined ? {} : _template$option;
+
+
             var result = void 0;
 
             if (typeof funcOrStr === 'function') {
@@ -478,7 +489,10 @@ var Soda = function () {
                 result = funcOrStr;
             }
 
-            return result;
+            return {
+                template: result,
+                option: option
+            };
         }
     }]);
 
@@ -488,7 +502,7 @@ var Soda = function () {
 Soda.sodaDirectives = [];
 Soda.sodaFilterMap = {};
 Soda.template = {};
-exports["default"] = Soda;
+exports.default = Soda;
 
 /***/ }),
 /* 1 */
@@ -613,8 +627,6 @@ var _soda2 = _interopRequireDefault(_soda);
 
 var _util = __webpack_require__(2);
 
-__webpack_require__(4);
-
 __webpack_require__(5);
 
 __webpack_require__(6);
@@ -627,9 +639,11 @@ __webpack_require__(9);
 
 __webpack_require__(10);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+__webpack_require__(11);
 
-var sodaInstance = new _soda2["default"]();
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var sodaInstance = new _soda2.default();
 
 var init = function init(str, data) {
     return sodaInstance.run(str, data);
@@ -640,20 +654,20 @@ var mock = {
         sodaInstance.prefix(_prefix);
     },
     filter: function filter(name, func) {
-        _soda2["default"].filter(name, func);
+        _soda2.default.filter(name, func);
     },
     directive: function directive(name, opt) {
-        _soda2["default"].directive(name, opt);
+        _soda2.default.directive(name, opt);
     },
     setDocument: function setDocument(document) {
         sodaInstance.setDocument(document);
     },
-    discribe: function discribe(name, str) {
-        _soda2["default"].discribe(name, str);
+    discribe: function discribe(name, str, option) {
+        _soda2.default.discribe(name, str, option);
     },
 
 
-    Soda: _soda2["default"]
+    Soda: _soda2.default
 };
 
 var soda = (0, _util.assign)(init, mock);
@@ -661,7 +675,8 @@ var soda = (0, _util.assign)(init, mock);
 module.exports = soda;
 
 /***/ }),
-/* 4 */
+/* 4 */,
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -671,9 +686,9 @@ var _soda = __webpack_require__(0);
 
 var _soda2 = _interopRequireDefault(_soda);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_soda2["default"].directive('repeat', {
+_soda2.default.directive('repeat', {
     priority: 10,
     link: function link(_ref) {
         var _this = this;
@@ -728,12 +743,12 @@ _soda2["default"].directive('repeat', {
             var itemNode = el.cloneNode(true);
 
             // 这里创建一个新的scope
-            var itemScope = {};
+            var itemScope = Object.create(scope);
             itemScope[trackName] = i;
 
             itemScope[itemName] = repeatObj[i];
 
-            itemScope.__proto__ = scope;
+            //itemScope.__proto__ = scope;
 
             // REMOVE cjd6568358
             itemNode.removeAttribute(_this._prefix + 'repeat');
@@ -761,7 +776,7 @@ _soda2["default"].directive('repeat', {
 });
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -771,9 +786,9 @@ var _soda = __webpack_require__(0);
 
 var _soda2 = _interopRequireDefault(_soda);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_soda2["default"].directive('if', {
+_soda2.default.directive('if', {
     priority: 9,
     link: function link(_ref) {
         var expression = _ref.expression,
@@ -790,7 +805,7 @@ _soda2["default"].directive('if', {
 });
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -800,7 +815,7 @@ var _soda = __webpack_require__(0);
 
 var _soda2 = _interopRequireDefault(_soda);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var classNameRegExp = function classNameRegExp(className) {
     return new RegExp('(^|\\s+)' + className + '(\\s+|$)', 'g');
@@ -822,7 +837,7 @@ var removeClass = function removeClass(el, className) {
     el.className = el.className.replace(classNameRegExp(className), "");
 };
 
-_soda2["default"].directive('class', {
+_soda2.default.directive('class', {
     link: function link(_ref) {
         var scope = _ref.scope,
             el = _ref.el,
@@ -838,7 +853,7 @@ _soda2["default"].directive('class', {
 });
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -848,9 +863,9 @@ var _soda = __webpack_require__(0);
 
 var _soda2 = _interopRequireDefault(_soda);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_soda2["default"].directive('html', {
+_soda2.default.directive('html', {
     link: function link(_ref) {
         var expression = _ref.expression,
             scope = _ref.scope,
@@ -866,7 +881,7 @@ _soda2["default"].directive('html', {
 });
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -876,9 +891,9 @@ var _soda = __webpack_require__(0);
 
 var _soda2 = _interopRequireDefault(_soda);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_soda2["default"].directive('replace', {
+_soda2.default.directive('replace', {
     link: function link(_ref) {
         var scope = _ref.scope,
             el = _ref.el,
@@ -904,7 +919,7 @@ _soda2["default"].directive('replace', {
 });
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -914,9 +929,9 @@ var _soda = __webpack_require__(0);
 
 var _soda2 = _interopRequireDefault(_soda);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_soda2["default"].directive('style', {
+_soda2.default.directive('style', {
     link: function link(_ref) {
         var scope = _ref.scope,
             el = _ref.el,
@@ -965,7 +980,7 @@ _soda2["default"].directive('style', {
 });
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -975,33 +990,42 @@ var _soda = __webpack_require__(0);
 
 var _soda2 = _interopRequireDefault(_soda);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_soda2["default"].directive('include', {
-        priority: 8,
-        link: function link(_ref) {
-                var scope = _ref.scope,
-                    el = _ref.el,
-                    parseSodaExpression = _ref.parseSodaExpression,
-                    expression = _ref.expression;
+_soda2.default.directive('include', {
+    priority: 8,
+    link: function link(_ref) {
+        var scope = _ref.scope,
+            el = _ref.el,
+            parseSodaExpression = _ref.parseSodaExpression,
+            expression = _ref.expression;
 
-                var VALUE_OUT_REG = /\{\{([^\}]*)\}\}/g;
+        var VALUE_OUT_REG = /\{\{([^\}]*)\}\}/g;
 
-                var result = expression.replace(VALUE_OUT_REG, function (item, $1) {
-                        return parseSodaExpression($1, scope);
-                });
+        var result = expression.replace(VALUE_OUT_REG, function (item, $1) {
+            return parseSodaExpression($1, scope);
+        });
 
-                result = result.split(":");
+        result = result.split(":");
 
-                var name = result[0];
+        var name = result[0];
 
-                var args = result.slice(1);
+        var args = result.slice(1);
 
-                var template = _soda2["default"].getTmpl(name, args);
-                if (template) {
-                        el.outerHTML = this.run(template, scope);
-                }
+        var templateOption = _soda2.default.getTmpl(name, args);
+
+        var template = templateOption.template,
+            _templateOption$optio = templateOption.option,
+            option = _templateOption$optio === undefined ? {} : _templateOption$optio;
+
+        if (template) {
+            if (option.compile) {
+                el.outerHTML = this.run(template, scope);
+            } else {
+                el.outerHTML = template;
+            }
         }
+    }
 });
 
 /***/ })

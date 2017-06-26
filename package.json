@@ -8,7 +8,7 @@
     "url": "git+https://github.com/AlloyTeam/sodajs.git"
   },
   "scripts": {
-    "build": "npm run build-uncom && npm run build-min &&  npm run build-node-uncom && npm run build-node-min && npm run build-test && npm run build-test-lite",
+    "build": "npm run build-uncom && npm run build-min &&  npm run build-node-uncom && npm run build-node-min && npm run build-test",
     "build-uncom": "webpack",
     "build-min": "webpack",
     "build-test": "webpack",

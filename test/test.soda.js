@@ -1778,6 +1778,15 @@ describe('Output', function () {
         assert.equal(soda('{{list[0]["title"]}}', data), '1');
     });
 
+    it('prototype output', function () {
+        var data = {
+            test: 'test',
+            list: [{}]
+        };
+
+        assert.equal(soda('<span soda-repeat="item in list">{{test}}</span>', data), '<span>test</span>');
+    });
+
     it('complex output', function () {
         var data = {
             list: [{ list: [{ 'title': '<>aa</h1>' }, { 'title': 'bb' }], name: 0, show: 1 }, { list: [{ 'title': 0 }, { 'title': 'bb' }], name: 'b' }, { list: [{ 'title': 'aa' }, { 'title': 'bb' }], name: 'b' }, { list: [{ 'title': 'aa' }, { 'title': 'bb' }], name: 'b' }, { list: [{ 'title': 'aa' }, { 'title': 'bb' }], name: 'b' }, { list: [{ 'title': 'aa' }, { 'title': 'bb' }], name: 'b' }, { list: [{ 'title': 'aa' }, { 'title': 'bb' }], name: 'c' }]
@@ -11563,12 +11572,21 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
                 }, {
                     key: 'discribe',
                     value: function discribe(name, funcOrStr) {
-                        this.template[name] = funcOrStr;
+                        var option = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : { compile: true };
+
+                        this.template[name] = {
+                            funcOrStr: funcOrStr,
+                            option: option
+                        };
                     }
                 }, {
                     key: 'getTmpl',
                     value: function getTmpl(name, args) {
-                        var funcOrStr = this.template[name];
+                        var template = this.template[name];
+                        var funcOrStr = template.funcOrStr,
+                            _template$option = template.option,
+                            option = _template$option === undefined ? {} : _template$option;
+
                         var result = void 0;
 
                         if (typeof funcOrStr === 'function') {
@@ -11577,7 +11595,10 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
                             result = funcOrStr;
                         }
 
-                        return result;
+                        return {
+                            template: result,
+                            option: option
+                        };
                     }
                 }]);
 
@@ -11830,12 +11851,12 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
                         var itemNode = el.cloneNode(true);
 
                         // 这里创建一个新的scope
-                        var itemScope = {};
+                        var itemScope = Object.create(scope);
                         itemScope[trackName] = i;
 
                         itemScope[itemName] = repeatObj[i];
 
-                        itemScope.__proto__ = scope;
+                        //itemScope.__proto__ = scope;
 
                         // REMOVE cjd6568358
                         itemNode.removeAttribute(_this._prefix + 'repeat');
@@ -12111,9 +12132,18 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
 
                     var args = result.slice(1);
 
-                    var template = _soda2["default"].getTmpl(name, args);
+                    var templateOption = _soda2["default"].getTmpl(name, args);
+
+                    var template = templateOption.template,
+                        _templateOption$optio = templateOption.option,
+                        option = _templateOption$optio === undefined ? {} : _templateOption$optio;
+
                     if (template) {
-                        el.outerHTML = this.run(template, scope);
+                        if (option.compile) {
+                            el.outerHTML = this.run(template, scope);
+                        } else {
+                            el.outerHTML = template;
+                        }
                     }
                 }
             });

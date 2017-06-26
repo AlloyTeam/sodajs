@@ -47,12 +47,12 @@ Soda.directive('repeat', {
             var itemNode = el.cloneNode(true);
 
             // 这里创建一个新的scope
-            var itemScope = {};
+            var itemScope = Object.create(scope);
             itemScope[trackName] = i;
 
             itemScope[itemName] = repeatObj[i];
 
-            itemScope.__proto__ = scope;
+            //itemScope.__proto__ = scope;
 
             // REMOVE cjd6568358
             itemNode.removeAttribute(this._prefix + 'repeat');

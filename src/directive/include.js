@@ -15,9 +15,15 @@ Soda.directive('include',  {
 
         var args = result.slice(1);
 
-        var template = Soda.getTmpl(name, args);
+        var templateOption = Soda.getTmpl(name, args);
+
+        let { template, option = {} } = templateOption;
         if (template) {
-            el.outerHTML = this.run(template, scope);
+            if(option.compile){
+                el.outerHTML = this.run(template, scope);
+            }else{
+                el.outerHTML = template;
+            }
         }
 
     }

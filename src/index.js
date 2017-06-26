@@ -33,8 +33,8 @@ let mock = {
         sodaInstance.setDocument(document);
     },
 
-    discribe(name, str){
-        Soda.discribe(name, str);
+    discribe(name, str, option){
+        Soda.discribe(name, str, option);
     },
 
     Soda

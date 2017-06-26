@@ -131,6 +131,21 @@ if(typeof describe === 'undefined'){
 
     });
 
+   it('prototype output', function() {
+        var data = {
+            test: 'test',
+            list: [
+                {}
+            ]
+        };
+
+
+        assert.equal(
+            soda(`<span soda-repeat="item in list">{{test}}</span>`, data),
+            '<span>test</span>'
+        );
+   });
+
     it('complex output', function(){
         var data = {
               list: [
@@ -267,11 +282,19 @@ describe('Directives', function() {
                 name: "dorsy"
             };
 
-            soda.discribe('list', `<h1>{{name}}</h1>`);
+           soda.discribe('list', `<h1>{{name}}</h1>`);
 
            assert.equal(
                 soda(`<span soda-include="list">1</span>`, data),
                 `<h1>dorsy</h1>`
+           );
+
+           // static 
+           soda.discribe('list-static', `<h1>{{name}}</h1>`, { compile: false });
+
+           assert.equal(
+                soda(`<span soda-include="list-static">1</span>`, data),
+                `<h1>{{name}}</h1>`
            );
 
            soda.discribe('list2', function(arg){

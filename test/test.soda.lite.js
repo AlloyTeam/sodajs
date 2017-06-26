@@ -1778,6 +1778,15 @@ describe('Output', function () {
         assert.equal(soda('{{list[0]["title"]}}', data), '1');
     });
 
+    it('prototype output', function () {
+        var data = {
+            test: 'test',
+            list: [{}]
+        };
+
+        assert.equal(soda('<span soda-repeat="item in list">{{test}}</span>', data), '<span>test</span>');
+    });
+
     it('complex output', function () {
         var data = {
             list: [{ list: [{ 'title': '<>aa</h1>' }, { 'title': 'bb' }], name: 0, show: 1 }, { list: [{ 'title': 0 }, { 'title': 'bb' }], name: 'b' }, { list: [{ 'title': 'aa' }, { 'title': 'bb' }], name: 'b' }, { list: [{ 'title': 'aa' }, { 'title': 'bb' }], name: 'b' }, { list: [{ 'title': 'aa' }, { 'title': 'bb' }], name: 'b' }, { list: [{ 'title': 'aa' }, { 'title': 'bb' }], name: 'b' }, { list: [{ 'title': 'aa' }, { 'title': 'bb' }], name: 'c' }]

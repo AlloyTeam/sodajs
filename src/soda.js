@@ -377,12 +377,18 @@ export default class Soda{
         });
     }
 
-    static discribe(name, funcOrStr){
-        this.template[name] = funcOrStr;
+    static discribe(name, funcOrStr, option = { compile: true}){
+        
+        this.template[name] = {
+            funcOrStr,
+            option
+        };
     }
 
     static getTmpl(name, args){
-        let funcOrStr = this.template[name];
+        let template = this.template[name];
+        let { funcOrStr, option = {} } = template;
+
         let result;
 
         if(typeof funcOrStr === 'function'){
@@ -391,6 +397,9 @@ export default class Soda{
             result = funcOrStr;
         }
 
-        return result;
+        return {
+            template: result,
+            option
+        }
     }
 }

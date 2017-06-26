@@ -103,22 +103,6 @@ switch(ENV){
 
         break;
 
-   case 'build-test-lite':
-        config = Object.assign(config, {
-            entry: {
-                'test.soda.lite': './test/index.js'
-            },
-            resolve:{
-                alias: {
-                    './../node' : path.resolve(__dirname, "./dist/soda.lite.js")
-                }
-            }
-        });
-
-        config.output.path = path.resolve('./test');
-
-        break;   
-
 }
 
 module.exports = config;
