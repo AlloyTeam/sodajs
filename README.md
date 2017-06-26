@@ -23,12 +23,39 @@ npm install --save sodajs
 * [https://unpkg.com/sodajs@0.4.4/dist/soda.node.js](https://unpkg.com/sodajs@0.4.4/dist/soda.node.js)
 
 
-
-
 ## Usage
+### Different between soda & soda.node
+| version  |  soda  |   soda.node |
+| ------------ | ------------ | ------------ |
+|   Mordern Browsers |  ✓|  ✓|
+|  Mobile Browsers |  ✓ | ✓ |
+|  ie 8 + | ✓ | ✗|
+|  node |  ✗ | ✓|
+| DOM Parsor| Native |  Self |
 
-### simple
+waring: ie 8 needs es5-shim or es5-sham and console-polyfill
 
+### Browser
+* script tag
+
+```html
+<script src="https://unpkg.com/sodajs@0.4.4/dist/soda.min.js"></script>
+```
+* with webpack
+
+```javascript
+   import soda from "sodajs"
+```
+
+### Node
+```js
+let soda = require('sodajs/node');
+```
+or use dist version for lower node
+```js
+let soda = require('sodajs/dist/soda.node')
+```
+## API
 ### Output
 
 #### plain
@@ -39,6 +66,7 @@ var tpl = '<div>{{name}}</div>';
 document.body.innerHTML = soda(tpl,{ name : 'soda' })
 
 ```
+➜ [plain example](http://alloyteam.github.io/sodajs/pg/rd.html?type=simple)
 
 
 #### safe propery chain output
@@ -74,10 +102,11 @@ soda("{{1 + 2}}", data);
 soda("{{true ? 'soda' : 'foo'}}", data)
 // result => "soda"      
 
-soda("{{1 > 3 && 'soda'}}", data)
+soda("{{1 < 3 && 'soda'}}", data)
 // result => "soda"
 
 ```
+➜ [expression example](http://alloyteam.github.io/sodajs/pg/rd.html?type=expression)
 
 #### complex expression
 ```js
@@ -93,7 +122,7 @@ soda("{{1 > 3 && 'soda'}}", data)
  // result => '<>aa</h1>'
 ```
 
-###Directives
+### Directives
 
 #### if
 
@@ -105,6 +134,8 @@ soda(` <div soda-if="show">Hello, {{name}}</div>
     )
 // result => <div>Hello, soda</div>
 ```
+
+➜ [if example](http://alloyteam.github.io/sodajs/pg/rd.html?type=if)
 
 
 ### repeat
@@ -146,14 +177,6 @@ document.body.innerHTML =  soda(tpl, data);
 
 ➜ [repeat example](http://alloyteam.github.io/sodajs/pg/rd.html?type=repeat)
 
-### expression
-
-``` js
-var tpl = '<div>Hello, {{count+1}}</div>'
-document.body.innerHTML = soda(tpl,{ count : 1 })
-```
-
-➜ [expression example](http://alloyteam.github.io/sodajs/pg/rd.html?type=expression)
 
 ### filter
 
@@ -184,7 +207,7 @@ document.body.innerHTML = soda(tpl,{ list : [
 ➜ [filter example](http://alloyteam.github.io/sodajs/pg/rd.html?type=filter)
 
 ### html
-
+output origin html as innerHTML
 ```js
 var tpl = '<div soda-html="html"></div>'
 document.body.innerHTML = soda(tpl,{ html : '<span style="color:red;">test soda-html</span>' })
@@ -208,16 +231,29 @@ div will be replaced with given html
 include template
 
 soda-include="tmplateName:arg1:arg2:..."
+with soda.discribe, we can include sub templates
 
 ```js
     var data = {
         name: "soda"
     };
-
+    
+	// define sub template named tmpl1
     soda.discribe('tmpl1', `<h1>{{name}}</h1>`);
-
+    
+	
+	// use template tmpl1 by soda-include
     soda(`<span soda-include="tmpl1">1</span>`, data);
     // result => <h1>dorsy</h1>
+    
+	// set compile false not to compile sub template
+	soda.discribe('tmpl1', `<h1>{{name}}</h1>`, {
+		compile: false
+	});
+ 
+ 	// show origin template
+    soda(`<span soda-include="tmpl1">1</span>`, data);
+    // result => <h1>{{name}}</h1>
 
     soda.discribe('tmpl2', function(path){
         return `<h1>{{name}}_${path}</h1>`;
@@ -243,6 +279,7 @@ soda-include="tmplateName:arg1:arg2:..."
 #### soda-class
 > soda-class="currItem === 'list1' ? 'active' : ''"
 
+
 #### soda-src
 > soda-src="hello{{index}}.png"
 
@@ -259,14 +296,18 @@ var data = { style : { width : '100px', height : '100px' } };
 #### soda-*
 > soda-rx="{{rx}}%"
 
+## Custom 
+
 ### soda.prefix
 
+change prefix as you like, the default prefix is "soda-"
+
 ``` js
-soda.prefix('o')
+soda.prefix('v:')
 
 var tpl = '\
 <ul>\
-    <li o-repeat="item in list" o-if="item.show">\
+    <li v:repeat="item in list" v:if="item.show">\
         {{item.name}}\
     </li>\
 </ul>'
@@ -282,15 +323,90 @@ var data = {
 
 document.body.innerHTML =  soda(tpl, data);
 ```
+### soda.directive
+Custom your directive
+#### es 2015
+```js
+soda.directive('name',  {
+    priority: 8,
+	
+	// how to compile el
+    link({ scope, el, parseSodaExpression, expression,  getValue, compileNode, document }) {
 
-you can customize your prefix by `soda.prefix` method.
+    }
+});
+```
+* scope: current scope data
+* el: current node elment
+* expression: directive string value
+* getValue: get value from data
+```js
+     getValue({a: {b: 1}}, "a.b");  // ===>   1
+```
+* parseSodaExpression: parse soda expressions
+```js
+    parseSodaExpression('{{1 + 2 + a}}', {a: 1}); // ===> 4
+```
+* compileNode: compile new nodes
+* document:  using document rather than window.document to run in node env;
+
+#### example
+```js
+soda.directive('mydirective', {
+        priority: 8,
+		
+		link({ scope, el, parseSodaExpression, expression,  getValue, compileNode, document }) {
+				var value = parseSodaExpression(expression);
+				if(value){
+				      var textNode = document.createTextNode(value);
+					  el.appendChild(textNode);
+				}
+    }
+}
+
+soda(`
+       <div soda-mydirective="add one tips: {{tips}}"></div>
+`, {
+       tips: 'tips'
+});
+
+// result  ==>   <div>add one tips: tips</div>
+```
 
 
+## Contribute
+### Development
 
+git clone
+``` shell
+ git clone git://github.com/AlloyTeam/sodajs.git
+ ```
+install dependency
 
+``` shell
+    npm install
+```
 
-## Who using sodajs?
-sodajs is currently using by QQ Tribes(兴趣部落), QQ Group(群) and other projects
+then run npm start
+
+``` shell
+    npm start
+```
+publish code to run test
+
+``` shell
+    npm run build
+```
+### Auto-Test
+soda uses mocha to run test
+
+test unit is in test dir.
+``` shell
+    npm run test
+```
+
+## Used projects
+QQ Tribes(兴趣部落), QQ Group(群) and other projects
 
 ## License
 
