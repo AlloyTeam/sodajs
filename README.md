@@ -24,7 +24,7 @@ npm install --save sodajs
 
 
 ## Usage
-### Different between soda & soda.node
+### Difference between soda & soda.node
 | version  |  soda  |   soda.node |
 | ------------ | ------------ | ------------ |
 |   Mordern Browsers |  ✓|  ✓|
