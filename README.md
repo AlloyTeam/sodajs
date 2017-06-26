@@ -374,6 +374,22 @@ soda(`
 ```
 
 
+### soda.setDocument
+custom dom parsor for node running.
+
+soda.node version default document dom parsor is nodeWindow.
+
+```js
+var document = require('document');
+var soda = require('soda');
+
+soda.setDocument(document);
+
+// ... run 
+
+```
+
+
 ## Contribute
 ### Development
 
