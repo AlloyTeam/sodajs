@@ -1,17 +1,29 @@
 # sodajs
 
-Light weight but powerful template engine for JavaScript.
+An amazing directive template engine for JavaScript.
 
+## Fetures 
+* super tiny size (4kb gzipped)
+* dom directives support
+* good compatibility (IE8 +, node)
+* prevents XSS holes out of your template file
+* high-performance DOM parser
+
+
+## Install
+### npm
 ``` js
 npm install --save sodajs 
 ```
 
-## Why using sodajs?
-* super tiny size (2kb gzip)
-* make your template file tidy, clearly to read.
-* good compatibility (IE6+)
-* prevents XSS holes in your template file
-* high-performance DOM parser
+### CDN
+* [https://unpkg.com/sodajs@0.4.4/dist/soda.min.js](https://unpkg.com/sodajs@0.4.4/dist/soda.min.js)
+* [https://unpkg.com/sodajs@0.4.4/dist/soda.js](https://unpkg.com/sodajs@0.4.4/dist/soda.js)
+* [https://unpkg.com/sodajs@0.4.4/dist/soda.node.min.js](https://unpkg.com/sodajs@0.4.4/dist/soda.node.min.js)
+* [https://unpkg.com/sodajs@0.4.4/dist/soda.node.js](https://unpkg.com/sodajs@0.4.4/dist/soda.node.js)
+
+
+
 
 ## Usage
 
@@ -285,3 +297,4 @@ sodajs is currently using by QQ Tribes(兴趣部落), QQ Group(群) and other pr
 [MIT](http://opensource.org/licenses/MIT)
 
 Copyright (c) 2015-present, AlloyTeam
+
