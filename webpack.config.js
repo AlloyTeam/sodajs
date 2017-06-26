@@ -103,6 +103,24 @@ switch(ENV){
 
         break;
 
+   case 'build-node-test':
+        config = Object.assign(config, {
+            entry: {
+                'test.soda.node': './test/index.js'
+            },
+            resolve:{
+                /*
+                alias: {
+                    './../node' : path.resolve(__dirname, "./dist/soda.js")
+                }
+                */
+            }
+        });
+
+        config.output.path = path.resolve('./test');
+
+        break;
+
 }
 
 module.exports = config;

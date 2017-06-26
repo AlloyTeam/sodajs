@@ -2634,8 +2634,8 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
                 setDocument: function setDocument(document) {
                     sodaInstance.setDocument(document);
                 },
-                discribe: function discribe(name, str) {
-                    _soda2["default"].discribe(name, str);
+                discribe: function discribe(name, str, option) {
+                    _soda2["default"].discribe(name, str, option);
                 },
 
                 Soda: _soda2["default"]

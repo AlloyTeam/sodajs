@@ -17,10 +17,10 @@ npm install --save sodajs
 ```
 
 ### CDN
-* [https://unpkg.com/sodajs@0.4.4/dist/soda.min.js](https://unpkg.com/sodajs@0.4.4/dist/soda.min.js)
-* [https://unpkg.com/sodajs@0.4.4/dist/soda.js](https://unpkg.com/sodajs@0.4.4/dist/soda.js)
-* [https://unpkg.com/sodajs@0.4.4/dist/soda.node.min.js](https://unpkg.com/sodajs@0.4.4/dist/soda.node.min.js)
-* [https://unpkg.com/sodajs@0.4.4/dist/soda.node.js](https://unpkg.com/sodajs@0.4.4/dist/soda.node.js)
+* [https://unpkg.com/sodajs@0.4.5/dist/soda.min.js](https://unpkg.com/sodajs@0.4.5/dist/soda.min.js)
+* [https://unpkg.com/sodajs@0.4.5/dist/soda.js](https://unpkg.com/sodajs@0.4.5/dist/soda.js)
+* [https://unpkg.com/sodajs@0.4.5/dist/soda.node.min.js](https://unpkg.com/sodajs@0.4.5/dist/soda.node.min.js)
+* [https://unpkg.com/sodajs@0.4.5/dist/soda.node.js](https://unpkg.com/sodajs@0.4.5/dist/soda.node.js)
 
 
 ## Usage
@@ -404,6 +404,12 @@ test unit is in test dir.
 ``` shell
     npm run test
 ```
+
+#### online test result
+* [soda-mocha](http://alloyteam.github.io/sodajs/test/soda-mocha.html)
+* [soda.node-mocha](http://alloyteam.github.io/sodajs/test/soda.node-mocha.html)
+* [ie8 browser test](http://alloyteam.github.io/sodajs/test/soda-browser.html)
+
 
 ## Used projects
 QQ Tribes(兴趣部落), QQ Group(群) and other projects

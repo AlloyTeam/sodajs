@@ -1,6 +1,6 @@
 {
   "name": "sodajs",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "Light weight but powerful template engine for JavaScript.",
   "main": "dist/soda.js",
   "repository": {
@@ -9,11 +9,11 @@
   },
   "scripts": {
     "start": "webpack -w",
-    "build": "npm run build-uncom && npm run build-min &&  npm run build-node-uncom && npm run build-node-min && npm run build-test",
+    "build": "npm run build-uncom && npm run build-min &&  npm run build-node-uncom && npm run build-node-min && npm run build-test && npm run build-node-test",
     "build-uncom": "webpack",
     "build-min": "webpack",
     "build-test": "webpack",
-    "build-test-lite": "webpack",
+    "build-node-test": "webpack",
 
     "build-lite-uncom": "webpack",
     "build-lite-min": "webpack",

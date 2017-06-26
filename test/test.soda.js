@@ -1871,6 +1871,11 @@ describe('Directives', function () {
 
         assert.equal(soda('<span soda-include="list">1</span>', data), '<h1>dorsy</h1>');
 
+        // static 
+        soda.discribe('list-static', '<h1>{{name}}</h1>', { compile: false });
+
+        assert.equal(soda('<span soda-include="list-static">1</span>', data), '<h1>{{name}}</h1>');
+
         soda.discribe('list2', function (arg) {
             return '<h1>{{name}}</h1>';
         });
@@ -1914,6 +1919,16 @@ describe('filter', function () {
         assert.equal(soda('{{2 | addargs : \'3\' : \'YYYY-MMMM-dd\'}}', {}), '23YYYY-MMMM-dd');
 
         assert.equal(soda('{{2 | addnum : 3 | addargs : \'3\' : \'YYYY-MMMM-dd\'}}', {}), '53YYYY-MMMM-dd');
+    });
+});
+
+describe('prefix', function () {
+    it('change prefix to v:', function () {
+        soda.prefix('v:');
+
+        assert.equal(soda('<span v:if="true">1</span><span v:if="false">2</span>', {}), '<span>1</span>');
+
+        assert.equal(soda('<span v:if="1">3</span><span v:if="0">4</span>', {}), '<span>3</span>');
     });
 });
 
@@ -11770,8 +11785,8 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
                 setDocument: function setDocument(document) {
                     sodaInstance.setDocument(document);
                 },
-                discribe: function discribe(name, str) {
-                    _soda2["default"].discribe(name, str);
+                discribe: function discribe(name, str, option) {
+                    _soda2["default"].discribe(name, str, option);
                 },
 
                 Soda: _soda2["default"]
