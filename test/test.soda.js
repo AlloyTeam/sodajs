@@ -1803,6 +1803,8 @@ describe('Output', function () {
         assert.equal(soda('<div class="p{{a == 1 ? \'flag\' : \'a\'}}"></div>', data), '<div class="pflag"></div>');
 
         assert.equal(soda('<span soda-rx="{{a}}%">a</span>', data), '<span rx="1%">a</span>');
+
+        assert.equal(soda('<span soda-autofocus="0"></span>', data), '<span autofocus="0"></span>');
     });
 });
 
@@ -1817,7 +1819,7 @@ describe('Directives', function () {
             }
         };
 
-        assert.equal(soda('<span soda-repeat="item in list">{{$index}}{{item.name}}</span>', data), '<span>0a</span><span>1b</span>');
+        assert.equal(soda('<span s="sss" soda-repeat="item in list">{{$index}}{{item.name}}</span>', data), '<span s="sss">0a</span><span s="sss">1b</span>');
 
         assert.equal(soda('<span soda-repeat="item in list track by i">{{i}}{{item.name}}</span>', data), '<span>0a</span><span>1b</span>');
 
@@ -11257,6 +11259,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
                         });
 
                         var innerHTML = div.innerHTML;
+
                         if (doc.documentMode < 9) {
                             doc.body.removeChild(div);
                         }
@@ -11319,6 +11322,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
 
                             // parse Attributes
                             if (node.attributes && node.attributes.length) {
+
                                 // 指令优先处理
                                 sodaDirectives.map(function (item) {
                                     var name = item.name,
@@ -11360,7 +11364,9 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
                                                 return _this3.parseSodaExpression($1, scope);
                                             });
 
-                                            node.setAttribute(attrName, attrValue);
+                                            if ((0, _util.exist)(attrValue)) {
+                                                node.setAttribute(attrName, attrValue);
+                                            }
 
                                             _this3._removeSodaMark(node, attr.name);
                                         }
@@ -11894,7 +11900,9 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
                         }
                     }
 
+                    // el 清理
                     el.parentNode.removeChild(el);
+                    el.innerHTML = '';
                 }
             });
 

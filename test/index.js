@@ -179,7 +179,14 @@ if(typeof describe === 'undefined'){
             soda(`<span soda-rx="{{a}}%">a</span>`, data),
             '<span rx="1%">a</span>'
         );
+
+        assert.equal(
+            soda(`<span soda-autofocus="0"></span>`, data),
+            '<span autofocus="0"></span>'
+        );
+
     });
+
 
   });
 
@@ -200,8 +207,8 @@ describe('Directives', function() {
 
 
            assert.equal(
-                soda(`<span soda-repeat="item in list">{{$index}}{{item.name}}</span>`, data),
-                '<span>0a</span><span>1b</span>'
+                soda(`<span s="sss" soda-repeat="item in list">{{$index}}{{item.name}}</span>`, data),
+                '<span s="sss">0a</span><span s="sss">1b</span>'
            );
 
            assert.equal(

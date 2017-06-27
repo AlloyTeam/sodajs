@@ -205,6 +205,8 @@ var Node = function (_EventTarget) {
             for (var i = 0; i < this.childNodes.length; i++) {
                 if (this.childNodes[i] === node) {
                     this.childNodes.splice(i, 1);
+
+                    node.parentNode = null;
                     break;
                 }
             }
@@ -723,9 +725,9 @@ var Element = function (_Node) {
             var item = this.attributes.getNamedItem(attr);
 
             if (item) {
-                return item.value || '';
+                return item.value || null;
             } else {
-                return '';
+                return null;
             }
         }
     }, {
@@ -1019,6 +1021,8 @@ var NamedNodeMap = function () {
                 for (var i = index; i < this.length; i++) {
                     this[i] = this[i + 1];
                 }
+
+                delete this[name];
             }
         }
     }, {
@@ -2106,6 +2110,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
                         });
 
                         var innerHTML = div.innerHTML;
+
                         if (doc.documentMode < 9) {
                             doc.body.removeChild(div);
                         }
@@ -2168,6 +2173,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
 
                             // parse Attributes
                             if (node.attributes && node.attributes.length) {
+
                                 // 指令优先处理
                                 sodaDirectives.map(function (item) {
                                     var name = item.name,
@@ -2209,7 +2215,9 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
                                                 return _this3.parseSodaExpression($1, scope);
                                             });
 
-                                            node.setAttribute(attrName, attrValue);
+                                            if ((0, _util.exist)(attrValue)) {
+                                                node.setAttribute(attrName, attrValue);
+                                            }
 
                                             _this3._removeSodaMark(node, attr.name);
                                         }
@@ -2743,7 +2751,9 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
                         }
                     }
 
+                    // el 清理
                     el.parentNode.removeChild(el);
+                    el.innerHTML = '';
                 }
             });
 

@@ -17,10 +17,10 @@ npm install --save sodajs
 ```
 
 ### CDN
-* [https://unpkg.com/sodajs@0.4.5/dist/soda.min.js](https://unpkg.com/sodajs@0.4.5/dist/soda.min.js)
-* [https://unpkg.com/sodajs@0.4.5/dist/soda.js](https://unpkg.com/sodajs@0.4.5/dist/soda.js)
-* [https://unpkg.com/sodajs@0.4.5/dist/soda.node.min.js](https://unpkg.com/sodajs@0.4.5/dist/soda.node.min.js)
-* [https://unpkg.com/sodajs@0.4.5/dist/soda.node.js](https://unpkg.com/sodajs@0.4.5/dist/soda.node.js)
+* [https://unpkg.com/sodajs@0.4.6/dist/soda.min.js](https://unpkg.com/sodajs@0.4.6/dist/soda.min.js)
+* [https://unpkg.com/sodajs@0.4.6/dist/soda.js](https://unpkg.com/sodajs@0.4.6/dist/soda.js)
+* [https://unpkg.com/sodajs@0.4.6/dist/soda.node.min.js](https://unpkg.com/sodajs@0.4.6/dist/soda.node.min.js)
+* [https://unpkg.com/sodajs@0.4.6/dist/soda.node.js](https://unpkg.com/sodajs@0.4.6/dist/soda.node.js)
 
 
 ## Usage
@@ -39,7 +39,7 @@ waring: ie 8 needs es5-shim or es5-sham and console-polyfill
 * script tag
 
 ```html
-<script src="https://unpkg.com/sodajs@0.4.4/dist/soda.min.js"></script>
+<script src="https://unpkg.com/sodajs@0.4.6/dist/soda.min.js"></script>
 ```
 * with webpack
 

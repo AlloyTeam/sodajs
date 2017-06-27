@@ -131,6 +131,7 @@ var Soda = function () {
             });
 
             var innerHTML = div.innerHTML;
+
             if (doc.documentMode < 9) {
                 doc.body.removeChild(div);
             }
@@ -194,6 +195,7 @@ var Soda = function () {
 
                 // parse Attributes
                 if (node.attributes && node.attributes.length) {
+
                     // 指令优先处理
                     sodaDirectives.map(function (item) {
                         var name = item.name,
@@ -236,7 +238,9 @@ var Soda = function () {
                                     return _this3.parseSodaExpression($1, scope);
                                 });
 
-                                node.setAttribute(attrName, attrValue);
+                                if ((0, _util.exist)(attrValue)) {
+                                    node.setAttribute(attrName, attrValue);
+                                }
 
                                 _this3._removeSodaMark(node, attr.name);
                             }
@@ -770,7 +774,9 @@ _soda2["default"].directive('repeat', {
             }
         }
 
+        // el 清理
         el.parentNode.removeChild(el);
+        el.innerHTML = '';
     }
 });
 

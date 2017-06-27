@@ -51,12 +51,13 @@ export default class Soda{
 
         div.innerHTML = str;
 
-
         nodes2Arr(div.childNodes).map(child => {
             this.compileNode(child, data);
         });
 
         var innerHTML = div.innerHTML;
+
+
         if (doc.documentMode < 9) {
             doc.body.removeChild(div);
         }
@@ -112,6 +113,7 @@ export default class Soda{
 
             // parse Attributes
             if (node.attributes && node.attributes.length) {
+
                 // 指令优先处理
                 sodaDirectives.map(item => {
                     let {
@@ -158,7 +160,9 @@ export default class Soda{
                                     return this.parseSodaExpression($1, scope);
                                 });
 
-                                node.setAttribute(attrName, attrValue);
+                                if(exist(attrValue)){
+                                    node.setAttribute(attrName, attrValue);
+                                }
 
                                 this._removeSodaMark(node, attr.name);
                             }

@@ -1,6 +1,6 @@
 {
   "name": "sodajs",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "description": "Light weight but powerful template engine for JavaScript.",
   "main": "dist/soda.js",
   "repository": {

@@ -670,6 +670,7 @@
     });
 
     var sodaRender = function(str, data) {
+        //console.log( + new Date() - data.t1);
         // 对directive进行排序
         sodaDirectiveArr.sort(function(b, a) {
             return (Number(a.opt.priority || 0) - Number(b.opt.priority || 0));

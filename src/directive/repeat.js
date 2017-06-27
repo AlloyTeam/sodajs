@@ -76,6 +76,8 @@ Soda.directive('repeat', {
             }
         }
 
+        // el 清理
         el.parentNode.removeChild(el);
+        el.innerHTML = '';
     }
 });
