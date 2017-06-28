@@ -36,6 +36,7 @@ npm install --save sodajs
 | DOM Parsor| Native |  Self |
 
 warning: ie 8 needs es5-shim or es5-sham and console-polyfill
+
 check ie 8 test below
 * [ie8 browser test](http://alloyteam.github.io/sodajs/test/soda-browser.html)
 
