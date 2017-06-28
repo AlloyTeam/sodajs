@@ -34,6 +34,15 @@ if(typeof describe === 'undefined'){
         assert.equal(soda(html2), html2);
     });
 
+    it('script tag output', function(){
+        var html1 = `<div>{{a}}</div><script type="text/javascript">1>2{{a}}</script>`;
+
+        assert.equal(soda(html1, {
+            a: '1>2'
+        }), `<div>1&gt;2</div><script type="text/javascript">1>21>2</script>`);
+    });
+
+
     it('plain', function() {
         assert.equal(
             soda('{{a}}', {a: 1}),

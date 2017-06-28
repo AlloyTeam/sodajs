@@ -17,10 +17,10 @@ npm install --save sodajs
 ```
 
 ### CDN
-* [https://unpkg.com/sodajs@0.4.6/dist/soda.min.js](https://unpkg.com/sodajs@0.4.6/dist/soda.min.js)
-* [https://unpkg.com/sodajs@0.4.6/dist/soda.js](https://unpkg.com/sodajs@0.4.6/dist/soda.js)
-* [https://unpkg.com/sodajs@0.4.6/dist/soda.node.min.js](https://unpkg.com/sodajs@0.4.6/dist/soda.node.min.js)
-* [https://unpkg.com/sodajs@0.4.6/dist/soda.node.js](https://unpkg.com/sodajs@0.4.6/dist/soda.node.js)
+* [https://unpkg.com/sodajs@0.4.7/dist/soda.min.js](https://unpkg.com/sodajs@0.4.7/dist/soda.min.js)
+* [https://unpkg.com/sodajs@0.4.7/dist/soda.js](https://unpkg.com/sodajs@0.4.7/dist/soda.js)
+* [https://unpkg.com/sodajs@0.4.7/dist/soda.node.min.js](https://unpkg.com/sodajs@0.4.7/dist/soda.node.min.js)
+* [https://unpkg.com/sodajs@0.4.7/dist/soda.node.js](https://unpkg.com/sodajs@0.4.7/dist/soda.node.js)
 
 
 ## Usage

@@ -1249,22 +1249,6 @@ var Text = function (_Node) {
         value: function _getEnscapeValue(value) {
             return value.replace(/</g, '&lt;').replace(/>/g, '&gt;');
         }
-
-        // non-standard method
-
-    }, {
-        key: 'outerHTML',
-        get: function get() {
-            return this._getEnscapeValue(this.nodeValue || '');
-        }
-
-        // non-standard method
-
-    }, {
-        key: 'innerHTML',
-        get: function get() {
-            return this._getEnscapeValue(this.nodeValue || '');
-        }
     }]);
 
     return Text;
@@ -1573,6 +1557,12 @@ var parseCssText = function parseCssText(style, val) {
     }
 };
 
+var getEnscapeValue = function getEnscapeValue(value) {
+    return value.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+};
+
+var donotEnscapeTagReg = /script|pre|code/;
+
 var Element = function (_Node) {
     _inherits(Element, _Node);
 
@@ -1749,12 +1739,22 @@ var Element = function (_Node) {
         key: 'innerHTML',
         get: function get() {
 
-            var tagName = this.tagName;
+            var tagName = (this.tagName || '').toLowerCase();
             var html = "";
 
             if (this.childNodes && this.childNodes.length) {
                 for (var i = 0; i < this.childNodes.length; i++) {
-                    html += this.childNodes[i].outerHTML;
+                    var child = this.childNodes[i];
+
+                    if (child.nodeType === this.TEXT_NODE) {
+                        if (donotEnscapeTagReg.test(tagName)) {
+                            html += child.nodeValue;
+                        } else {
+                            html += getEnscapeValue(child.nodeValue);
+                        }
+                    } else {
+                        html += child.outerHTML;
+                    }
                 }
             } else {}
 
@@ -1814,7 +1814,17 @@ var Element = function (_Node) {
                 html = "<" + tagName + attrStr + ">";
                 if (this.childNodes) {
                     for (var i = 0; i < this.childNodes.length; i++) {
-                        html += this.childNodes[i].outerHTML;
+                        var child = this.childNodes[i];
+
+                        if (child.nodeType === this.TEXT_NODE) {
+                            if (donotEnscapeTagReg.test(tagName)) {
+                                html += child.nodeValue;
+                            } else {
+                                html += getEnscapeValue(child.nodeValue);
+                            }
+                        } else {
+                            html += child.outerHTML;
+                        }
                     }
                 }
 
@@ -3581,6 +3591,14 @@ describe('Output', function () {
 
         assert.equal(soda(html1), html1);
         assert.equal(soda(html2), html2);
+    });
+
+    it('script tag output', function () {
+        var html1 = '<div>{{a}}</div><script type="text/javascript">1>2{{a}}</script>';
+
+        assert.equal(soda(html1, {
+            a: '1>2'
+        }), '<div>1&gt;2</div><script type="text/javascript">1>21>2</script>');
     });
 
     it('plain', function () {

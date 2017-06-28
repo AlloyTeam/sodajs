@@ -36,7 +36,7 @@ switch(ENV){
     case 'build-uncom':
         config = Object.assign(config, {
             plugins: [
-                new es3ifyPlugin(),
+                new es3ifyPlugin()
             ]
 
         });
@@ -51,7 +51,23 @@ switch(ENV){
 
             plugins: [
                 new es3ifyPlugin(),
-                new UglifyJSPlugin()
+                new UglifyJSPlugin({
+                  mangle: {
+                    screw_ie8: false
+                  },
+                  mangleProperties: {
+                    screw_ie8: false,
+                    //ignore_quoted: true      // do not mangle quoted properties and object keys
+                  },
+                  compress: {
+                    screw_ie8: false, 
+                    //properties: false // optional: don't convert foo["bar"] to foo.bar
+                  },
+                  output: {
+                    screw_ie8: false         
+                  }
+
+                })
             ]
 
         });
