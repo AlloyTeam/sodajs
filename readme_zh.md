@@ -1,20 +1,17 @@
 # sodajs
+超好用的指令模板引擎
 
-An amazing directive template engine for JavaScript.
-
-## [中文说明](https://github.com/AlloyTeam/sodajs/blob/master/readme_zh.md)
-
-## Fetures 
-* super tiny size (4kb gzipped)
-* dom directives support
-* good compatibility (IE8 +, node)
-* prevents XSS holes out of your template file
-* high-performance DOM parser
-* directive Api compatibile with AngularJS
-* custom directive and prefix
+## 特性
+* 超小体积（gzip之后只有4K)
+* 支持dom指令系统
+* 良好的兼容性，兼容ie8及现代浏览器，兼容node环境
+* 避免输出的xss漏洞
+* 高性能dom渲染引擎
+* 与AngularJS指令兼容
+* 自定义指令和前缀
 
 
-## Install
+## 安装
 ### npm
 ``` js
 npm install --save sodajs 
@@ -27,45 +24,45 @@ npm install --save sodajs
 * [https://unpkg.com/sodajs@0.4.7/dist/soda.node.js](https://unpkg.com/sodajs@0.4.7/dist/soda.node.js)
 
 
-## Usage
-### Difference between soda & soda.node
+## 使用
+### soda & soda.node的不同
 | version  |  soda  |   soda.node |
 | ------------ | ------------ | ------------ |
 |   Mordern Browsers |  ✓|  ✓|
 |  Mobile Browsers |  ✓ | ✓ |
 |  ie  | ≥8 | ≥9|
 |  node |  ✗ | ✓|
-| DOM Parsor| Native |  Self |
+| dom解析引擎| 原生|  自带nodeWindow引擎|
 
-warning: ie 8 needs es5-shim or es5-sham and console-polyfill
+提示: ie 8兼容需要自行引入es5-shim 或es5-sham 和console-polyfill
 
-check ie 8 test below
+查看这里的ie8的兼容测试
 * [ie8 browser test](http://alloyteam.github.io/sodajs/test/soda-browser.html)
 
-### Browser
-* script tag
+### 浏览器端
+* script标签
 
 ```html
 <script src="https://unpkg.com/sodajs@0.4.6/dist/soda.min.js"></script>
 ```
-* with webpack
+* 使用webpack
 
 ```javascript
    import soda from "sodajs"
 ```
 
-### Node
+### Node端
 ```js
 let soda = require('sodajs/node');
 ```
-or use dist version for lower node
+低版本node可以使用dist版本
 ```js
 let soda = require('sodajs/dist/soda.node')
 ```
 ## API
-### Output
+### 输出
 
-#### plain
+#### 简单输出
 
 ```js
 var tpl = '<div>{{name}}</div>';
@@ -73,10 +70,10 @@ var tpl = '<div>{{name}}</div>';
 document.body.innerHTML = soda(tpl,{ name : 'soda' })
 
 ```
-➜ [plain example](http://alloyteam.github.io/sodajs/pg/rd.html?type=simple)
+➜ [示例](http://alloyteam.github.io/sodajs/pg/rd.html?type=simple)
 
 
-#### safe propery chain output
+#### 安全的链式输出
 ```js
 var data = {
     name: 'soda',
@@ -97,7 +94,7 @@ soda("{{info['name']}}", data)
 
 ```
 
-#### expression
+#### 表达式
 
 ```js
 var data = {}
@@ -113,9 +110,9 @@ soda("{{1 < 3 && 'soda'}}", data)
 // result => "soda"
 
 ```
-➜ [expression example](http://alloyteam.github.io/sodajs/pg/rd.html?type=expression)
+➜ [示例](http://alloyteam.github.io/sodajs/pg/rd.html?type=expression)
 
-#### complex expression
+#### 复杂的表达式
 ```js
  var data = {
       list: [
@@ -129,7 +126,7 @@ soda("{{1 < 3 && 'soda'}}", data)
  // result => '<>aa</h1>'
 ```
 
-### Directives
+### 指令
 
 #### if
 
@@ -142,7 +139,7 @@ soda(` <div soda-if="show">Hello, {{name}}</div>
 // result => <div>Hello, soda</div>
 ```
 
-➜ [if example](http://alloyteam.github.io/sodajs/pg/rd.html?type=if)
+➜ [示例](http://alloyteam.github.io/sodajs/pg/rd.html?type=if)
 
 
 ### repeat
@@ -159,7 +156,7 @@ soda(` <div soda-if="show">Hello, {{name}}</div>
 
 > soda-repeat="(key, value) in object"
 
-default index or key is $index
+默认的下标是$index
 
 
 ``` js
@@ -182,7 +179,7 @@ var data = {
 document.body.innerHTML =  soda(tpl, data);
 ```
 
-➜ [repeat example](http://alloyteam.github.io/sodajs/pg/rd.html?type=repeat)
+➜ [示例](http://alloyteam.github.io/sodajs/pg/rd.html?type=repeat)
 
 
 ### filter
@@ -211,10 +208,11 @@ document.body.innerHTML = soda(tpl,{ list : [
 ] })
 ```
 
-➜ [filter example](http://alloyteam.github.io/sodajs/pg/rd.html?type=filter)
+➜ [示例](http://alloyteam.github.io/sodajs/pg/rd.html?type=filter)
 
 ### html
-output origin html as innerHTML
+输出原始的html,不做完全转换
+
 ```js
 var tpl = '<div soda-html="html"></div>'
 document.body.innerHTML = soda(tpl,{ html : '<span style="color:red;">test soda-html</span>' })
@@ -223,7 +221,7 @@ document.body.innerHTML = soda(tpl,{ html : '<span style="color:red;">test soda-
 ➜ [html example](http://alloyteam.github.io/sodajs/pg/rd.html?type=html)
 
 ### replace
-replace this node with html
+用html替换当前结点
 
 ```js
 var tpl = '<div soda-replace="html"></div>'
@@ -233,12 +231,13 @@ document.body.innerHTML = soda(tpl,{ html : '<span style="color:red;">test soda-
 ➜ [replace example](http://alloyteam.github.io/sodajs/pg/rd.html?type=replace)
 
 div will be replaced with given html
+div会被html替换
 
 #### include
-include template
+嵌套模板
 
 soda-include="tmplateName:arg1:arg2:..."
-with soda.discribe, we can include sub templates
+和soda.discribe一起使用
 
 ```js
     var data = {
@@ -281,7 +280,7 @@ with soda.discribe, we can include sub templates
 
 ```
 
-### Others
+### 其他
 
 #### soda-class
 > soda-class="currItem === 'list1' ? 'active' : ''"
@@ -303,11 +302,11 @@ var data = { style : { width : '100px', height : '100px' } };
 #### soda-*
 > soda-rx="{{rx}}%"
 
-## Custom 
+## 自定义
 
 ### soda.prefix
 
-change prefix as you like, the default prefix is "soda-"
+改变指令的前缀，默认的前缀是soda-
 
 ``` js
 soda.prefix('v:')
@@ -331,8 +330,8 @@ var data = {
 document.body.innerHTML =  soda(tpl, data);
 ```
 ### soda.directive
-Custom your directive
-#### es 2015
+自定义指令
+#### es 2015写法
 ```js
 soda.directive('name',  {
     priority: 8,
@@ -343,21 +342,21 @@ soda.directive('name',  {
     }
 });
 ```
-* scope: current scope data
-* el: current node elment
-* expression: directive string value
-* getValue: get value from data
+* scope: 当前的scope数据
+* el: 当前节点
+* expression: 指令的表达式原始字符串
+* getValue: 从data链式获取值
 ```js
      getValue({a: {b: 1}}, "a.b");  // ===>   1
 ```
-* parseSodaExpression: parse soda expressions
+* parseSodaExpression: 解析soda表达式
 ```js
     parseSodaExpression('{{1 + 2 + a}}', {a: 1}); // ===> 4
 ```
-* compileNode: compile new nodes
-* document:  using document rather than window.document to run in node env;
+* compileNode: 继续编译节点
+* document:  使用document参数而不是使用window.document, 这样可以在node环境下去用
 
-#### example
+#### 示例
 ```js
 soda.directive('mydirective', {
     priority: 8,
@@ -382,9 +381,10 @@ soda(`
 
 
 ### soda.setDocument
-custom dom parsor for node running.
+自定义node端的dom解析引擎
 
-soda.node version default document dom parsor is nodeWindow.
+soda.node版本的默认dom解析引擎是nodeWindow,你可以用这个方法替换为jsdom等
+
 
 ```js
 var document = require('document');
@@ -397,49 +397,48 @@ soda.setDocument(document);
 ```
 
 
-## Contribute
-### Development
+## 贡献代码
+### 开发
 
 git clone
 ``` shell
  git clone git://github.com/AlloyTeam/sodajs.git
  ```
-install dependency
 
+ 安装依赖
 ``` shell
     npm install
 ```
 
-then run npm start
+然后执行npm start
 
 ``` shell
     npm start
 ```
-publish code to run test
+执行run build构建代码
 
 ``` shell
     npm run build
 ```
-### Auto-Test
-soda uses mocha to run test
+### 自动化测试
+soda使用mocha来做自动化测试
 
-test unit is in test dir.
+测试单元在test目录
 ``` shell
     npm run test
 ```
 
-#### online test result
+#### 在线测试页面
 * [soda-mocha](http://alloyteam.github.io/sodajs/test/soda-mocha.html)
 * [soda.node-mocha](http://alloyteam.github.io/sodajs/test/soda.node-mocha.html)
 * [ie8 browser test](http://alloyteam.github.io/sodajs/test/soda-browser.html)
 
 
-## Used projects
-QQ Tribes(兴趣部落), QQ Group(群) and other projects
+## 使用项目
+兴趣部落, QQ群, 群活动
 
-## License
+## 协议
 
 [MIT](http://opensource.org/licenses/MIT)
 
 Copyright (c) 2015-present, AlloyTeam
-
