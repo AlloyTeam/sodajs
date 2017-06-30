@@ -11910,7 +11910,10 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
 
                     // el 清理
                     el.parentNode.removeChild(el);
-                    el.innerHTML = '';
+
+                    if (el.childNodes && el.childNodes.length) {
+                        el.innerHTML = '';
+                    }
                 }
             });
 

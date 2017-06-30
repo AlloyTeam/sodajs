@@ -18,10 +18,10 @@ npm install --save sodajs
 ```
 
 ### CDN
-* [https://unpkg.com/sodajs@0.4.7/dist/soda.min.js](https://unpkg.com/sodajs@0.4.7/dist/soda.min.js)
-* [https://unpkg.com/sodajs@0.4.7/dist/soda.js](https://unpkg.com/sodajs@0.4.7/dist/soda.js)
-* [https://unpkg.com/sodajs@0.4.7/dist/soda.node.min.js](https://unpkg.com/sodajs@0.4.7/dist/soda.node.min.js)
-* [https://unpkg.com/sodajs@0.4.7/dist/soda.node.js](https://unpkg.com/sodajs@0.4.7/dist/soda.node.js)
+* [https://unpkg.com/sodajs@0.4.8/dist/soda.min.js](https://unpkg.com/sodajs@0.4.8/dist/soda.min.js)
+* [https://unpkg.com/sodajs@0.4.8/dist/soda.js](https://unpkg.com/sodajs@0.4.8/dist/soda.js)
+* [https://unpkg.com/sodajs@0.4.8/dist/soda.node.min.js](https://unpkg.com/sodajs@0.4.8/dist/soda.node.min.js)
+* [https://unpkg.com/sodajs@0.4.8/dist/soda.node.js](https://unpkg.com/sodajs@0.4.8/dist/soda.node.js)
 
 
 ## 使用
@@ -43,7 +43,7 @@ npm install --save sodajs
 * script标签
 
 ```html
-<script src="https://unpkg.com/sodajs@0.4.6/dist/soda.min.js"></script>
+<script src="https://unpkg.com/sodajs@0.4.8/dist/soda.min.js"></script>
 ```
 * 使用webpack
 

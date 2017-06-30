@@ -776,7 +776,10 @@ _soda2["default"].directive('repeat', {
 
         // el 清理
         el.parentNode.removeChild(el);
-        el.innerHTML = '';
+
+        if (el.childNodes && el.childNodes.length) {
+            el.innerHTML = '';
+        }
     }
 });
 
