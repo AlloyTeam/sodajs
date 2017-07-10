@@ -8,6 +8,7 @@ Soda.directive('if', {
         if(expressFunc){
         }else{
             el.parentNode && el.parentNode.removeChild(el);
+            el.innerHTML = '';
         }
     }
 });

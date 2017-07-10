@@ -1786,6 +1786,23 @@ describe('Output', function () {
         assert.equal(soda('{{list[0]["title"]}}', data), '1');
     });
 
+    it('safe output', function () {
+        var data = {
+            b: null,
+            c: undefined,
+            d: 0,
+            e: ''
+        };
+
+        assert.equal(soda('{{b.a}}', data), '');
+
+        assert.equal(soda('{{c.a}}', data), '');
+
+        assert.equal(soda('{{d.a}}', data), '');
+
+        assert.equal(soda('{{e.a}}', data), '');
+    });
+
     it('prototype output', function () {
         var data = {
             test: 'test',
@@ -11437,7 +11454,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
                                     attr = _data[attr];
                                 }
 
-                                if (typeof data[attr] !== "undefined") {
+                                if (typeof data[attr] !== "undefined" && data[attr] !== null) {
                                     return _getValue(data[attr], attrStr);
                                 } else {
                                     var eventData = {
@@ -11944,6 +11961,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
 
                     if (expressFunc) {} else {
                         el.parentNode && el.parentNode.removeChild(el);
+                        el.innerHTML = '';
                     }
                 }
             });

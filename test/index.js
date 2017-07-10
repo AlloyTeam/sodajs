@@ -140,6 +140,37 @@ if(typeof describe === 'undefined'){
 
     });
 
+  it('safe output', function() {
+      var data = {
+        b: null,
+        c: undefined,
+        d: 0,
+        e: ''
+      };
+
+      assert.equal(
+        soda(`{{b.a}}`, data),
+        ''
+      );
+
+      assert.equal(
+        soda(`{{c.a}}`, data),
+        ''
+      );
+
+      assert.equal(
+        soda(`{{d.a}}`, data),
+        ''
+      );
+
+      assert.equal(
+        soda(`{{e.a}}`, data),
+        ''
+      );
+
+
+  });
+
    it('prototype output', function() {
         var data = {
             test: 'test',

@@ -2290,7 +2290,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
                                     attr = _data[attr];
                                 }
 
-                                if (typeof data[attr] !== "undefined") {
+                                if (typeof data[attr] !== "undefined" && data[attr] !== null) {
                                     return _getValue(data[attr], attrStr);
                                 } else {
                                     var eventData = {
@@ -2797,6 +2797,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
 
                     if (expressFunc) {} else {
                         el.parentNode && el.parentNode.removeChild(el);
+                        el.innerHTML = '';
                     }
                 }
             });

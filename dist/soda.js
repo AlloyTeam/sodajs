@@ -303,7 +303,7 @@ var Soda = function () {
                         attr = _data[attr];
                     }
 
-                    if (typeof data[attr] !== "undefined") {
+                    if (typeof data[attr] !== "undefined" && data[attr] !== null) {
                         return _getValue(data[attr], attrStr);
                     } else {
                         var eventData = {
@@ -808,6 +808,7 @@ _soda2["default"].directive('if', {
 
         if (expressFunc) {} else {
             el.parentNode && el.parentNode.removeChild(el);
+            el.innerHTML = '';
         }
     }
 });

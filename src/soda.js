@@ -225,7 +225,7 @@ export default class Soda{
                     attr = _data[attr];
                 }
 
-                if (typeof data[attr] !== "undefined") {
+                if (typeof data[attr] !== "undefined" && data[attr] !== null) {
                     return _getValue(data[attr], attrStr);
                 } else {
                     var eventData = {
