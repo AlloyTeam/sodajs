@@ -58,7 +58,7 @@ check ie 8 test below
 ```js
 let soda = require('sodajs/node');
 ```
-or use dist version for lower node
+or use dist version for older node
 ```js
 let soda = require('sodajs/dist/soda.node')
 ```
