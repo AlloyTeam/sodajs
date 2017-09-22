@@ -626,6 +626,10 @@ var Node = __webpack_require__(0);
 var NamedNodeMap = __webpack_require__(7);
 var DOMTokenList = __webpack_require__(8);
 
+var exist = function exist(value) {
+    return value !== null && value !== undefined && value !== "" && typeof value !== 'undefined';
+};
+
 var parseCssText = function parseCssText(style, val) {
     // 解析css
     if (val) {
@@ -683,7 +687,7 @@ var Element = function (_Node) {
                         continue;
                     }
 
-                    attrArr.push(attrName + "=\"" + (this.attributes[i].value || '') + "\"");
+                    attrArr.push(attrName + "=\"" + (exist(this.attributes[i].value) ? this.attributes[i].value : '') + "\"");
                 }
             }
 
@@ -715,7 +719,7 @@ var Element = function (_Node) {
             var item = this.attributes.getNamedItem(attr);
 
             if (item) {
-                return item.value || null;
+                return item.value;
             } else {
                 return null;
             }
@@ -1043,19 +1047,19 @@ var NamedNodeMap = function () {
 
             if (attr) {
                 attr.name = name;
-                attr.nodeValue = value || '';
-                attr.value = value || '';
+                attr.nodeValue = value;
+                attr.value = value;
 
-                attr.firstChild.value = value || '';
-                attr.firstChild.nodeValue = value || '';
+                attr.firstChild.value = value;
+                attr.firstChild.nodeValue = value;
             } else {
 
                 this[this.length++] = {
                     name: name,
-                    value: value || '',
+                    value: value,
                     ownerElment: this.ownerElment,
                     nodeType: this.ownerElment.ATTRIBUTE_NODE,
-                    nodeValue: value || '',
+                    nodeValue: value,
                     childNodes: function () {
                         var node = _this.ownerElment.ownerDocument.createTextNode();
                         return [node];
@@ -2221,11 +2225,9 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
                                         var attrName = attr.name.replace(prefixReg, '');
 
                                         if (attrName && (0, _util.exist)(attr.value)) {
-                                            var attrValue = attr.value.replace(_const.VALUE_OUT_REG, function (item, $1) {
-                                                return _this3.parseSodaExpression($1, scope);
-                                            });
+                                            var attrValue = _this3.parseComplexExpression(attr.value, scope);
 
-                                            if ((0, _util.exist)(attrValue)) {
+                                            if (attrValue !== false && (0, _util.exist)(attrValue)) {
                                                 node.setAttribute(attrName, attrValue);
                                             }
 
@@ -2235,9 +2237,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
                                         // 对其他属性里含expr 处理
                                     } else {
                                         if ((0, _util.exist)(attr.value)) {
-                                            attr.value = attr.value.replace(_const.VALUE_OUT_REG, function (item, $1) {
-                                                return _this3.parseSodaExpression($1, scope);
-                                            });
+                                            attr.value = _this3.parseComplexExpression(attr.value, scope);
                                         }
                                     }
                                 });
@@ -2327,10 +2327,29 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
 
                         return _getValue(_data, _attrStr);
                     }
+
+                    // 解析混合表达式
+
+                }, {
+                    key: 'parseComplexExpression',
+                    value: function parseComplexExpression(str, scope) {
+                        var _this4 = this;
+
+                        var onlyResult = _const.ONLY_VALUE_OUT_REG.exec(str);
+                        if (onlyResult) {
+                            var sodaExp = onlyResult[1];
+
+                            return this.parseSodaExpression(sodaExp, scope);
+                        }
+
+                        return str.replace(_const.VALUE_OUT_REG, function (item, $1) {
+                            return _this4.parseSodaExpression($1, scope);
+                        });
+                    }
                 }, {
                     key: 'parseSodaExpression',
                     value: function parseSodaExpression(str, scope) {
-                        var _this4 = this;
+                        var _this5 = this;
 
                         // 将字符常量保存下来
                         str = str.replace(_const.STRING_REG, function (r, $1, $2) {
@@ -2356,7 +2375,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
                             expr = expr.replace(_const.ATTR_REG, function (r, $1) {
                                 var key = (0, _util.getAttrVarKey)();
                                 // 属性名称为字符常量
-                                var attrName = _this4.parseSodaExpression($1, scope);
+                                var attrName = _this5.parseSodaExpression($1, scope);
 
                                 // 给一个特殊的前缀 表示是属性变量
 
@@ -2526,6 +2545,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
             var CONST_REG = exports.CONST_REG = /^_\$C\$_/;
             var CONST_REGG = exports.CONST_REGG = /_\$C\$_[^\.]+/g;
             var VALUE_OUT_REG = exports.VALUE_OUT_REG = /\{\{([^\}]*)\}\}/g;
+            var ONLY_VALUE_OUT_REG = exports.ONLY_VALUE_OUT_REG = /^\{\{([^\}]*)\}\}$/;
 
             /***/
         },

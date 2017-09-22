@@ -21,10 +21,10 @@ npm install --save sodajs
 ```
 
 ### CDN
-* [https://unpkg.com/sodajs@0.4.9/dist/soda.min.js](https://unpkg.com/sodajs@0.4.9/dist/soda.min.js)
-* [https://unpkg.com/sodajs@0.4.9/dist/soda.js](https://unpkg.com/sodajs@0.4.9/dist/soda.js)
-* [https://unpkg.com/sodajs@0.4.9/dist/soda.node.min.js](https://unpkg.com/sodajs@0.4.9/dist/soda.node.min.js)
-* [https://unpkg.com/sodajs@0.4.9/dist/soda.node.js](https://unpkg.com/sodajs@0.4.9/dist/soda.node.js)
+* [https://unpkg.com/sodajs@0.4.10/dist/soda.min.js](https://unpkg.com/sodajs@0.4.10/dist/soda.min.js)
+* [https://unpkg.com/sodajs@0.4.10/dist/soda.js](https://unpkg.com/sodajs@0.4.10/dist/soda.js)
+* [https://unpkg.com/sodajs@0.4.10/dist/soda.node.min.js](https://unpkg.com/sodajs@0.4.10/dist/soda.node.min.js)
+* [https://unpkg.com/sodajs@0.4.10/dist/soda.node.js](https://unpkg.com/sodajs@0.4.10/dist/soda.node.js)
 
 
 ## Usage
@@ -46,7 +46,7 @@ check ie 8 test below
 * script tag
 
 ```html
-<script src="https://unpkg.com/sodajs@0.4.9/dist/soda.min.js"></script>
+<script src="https://unpkg.com/sodajs@0.4.10/dist/soda.min.js"></script>
 ```
 * with webpack
 
@@ -302,6 +302,10 @@ var data = { style : { width : '100px', height : '100px' } };
 
 #### soda-*
 > soda-rx="{{rx}}%"
+
+> soda-checked="{{false}}"
+
+if the value is false or "", the attribute will be removed
 
 ## Custom 
 

@@ -18,10 +18,10 @@ npm install --save sodajs
 ```
 
 ### CDN
-* [https://unpkg.com/sodajs@0.4.9/dist/soda.min.js](https://unpkg.com/sodajs@0.4.9/dist/soda.min.js)
-* [https://unpkg.com/sodajs@0.4.9/dist/soda.js](https://unpkg.com/sodajs@0.4.9/dist/soda.js)
-* [https://unpkg.com/sodajs@0.4.9/dist/soda.node.min.js](https://unpkg.com/sodajs@0.4.9/dist/soda.node.min.js)
-* [https://unpkg.com/sodajs@0.4.9/dist/soda.node.js](https://unpkg.com/sodajs@0.4.9/dist/soda.node.js)
+* [https://unpkg.com/sodajs@0.4.10/dist/soda.min.js](https://unpkg.com/sodajs@0.4.10/dist/soda.min.js)
+* [https://unpkg.com/sodajs@0.4.10/dist/soda.js](https://unpkg.com/sodajs@0.4.10/dist/soda.js)
+* [https://unpkg.com/sodajs@0.4.10/dist/soda.node.min.js](https://unpkg.com/sodajs@0.4.10/dist/soda.node.min.js)
+* [https://unpkg.com/sodajs@0.4.10/dist/soda.node.js](https://unpkg.com/sodajs@0.4.10/dist/soda.node.js)
 
 
 ## 使用
@@ -43,7 +43,7 @@ npm install --save sodajs
 * script标签
 
 ```html
-<script src="https://unpkg.com/sodajs@0.4.9/dist/soda.min.js"></script>
+<script src="https://unpkg.com/sodajs@0.4.10/dist/soda.min.js"></script>
 ```
 * 使用webpack
 
@@ -301,6 +301,10 @@ var data = { style : { width : '100px', height : '100px' } };
 
 #### soda-*
 > soda-rx="{{rx}}%"
+
+> soda-checked="{{false}}"
+
+如果值为false 或者 "", 该属性就会被移除，否则，会被添加上去
 
 ## 自定义
 

@@ -13,7 +13,8 @@ import {
     CONST_PRIFIX,
     CONST_REG,
     CONST_REGG,
-    VALUE_OUT_REG
+    VALUE_OUT_REG,
+    ONLY_VALUE_OUT_REG
 } from './const';
 
 import {
@@ -156,11 +157,9 @@ export default class Soda{
                             var attrName = attr.name.replace(prefixReg, '');
 
                             if (attrName && exist(attr.value)) {
-                                var attrValue = attr.value.replace(VALUE_OUT_REG, (item, $1) => {
-                                    return this.parseSodaExpression($1, scope);
-                                });
+                                var attrValue = this.parseComplexExpression(attr.value, scope);
 
-                                if(exist(attrValue)){
+                                if(attrValue !== false && exist(attrValue)){
                                     node.setAttribute(attrName, attrValue);
                                 }
 
@@ -170,9 +169,7 @@ export default class Soda{
                             // 对其他属性里含expr 处理
                         } else {
                             if (exist(attr.value)) {
-                                attr.value = attr.value.replace(VALUE_OUT_REG, (item, $1) => {
-                                    return this.parseSodaExpression($1, scope);
-                                });
+                                attr.value = this.parseComplexExpression(attr.value, scope);
                             }
                         }
                     });
@@ -262,6 +259,20 @@ export default class Soda{
         };
 
         return _getValue(_data, _attrStr);
+    }
+
+    // 解析混合表达式
+    parseComplexExpression(str, scope){
+        var onlyResult = ONLY_VALUE_OUT_REG.exec(str);
+        if(onlyResult){
+            var sodaExp = onlyResult[1];
+
+            return this.parseSodaExpression(sodaExp, scope);
+        }
+
+        return str.replace(VALUE_OUT_REG, (item, $1) => {
+            return this.parseSodaExpression($1, scope);
+        });
     }
 
     

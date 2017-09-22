@@ -22,3 +22,4 @@ export const CONST_PRIFIX = "_$C$_";
 export const CONST_REG = /^_\$C\$_/;
 export const CONST_REGG = /_\$C\$_[^\.]+/g;
 export const VALUE_OUT_REG = /\{\{([^\}]*)\}\}/g;
+export const ONLY_VALUE_OUT_REG = /^\{\{([^\}]*)\}\}$/;

@@ -207,7 +207,8 @@ if(typeof describe === 'undefined'){
 
     it('attr output', function(){
         var data = {
-            a: 1
+            a: 1,
+            b: 2
         };
 
         assert.equal(
@@ -221,8 +222,28 @@ if(typeof describe === 'undefined'){
         );
 
         assert.equal(
-            soda(`<span soda-autofocus="0"></span>`, data),
+            soda(`<span soda-autofocus='{{0}}'></span>`, data),
             '<span autofocus="0"></span>'
+        );
+
+        assert.equal(
+            soda(`<span soda-autofocus="{{false}}"></span>`, data),
+            '<span></span>'
+        );
+
+        assert.equal(
+            soda(`<span soda-autofocus="{{a === 1}}"></span>`, data),
+            '<span autofocus="true"></span>'
+        );
+
+        assert.equal(
+            soda(`<span soda-autofocus="{{b === 1}}"></span>`, data),
+            '<span></span>'
+        );
+
+        assert.equal(
+            soda(`<span soda-autofocus="{{true}}"></span>`, data),
+            '<span autofocus="true"></span>'
         );
 
     });

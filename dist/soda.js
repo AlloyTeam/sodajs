@@ -234,11 +234,9 @@ var Soda = function () {
                             var attrName = attr.name.replace(prefixReg, '');
 
                             if (attrName && (0, _util.exist)(attr.value)) {
-                                var attrValue = attr.value.replace(_const.VALUE_OUT_REG, function (item, $1) {
-                                    return _this3.parseSodaExpression($1, scope);
-                                });
+                                var attrValue = _this3.parseComplexExpression(attr.value, scope);
 
-                                if ((0, _util.exist)(attrValue)) {
+                                if (attrValue !== false && (0, _util.exist)(attrValue)) {
                                     node.setAttribute(attrName, attrValue);
                                 }
 
@@ -248,9 +246,7 @@ var Soda = function () {
                             // 对其他属性里含expr 处理
                         } else {
                             if ((0, _util.exist)(attr.value)) {
-                                attr.value = attr.value.replace(_const.VALUE_OUT_REG, function (item, $1) {
-                                    return _this3.parseSodaExpression($1, scope);
-                                });
+                                attr.value = _this3.parseComplexExpression(attr.value, scope);
                             }
                         }
                     });
@@ -340,10 +336,29 @@ var Soda = function () {
 
             return _getValue(_data, _attrStr);
         }
+
+        // 解析混合表达式
+
+    }, {
+        key: 'parseComplexExpression',
+        value: function parseComplexExpression(str, scope) {
+            var _this4 = this;
+
+            var onlyResult = _const.ONLY_VALUE_OUT_REG.exec(str);
+            if (onlyResult) {
+                var sodaExp = onlyResult[1];
+
+                return this.parseSodaExpression(sodaExp, scope);
+            }
+
+            return str.replace(_const.VALUE_OUT_REG, function (item, $1) {
+                return _this4.parseSodaExpression($1, scope);
+            });
+        }
     }, {
         key: 'parseSodaExpression',
         value: function parseSodaExpression(str, scope) {
-            var _this4 = this;
+            var _this5 = this;
 
             // 将字符常量保存下来
             str = str.replace(_const.STRING_REG, function (r, $1, $2) {
@@ -369,7 +384,7 @@ var Soda = function () {
                 expr = expr.replace(_const.ATTR_REG, function (r, $1) {
                     var key = (0, _util.getAttrVarKey)();
                     // 属性名称为字符常量
-                    var attrName = _this4.parseSodaExpression($1, scope);
+                    var attrName = _this5.parseSodaExpression($1, scope);
 
                     // 给一个特殊的前缀 表示是属性变量
 
@@ -542,6 +557,7 @@ var CONST_PRIFIX = exports.CONST_PRIFIX = "_$C$_";
 var CONST_REG = exports.CONST_REG = /^_\$C\$_/;
 var CONST_REGG = exports.CONST_REGG = /_\$C\$_[^\.]+/g;
 var VALUE_OUT_REG = exports.VALUE_OUT_REG = /\{\{([^\}]*)\}\}/g;
+var ONLY_VALUE_OUT_REG = exports.ONLY_VALUE_OUT_REG = /^\{\{([^\}]*)\}\}$/;
 
 /***/ }),
 /* 2 */
